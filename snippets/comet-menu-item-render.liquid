@@ -21,6 +21,16 @@
       {%- assign icon_preset = block.settings.icon_preset -%}
       {%- break -%}
     {%- endif -%}
+  {%- elsif block.type == 'category_icon' -%}
+    {%- assign cat_val_upper = block.settings.category | strip | upcase -%}
+    {%- assign custom_cat_upper = block.settings.custom_category_name | strip | upcase -%}
+    {%- if link_title_upper contains cat_val_upper or link_title_upper == custom_cat_upper -%}
+      {%- assign icon_block = block -%}
+      {%- if block.settings.badge_text != blank -%}
+        {%- assign badge_text = block.settings.badge_text -%}
+      {%- endif -%}
+      {%- break -%}
+    {%- endif -%}
   {%- endif -%}
 {%- endfor -%}
 
@@ -111,6 +121,16 @@
                 {%- assign child_icon_block = block -%}
                 {%- assign child_badge_text = block.settings.badge_text -%}
                 {%- assign child_icon_preset = block.settings.icon_preset -%}
+                {%- break -%}
+              {%- endif -%}
+            {%- elsif block.type == 'category_icon' -%}
+              {%- assign cat_val_upper = block.settings.category | strip | upcase -%}
+              {%- assign custom_cat_upper = block.settings.custom_category_name | strip | upcase -%}
+              {%- if child_title_upper contains cat_val_upper or child_title_upper == custom_cat_upper -%}
+                {%- assign child_icon_block = block -%}
+                {%- if block.settings.badge_text != blank -%}
+                  {%- assign child_badge_text = block.settings.badge_text -%}
+                {%- endif -%}
                 {%- break -%}
               {%- endif -%}
             {%- endif -%}

@@ -678,7 +678,7 @@
           "type": "select",
           "id": "icon_preset",
           "label": "Or Select Icon Preset",
-          "default": "sneaker-1",
+          "default": "sneakers",
           "options": [
             { "value": "none", "label": "None" },
             { "value": "sneakers", "label": "Sneakers" },
@@ -698,6 +698,43 @@
           "id": "badge_text",
           "label": "Badge Text (Optional)",
           "info": "e.g. 'NEW', 'HOT', 'SALE'"
+        }
+      ]
+    },
+    {
+      "type": "category_icon",
+      "name": "Category Custom Icon",
+      "settings": [
+        {
+          "type": "select",
+          "id": "category",
+          "label": "Footwear Category",
+          "default": "SNEAKERS",
+          "options": [
+            { "value": "BOOTS", "label": "BOOTS" },
+            { "value": "CASUALS", "label": "CASUALS" },
+            { "value": "FORMALS", "label": "FORMALS" },
+            { "value": "LOAFERS", "label": "LOAFERS" },
+            { "value": "SANDALS", "label": "SANDALS / SLIPPERS" },
+            { "value": "SNEAKERS", "label": "SNEAKERS" },
+            { "value": "SHOP ALL", "label": "SHOP ALL" }
+          ]
+        },
+        {
+          "type": "text",
+          "id": "custom_category_name",
+          "label": "Or Custom Category Title",
+          "info": "If category isn't in dropdown, enter exact menu item title here."
+        },
+        {
+          "type": "image_picker",
+          "id": "icon_image",
+          "label": "Category Icon Image"
+        },
+        {
+          "type": "text",
+          "id": "badge_text",
+          "label": "Badge Text (Optional)"
         }
       ]
     }
