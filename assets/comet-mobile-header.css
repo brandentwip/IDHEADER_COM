@@ -245,8 +245,8 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 24px;
-  height: 24px;
+  width: 28px;
+  height: 28px;
   flex-shrink: 0;
 }
 
@@ -259,7 +259,6 @@
 .comet-menu-icon svg {
   width: 100%;
   height: 100%;
-  fill: currentColor;
 }
 
 /* Badges */
@@ -275,9 +274,20 @@
   letter-spacing: 0.05em;
 }
 
-/* Drawer adjustments for Comet Header */
+/* Full Width Drawer adjustments for Comet Header */
+#NavDrawer.drawer--comet,
 .drawer--comet {
+  width: 100% !important;
+  max-width: 100% !important;
   padding: 0 !important;
+}
+
+@media (max-width: 768px) {
+  #NavDrawer.drawer--comet,
+  .drawer--comet {
+    width: 100vw !important;
+    max-width: 100vw !important;
+  }
 }
 
 .drawer--comet .drawer__fixed-header {

@@ -1,5 +1,5 @@
 {%- comment -%}
-  Renders a single menu item with icon support, badge support, and sub-lists for Comet mobile drawer
+  Renders a single menu item with footwear icon support, badge support, and sub-lists for Comet mobile drawer
 {%- endcomment -%}
 
 {%- assign has_sub_dropdown = false -%}
@@ -24,6 +24,30 @@
   {%- endif -%}
 {%- endfor -%}
 
+{%- capture link_icon_svg -%}
+  {%- if icon_preset == 'boots' or link_title_upper contains 'BOOT' -%}
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M17 3v9c0 .6.4 1 1 1h2.5c.8 0 1.5.7 1.5 1.5V17c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2v-2.5c0-.8.7-1.5 1.5-1.5H6c1 0 1.8-.7 2-1.7l1-5.3C9.2 4.6 10.4 3 12.8 3H17z"/><path d="M4 17h16M7 17v2M17 17v2"/></svg>
+  {%- elsif icon_preset == 'casuals' or link_title_upper contains 'CASUAL' -%}
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2 14.5l4-2.5 5 1.5 5-3.5 6 2v4.5H2v-2z"/><path d="M6 12l2-4.5C8.5 6.5 10 6 11.5 6H15l2 3.5"/><path d="M2 17h20"/></svg>
+  {%- elsif icon_preset == 'formals' or link_title_upper contains 'FORMAL' -%}
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2 15c0-1.5 1-3 2.5-3.5L10 10l5-3h4.5c1.4 0 2.5 1.1 2.5 2.5v5.5H2z"/><path d="M10 10l-2 4.5M12 9.5l-1.5 5M14 9l-1 5.5"/><path d="M2 15h20M5 15v3M19 15v3"/></svg>
+  {%- elsif icon_preset == 'loafers' or link_title_upper contains 'LOAFER' -%}
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2 14.5c0-1.2.8-2.2 2-2.5L9 11l4-2.5h5.5c1.4 0 2.5 1.1 2.5 2.5v3.5H2z"/><path d="M9 11.5c.5-1.5 1.8-2.5 3.5-2.5h2.5"/><path d="M9.5 12h5v2.5h-5z"/><path d="M2 14.5h20M5 14.5v2.5M19 14.5v2.5"/></svg>
+  {%- elsif icon_preset == 'sandals' or link_title_upper contains 'SANDAL' or link_title_upper contains 'SLIPPER' -%}
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2 16c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2v-1H2v1z"/><path d="M5 15V9.5C5 8 6.2 7 7.7 7h.6c1.2 0 2.2.8 2.5 2L12 15"/><path d="M12 15l1.2-4.2c.3-1.1 1.3-1.8 2.4-1.8h.9c1.4 0 2.5 1 2.5 2.5V15"/><path d="M2 18h20"/></svg>
+  {%- elsif icon_preset == 'sneakers' or icon_preset == 'sneaker-1' or icon_preset == 'sneaker-2' or icon_preset == 'sneaker-3' or link_title_upper contains 'SNEAKER' or link_title_upper contains 'LOW' or link_title_upper contains 'RUNNER' or link_title_upper contains 'APEX' or link_title_upper contains 'AEON' or link_title_upper contains 'AERES' -%}
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21.5 15.5l-3.5-3.5-3 1-4-4L6 11 2 12.5V17h19.5v-1.5z"/><path d="M6 15a1 1 0 110-2 1 1 0 010 2zm12 0a1 1 0 110-2 1 1 0 010 2z"/><path d="M2 17h19.5"/></svg>
+  {%- elsif icon_preset == 'shop-all' or link_title_upper contains 'SHOP ALL' -%}
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+  {%- elsif icon_preset == 'star' -%}
+    <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+  {%- elsif icon_preset == 'fire' -%}
+    <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 23c-4.97 0-9-4.03-9-9 0-3.53 2.04-6.4 5-7.79 0 2.21 1.79 4 4 4s4-1.79 4-4c2.96 1.39 5 4.26 5 7.79 0 4.97-4.03 9-9 9z"/></svg>
+  {%- elsif icon_preset == 'gift' -%}
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="8" width="18" height="13" rx="2"/><path d="M12 8v13M3 12h18M12 8C10 5 6 5 6 8h6zm0 0c2-3 6-3 6 0h-6z"/></svg>
+  {%- endif -%}
+{%- endcapture -%}
+
 <li class="comet-menu-item">
   <div class="comet-menu-item__header">
     <a href="{{ link.url }}" class="comet-menu-link">
@@ -32,34 +56,9 @@
         <span class="comet-menu-icon">
           <img src="{{ icon_block.settings.icon_image | image_url: width: 60 }}" alt="{{ link.title }}" loading="lazy">
         </span>
-      {%- elsif icon_preset != blank and icon_preset != 'none' -%}
+      {%- elsif link_icon_svg != blank -%}
         <span class="comet-menu-icon">
-          {%- case icon_preset -%}
-            {%- when 'sneaker-1' -%}
-              <svg viewBox="0 0 24 24"><path d="M21.5 15.5l-3.5-3.5-3 1-4-4L6 11 2 12.5V17h19.5v-1.5zM6 15a1 1 0 110-2 1 1 0 010 2zm12 0a1 1 0 110-2 1 1 0 010 2z"/></svg>
-            {%- when 'sneaker-2' -%}
-              <svg viewBox="0 0 24 24"><path d="M22 16.5l-4-4-4 1-5-5-5 3L1 13v4h21v-0.5zM5 15a1 1 0 110-2 1 1 0 010 2zm13 0a1 1 0 110-2 1 1 0 010 2z"/></svg>
-            {%- when 'sneaker-3' -%}
-              <svg viewBox="0 0 24 24"><path d="M20 15.5l-3.5-3.5-3 1.5-4-3.5L5.5 11.5 2 13v4h18v-1.5zM6 15.5a1 1 0 110-2 1 1 0 010 2zm11 0a1 1 0 110-2 1 1 0 010 2z"/></svg>
-            {%- when 'shop-all' -%}
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-            {%- when 'star' -%}
-              <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-            {%- when 'fire' -%}
-              <svg viewBox="0 0 24 24"><path d="M12 23c-4.97 0-9-4.03-9-9 0-3.53 2.04-6.4 5-7.79 0 2.21 1.79 4 4 4s4-1.79 4-4c2.96 1.39 5 4.26 5 7.79 0 4.97-4.03 9-9 9z"/></svg>
-            {%- when 'gift' -%}
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="8" width="18" height="13" rx="2"/><path d="M12 8v13M3 12h18M12 8C10 5 6 5 6 8h6zm0 0c2-3 6-3 6 0h-6z"/></svg>
-          {%- endcase -%}
-        </span>
-      {%- elsif link_title_upper contains 'SHOP ALL' -%}
-        <!-- Default Shop All Icon -->
-        <span class="comet-menu-icon">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-        </span>
-      {%- elsif link_title_upper contains 'LOW' or link_title_upper contains 'SNEAKER' or link_title_upper contains 'RUNNER' or link_title_upper contains 'APEX' or link_title_upper contains 'AEON' or link_title_upper contains 'AERES' -%}
-        <!-- Default Sneaker Icon -->
-        <span class="comet-menu-icon">
-          <svg viewBox="0 0 24 24"><path d="M21.5 15.5l-3.5-3.5-3 1-4-4L6 11 2 12.5V17h19.5v-1.5zM6 15a1 1 0 110-2 1 1 0 010 2zm12 0a1 1 0 110-2 1 1 0 010 2z"/></svg>
+          {{ link_icon_svg }}
         </span>
       {%- endif -%}
 
@@ -98,37 +97,38 @@
             {%- endif -%}
           {%- endfor -%}
 
+          {%- capture child_link_icon_svg -%}
+            {%- if child_icon_preset == 'boots' or child_title_upper contains 'BOOT' -%}
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M17 3v9c0 .6.4 1 1 1h2.5c.8 0 1.5.7 1.5 1.5V17c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2v-2.5c0-.8.7-1.5 1.5-1.5H6c1 0 1.8-.7 2-1.7l1-5.3C9.2 4.6 10.4 3 12.8 3H17z"/><path d="M4 17h16M7 17v2M17 17v2"/></svg>
+            {%- elsif child_icon_preset == 'casuals' or child_title_upper contains 'CASUAL' -%}
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2 14.5l4-2.5 5 1.5 5-3.5 6 2v4.5H2v-2z"/><path d="M6 12l2-4.5C8.5 6.5 10 6 11.5 6H15l2 3.5"/><path d="M2 17h20"/></svg>
+            {%- elsif child_icon_preset == 'formals' or child_title_upper contains 'FORMAL' -%}
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2 15c0-1.5 1-3 2.5-3.5L10 10l5-3h4.5c1.4 0 2.5 1.1 2.5 2.5v5.5H2z"/><path d="M10 10l-2 4.5M12 9.5l-1.5 5M14 9l-1 5.5"/><path d="M2 15h20M5 15v3M19 15v3"/></svg>
+            {%- elsif child_icon_preset == 'loafers' or child_title_upper contains 'LOAFER' -%}
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2 14.5c0-1.2.8-2.2 2-2.5L9 11l4-2.5h5.5c1.4 0 2.5 1.1 2.5 2.5v3.5H2z"/><path d="M9 11.5c.5-1.5 1.8-2.5 3.5-2.5h2.5"/><path d="M9.5 12h5v2.5h-5z"/><path d="M2 14.5h20M5 14.5v2.5M19 14.5v2.5"/></svg>
+            {%- elsif child_icon_preset == 'sandals' or child_title_upper contains 'SANDAL' or child_title_upper contains 'SLIPPER' -%}
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2 16c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2v-1H2v1z"/><path d="M5 15V9.5C5 8 6.2 7 7.7 7h.6c1.2 0 2.2.8 2.5 2L12 15"/><path d="M12 15l1.2-4.2c.3-1.1 1.3-1.8 2.4-1.8h.9c1.4 0 2.5 1 2.5 2.5V15"/><path d="M2 18h20"/></svg>
+            {%- elsif child_icon_preset == 'sneakers' or child_icon_preset == 'sneaker-1' or child_icon_preset == 'sneaker-2' or child_icon_preset == 'sneaker-3' or child_title_upper contains 'SNEAKER' or child_title_upper contains 'LOW' or child_title_upper contains 'RUNNER' or child_title_upper contains 'APEX' or child_title_upper contains 'AEON' or child_title_upper contains 'AERES' -%}
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21.5 15.5l-3.5-3.5-3 1-4-4L6 11 2 12.5V17h19.5v-1.5z"/><path d="M6 15a1 1 0 110-2 1 1 0 010 2zm12 0a1 1 0 110-2 1 1 0 010 2z"/><path d="M2 17h19.5"/></svg>
+            {%- elsif child_icon_preset == 'shop-all' or child_title_upper contains 'SHOP ALL' -%}
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            {%- elsif child_icon_preset == 'star' -%}
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+            {%- elsif child_icon_preset == 'fire' -%}
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 23c-4.97 0-9-4.03-9-9 0-3.53 2.04-6.4 5-7.79 0 2.21 1.79 4 4 4s4-1.79 4-4c2.96 1.39 5 4.26 5 7.79 0 4.97-4.03 9-9 9z"/></svg>
+            {%- elsif child_icon_preset == 'gift' -%}
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="8" width="18" height="13" rx="2"/><path d="M12 8v13M3 12h18M12 8C10 5 6 5 6 8h6zm0 0c2-3 6-3 6 0h-6z"/></svg>
+            {%- endif -%}
+          {%- endcapture -%}
+
           <a href="{{ childlink.url }}" class="comet-sub-link">
             {%- if child_icon_block and child_icon_block.settings.icon_image != blank -%}
               <span class="comet-menu-icon">
                 <img src="{{ child_icon_block.settings.icon_image | image_url: width: 60 }}" alt="{{ childlink.title }}" loading="lazy">
               </span>
-            {%- elsif child_icon_preset != blank and child_icon_preset != 'none' -%}
+            {%- elsif child_link_icon_svg != blank -%}
               <span class="comet-menu-icon">
-                {%- case child_icon_preset -%}
-                  {%- when 'sneaker-1' -%}
-                    <svg viewBox="0 0 24 24"><path d="M21.5 15.5l-3.5-3.5-3 1-4-4L6 11 2 12.5V17h19.5v-1.5zM6 15a1 1 0 110-2 1 1 0 010 2zm12 0a1 1 0 110-2 1 1 0 010 2z"/></svg>
-                  {%- when 'sneaker-2' -%}
-                    <svg viewBox="0 0 24 24"><path d="M22 16.5l-4-4-4 1-5-5-5 3L1 13v4h21v-0.5zM5 15a1 1 0 110-2 1 1 0 010 2zm13 0a1 1 0 110-2 1 1 0 010 2z"/></svg>
-                  {%- when 'sneaker-3' -%}
-                    <svg viewBox="0 0 24 24"><path d="M20 15.5l-3.5-3.5-3 1.5-4-3.5L5.5 11.5 2 13v4h18v-1.5zM6 15.5a1 1 0 110-2 1 1 0 010 2zm11 0a1 1 0 110-2 1 1 0 010 2z"/></svg>
-                  {%- when 'shop-all' -%}
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-                  {%- when 'star' -%}
-                    <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-                  {%- when 'fire' -%}
-                    <svg viewBox="0 0 24 24"><path d="M12 23c-4.97 0-9-4.03-9-9 0-3.53 2.04-6.4 5-7.79 0 2.21 1.79 4 4 4s4-1.79 4-4c2.96 1.39 5 4.26 5 7.79 0 4.97-4.03 9-9 9z"/></svg>
-                  {%- when 'gift' -%}
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="8" width="18" height="13" rx="2"/><path d="M12 8v13M3 12h18M12 8C10 5 6 5 6 8h6zm0 0c2-3 6-3 6 0h-6z"/></svg>
-                {%- endcase -%}
-              </span>
-            {%- elsif child_title_upper contains 'SHOP ALL' -%}
-              <span class="comet-menu-icon">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-              </span>
-            {%- elsif child_title_upper contains 'LOW' or child_title_upper contains 'SNEAKER' or child_title_upper contains 'RUNNER' or child_title_upper contains 'APEX' or child_title_upper contains 'AEON' or child_title_upper contains 'AERES' -%}
-              <span class="comet-menu-icon">
-                <svg viewBox="0 0 24 24"><path d="M21.5 15.5l-3.5-3.5-3 1-4-4L6 11 2 12.5V17h19.5v-1.5zM6 15a1 1 0 110-2 1 1 0 010 2zm12 0a1 1 0 110-2 1 1 0 010 2z"/></svg>
+                {{ child_link_icon_svg }}
               </span>
             {%- endif -%}
 
