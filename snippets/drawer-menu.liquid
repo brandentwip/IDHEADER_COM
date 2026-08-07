@@ -95,8 +95,13 @@
             {%- for i in (1..4) -%}
               {%- capture title_key -%}comet_tab{{ i }}_title{%- endcapture -%}
               {%- capture menu_key -%}comet_tab{{ i }}_menu{%- endcapture -%}
+              {%- capture img_key -%}comet_tab{{ i }}_image{%- endcapture -%}
+              {%- capture link_key -%}comet_tab{{ i }}_image_link{%- endcapture -%}
+
               {%- assign tab_title = section.settings[title_key] -%}
               {%- assign tab_menu_handle = section.settings[menu_key] -%}
+              {%- assign tab_img = section.settings[img_key] -%}
+              {%- assign tab_img_link = section.settings[link_key] -%}
 
               {%- if tab_title != blank -%}
                 {%- assign tab_linklist = linklists[tab_menu_handle] -%}
@@ -110,6 +115,18 @@
                       {%- render 'comet-menu-item-render', link: link, section: section -%}
                     {%- endfor -%}
                   </ul>
+
+                  {%- if tab_img != blank -%}
+                    <div class="comet-tab-banner">
+                      {%- if tab_img_link != blank -%}
+                        <a href="{{ tab_img_link }}">
+                      {%- endif -%}
+                        <img src="{{ tab_img | image_url: width: 800 }}" alt="{{ tab_title | escape }}" loading="lazy">
+                      {%- if tab_img_link != blank -%}
+                        </a>
+                      {%- endif -%}
+                    </div>
+                  {%- endif -%}
                 </div>
               {%- endif -%}
             {%- endfor -%}
@@ -117,6 +134,11 @@
           {%- else -%}
             <!-- Auto-generated Tab Panels from Main Menu Children -->
             {%- for link in main_menu.links -%}
+              {%- capture img_key -%}comet_tab{{ forloop.index }}_image{%- endcapture -%}
+              {%- capture link_key -%}comet_tab{{ forloop.index }}_image_link{%- endcapture -%}
+              {%- assign tab_img = section.settings[img_key] -%}
+              {%- assign tab_img_link = section.settings[link_key] -%}
+
               <div class="comet-tab-panel {% if forloop.first %}is-active{% endif %}" id="auto-tab-{{ forloop.index }}" role="tabpanel">
                 <ul class="comet-menu-list">
                   {%- if link.links != blank -%}
@@ -127,6 +149,18 @@
                     {%- render 'comet-menu-item-render', link: link, section: section -%}
                   {%- endif -%}
                 </ul>
+
+                {%- if tab_img != blank -%}
+                  <div class="comet-tab-banner">
+                    {%- if tab_img_link != blank -%}
+                      <a href="{{ tab_img_link }}">
+                    {%- endif -%}
+                      <img src="{{ tab_img | image_url: width: 800 }}" alt="{{ link.title | escape }}" loading="lazy">
+                    {%- if tab_img_link != blank -%}
+                      </a>
+                    {%- endif -%}
+                  </div>
+                {%- endif -%}
               </div>
             {%- endfor -%}
           {%- endif -%}

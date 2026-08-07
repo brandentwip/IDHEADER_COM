@@ -298,3 +298,29 @@
 .drawer--comet .drawer__scrollable {
   padding: 0;
 }
+
+/* Tab Bottom Banner Image */
+.comet-tab-banner {
+  margin-top: 24px;
+  width: 100%;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.comet-tab-banner a {
+  display: block;
+  width: 100%;
+}
+
+.comet-tab-banner img {
+  width: 100%;
+  height: auto;
+  display: block;
+  object-fit: cover;
+  border-radius: 8px;
+  transition: transform 0.3s ease;
+}
+
+.comet-tab-banner a:hover img {
+  transform: scale(1.02);
+}
