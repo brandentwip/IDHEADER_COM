@@ -27,6 +27,8 @@
   endif
 -%}
 
+{{ 'comet-mobile-header.css' | asset_url | stylesheet_tag }}
+
 {%- render 'drawer-menu',
   section: section,
   main_menu: main_menu,
@@ -462,6 +464,97 @@
       "id": "show_currency_flags",
       "label": "Show currency flags",
       "default": true
+    },
+    {
+      "type": "header",
+      "content": "Comet Mobile Header & Drawer"
+    },
+    {
+      "type": "checkbox",
+      "id": "comet_enable",
+      "label": "Enable Comet Mobile Drawer",
+      "default": true
+    },
+    {
+      "type": "color",
+      "id": "comet_header_bg",
+      "label": "Header Background Color",
+      "default": "#1d64f2"
+    },
+    {
+      "type": "color",
+      "id": "comet_header_text",
+      "label": "Header Text & Icon Color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "comet_tab_bg",
+      "label": "Tab Navigation Background",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "comet_tab_text",
+      "label": "Tab Text Color",
+      "default": "#111111"
+    },
+    {
+      "type": "color",
+      "id": "comet_tab_active",
+      "label": "Active Tab & Accent Color",
+      "default": "#1d64f2"
+    },
+    {
+      "type": "header",
+      "content": "Comet Navigation Tabs"
+    },
+    {
+      "type": "paragraph",
+      "content": "Specify custom tab titles and assigned menus below. If empty, top-level items of your Main Menu will be used as tabs automatically."
+    },
+    {
+      "type": "text",
+      "id": "comet_tab1_title",
+      "label": "Tab 1 Title",
+      "default": "MEN"
+    },
+    {
+      "type": "link_list",
+      "id": "comet_tab1_menu",
+      "label": "Tab 1 Menu"
+    },
+    {
+      "type": "text",
+      "id": "comet_tab2_title",
+      "label": "Tab 2 Title",
+      "default": "WOMEN"
+    },
+    {
+      "type": "link_list",
+      "id": "comet_tab2_menu",
+      "label": "Tab 2 Menu"
+    },
+    {
+      "type": "text",
+      "id": "comet_tab3_title",
+      "label": "Tab 3 Title",
+      "default": "ABOUT US"
+    },
+    {
+      "type": "link_list",
+      "id": "comet_tab3_menu",
+      "label": "Tab 3 Menu"
+    },
+    {
+      "type": "text",
+      "id": "comet_tab4_title",
+      "label": "Tab 4 Title"
+    },
+    {
+      "type": "link_list",
+      "id": "comet_tab4_menu",
+      "label": "Tab 4 Menu"
     }
   ],
   "blocks": [
@@ -525,6 +618,45 @@
           "type": "url",
           "id": "link",
           "label": "Link"
+        }
+      ]
+    },
+    {
+      "type": "menu_icon",
+      "name": "Mobile Menu Icon",
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Menu Item Title",
+          "info": "Exact title of the menu item (e.g. 'SHOP ALL', 'X LOWS', 'AERES', 'APEX', 'AEON')"
+        },
+        {
+          "type": "image_picker",
+          "id": "icon_image",
+          "label": "Custom Icon Image"
+        },
+        {
+          "type": "select",
+          "id": "icon_preset",
+          "label": "Or Select Icon Preset",
+          "default": "sneaker-1",
+          "options": [
+            { "value": "none", "label": "None" },
+            { "value": "sneaker-1", "label": "Sneaker Icon 1 (Low Top)" },
+            { "value": "sneaker-2", "label": "Sneaker Icon 2 (Runner)" },
+            { "value": "sneaker-3", "label": "Sneaker Icon 3 (Court)" },
+            { "value": "shop-all", "label": "Shop All Arrow" },
+            { "value": "star", "label": "Star" },
+            { "value": "fire", "label": "Fire / Hot" },
+            { "value": "gift", "label": "Gift" }
+          ]
+        },
+        {
+          "type": "text",
+          "id": "badge_text",
+          "label": "Badge Text (Optional)",
+          "info": "e.g. 'NEW', 'HOT', 'SALE'"
         }
       ]
     }

@@ -1,0 +1,145 @@
+{%- comment -%}
+  Renders a single menu item with icon support, badge support, and sub-lists for Comet mobile drawer
+{%- endcomment -%}
+
+{%- assign has_sub_dropdown = false -%}
+{%- if link.links != blank -%}
+  {%- assign has_sub_dropdown = true -%}
+{%- endif -%}
+
+{%- assign link_title_upper = link.title | strip | upcase -%}
+{%- assign icon_block = nil -%}
+{%- assign badge_text = nil -%}
+{%- assign icon_preset = nil -%}
+
+{%- for block in section.blocks -%}
+  {%- if block.type == 'menu_icon' -%}
+    {%- assign block_title_upper = block.settings.title | strip | upcase -%}
+    {%- if block_title_upper == link_title_upper -%}
+      {%- assign icon_block = block -%}
+      {%- assign badge_text = block.settings.badge_text -%}
+      {%- assign icon_preset = block.settings.icon_preset -%}
+      {%- break -%}
+    {%- endif -%}
+  {%- endif -%}
+{%- endfor -%}
+
+<li class="comet-menu-item">
+  <div class="comet-menu-item__header">
+    <a href="{{ link.url }}" class="comet-menu-link">
+      <!-- ICON RENDERING -->
+      {%- if icon_block and icon_block.settings.icon_image != blank -%}
+        <span class="comet-menu-icon">
+          <img src="{{ icon_block.settings.icon_image | image_url: width: 60 }}" alt="{{ link.title }}" loading="lazy">
+        </span>
+      {%- elsif icon_preset != blank and icon_preset != 'none' -%}
+        <span class="comet-menu-icon">
+          {%- case icon_preset -%}
+            {%- when 'sneaker-1' -%}
+              <svg viewBox="0 0 24 24"><path d="M21.5 15.5l-3.5-3.5-3 1-4-4L6 11 2 12.5V17h19.5v-1.5zM6 15a1 1 0 110-2 1 1 0 010 2zm12 0a1 1 0 110-2 1 1 0 010 2z"/></svg>
+            {%- when 'sneaker-2' -%}
+              <svg viewBox="0 0 24 24"><path d="M22 16.5l-4-4-4 1-5-5-5 3L1 13v4h21v-0.5zM5 15a1 1 0 110-2 1 1 0 010 2zm13 0a1 1 0 110-2 1 1 0 010 2z"/></svg>
+            {%- when 'sneaker-3' -%}
+              <svg viewBox="0 0 24 24"><path d="M20 15.5l-3.5-3.5-3 1.5-4-3.5L5.5 11.5 2 13v4h18v-1.5zM6 15.5a1 1 0 110-2 1 1 0 010 2zm11 0a1 1 0 110-2 1 1 0 010 2z"/></svg>
+            {%- when 'shop-all' -%}
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            {%- when 'star' -%}
+              <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+            {%- when 'fire' -%}
+              <svg viewBox="0 0 24 24"><path d="M12 23c-4.97 0-9-4.03-9-9 0-3.53 2.04-6.4 5-7.79 0 2.21 1.79 4 4 4s4-1.79 4-4c2.96 1.39 5 4.26 5 7.79 0 4.97-4.03 9-9 9z"/></svg>
+            {%- when 'gift' -%}
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="8" width="18" height="13" rx="2"/><path d="M12 8v13M3 12h18M12 8C10 5 6 5 6 8h6zm0 0c2-3 6-3 6 0h-6z"/></svg>
+          {%- endcase -%}
+        </span>
+      {%- elsif link_title_upper contains 'SHOP ALL' -%}
+        <!-- Default Shop All Icon -->
+        <span class="comet-menu-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </span>
+      {%- elsif link_title_upper contains 'LOW' or link_title_upper contains 'SNEAKER' or link_title_upper contains 'RUNNER' or link_title_upper contains 'APEX' or link_title_upper contains 'AEON' or link_title_upper contains 'AERES' -%}
+        <!-- Default Sneaker Icon -->
+        <span class="comet-menu-icon">
+          <svg viewBox="0 0 24 24"><path d="M21.5 15.5l-3.5-3.5-3 1-4-4L6 11 2 12.5V17h19.5v-1.5zM6 15a1 1 0 110-2 1 1 0 010 2zm12 0a1 1 0 110-2 1 1 0 010 2z"/></svg>
+        </span>
+      {%- endif -%}
+
+      <span>{{ link.title }}</span>
+
+      {%- if badge_text != blank -%}
+        <span class="comet-menu-badge">{{ badge_text }}</span>
+      {%- endif -%}
+    </a>
+
+    {%- if has_sub_dropdown -%}
+      <button type="button" class="comet-menu-toggle js-comet-toggle" aria-label="Toggle sub-menu">
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+      </button>
+    {%- endif -%}
+  </div>
+
+  {%- if has_sub_dropdown -%}
+    <ul class="comet-sub-list">
+      {%- for childlink in link.links -%}
+        <li class="comet-sub-item">
+          {%- assign child_title_upper = childlink.title | strip | upcase -%}
+          {%- assign child_icon_block = nil -%}
+          {%- assign child_badge_text = nil -%}
+          {%- assign child_icon_preset = nil -%}
+
+          {%- for block in section.blocks -%}
+            {%- if block.type == 'menu_icon' -%}
+              {%- assign b_title_upper = block.settings.title | strip | upcase -%}
+              {%- if b_title_upper == child_title_upper -%}
+                {%- assign child_icon_block = block -%}
+                {%- assign child_badge_text = block.settings.badge_text -%}
+                {%- assign child_icon_preset = block.settings.icon_preset -%}
+                {%- break -%}
+              {%- endif -%}
+            {%- endif -%}
+          {%- endfor -%}
+
+          <a href="{{ childlink.url }}" class="comet-sub-link">
+            {%- if child_icon_block and child_icon_block.settings.icon_image != blank -%}
+              <span class="comet-menu-icon">
+                <img src="{{ child_icon_block.settings.icon_image | image_url: width: 60 }}" alt="{{ childlink.title }}" loading="lazy">
+              </span>
+            {%- elsif child_icon_preset != blank and child_icon_preset != 'none' -%}
+              <span class="comet-menu-icon">
+                {%- case child_icon_preset -%}
+                  {%- when 'sneaker-1' -%}
+                    <svg viewBox="0 0 24 24"><path d="M21.5 15.5l-3.5-3.5-3 1-4-4L6 11 2 12.5V17h19.5v-1.5zM6 15a1 1 0 110-2 1 1 0 010 2zm12 0a1 1 0 110-2 1 1 0 010 2z"/></svg>
+                  {%- when 'sneaker-2' -%}
+                    <svg viewBox="0 0 24 24"><path d="M22 16.5l-4-4-4 1-5-5-5 3L1 13v4h21v-0.5zM5 15a1 1 0 110-2 1 1 0 010 2zm13 0a1 1 0 110-2 1 1 0 010 2z"/></svg>
+                  {%- when 'sneaker-3' -%}
+                    <svg viewBox="0 0 24 24"><path d="M20 15.5l-3.5-3.5-3 1.5-4-3.5L5.5 11.5 2 13v4h18v-1.5zM6 15.5a1 1 0 110-2 1 1 0 010 2zm11 0a1 1 0 110-2 1 1 0 010 2z"/></svg>
+                  {%- when 'shop-all' -%}
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                  {%- when 'star' -%}
+                    <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                  {%- when 'fire' -%}
+                    <svg viewBox="0 0 24 24"><path d="M12 23c-4.97 0-9-4.03-9-9 0-3.53 2.04-6.4 5-7.79 0 2.21 1.79 4 4 4s4-1.79 4-4c2.96 1.39 5 4.26 5 7.79 0 4.97-4.03 9-9 9z"/></svg>
+                  {%- when 'gift' -%}
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="8" width="18" height="13" rx="2"/><path d="M12 8v13M3 12h18M12 8C10 5 6 5 6 8h6zm0 0c2-3 6-3 6 0h-6z"/></svg>
+                {%- endcase -%}
+              </span>
+            {%- elsif child_title_upper contains 'SHOP ALL' -%}
+              <span class="comet-menu-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+              </span>
+            {%- elsif child_title_upper contains 'LOW' or child_title_upper contains 'SNEAKER' or child_title_upper contains 'RUNNER' or child_title_upper contains 'APEX' or child_title_upper contains 'AEON' or child_title_upper contains 'AERES' -%}
+              <span class="comet-menu-icon">
+                <svg viewBox="0 0 24 24"><path d="M21.5 15.5l-3.5-3.5-3 1-4-4L6 11 2 12.5V17h19.5v-1.5zM6 15a1 1 0 110-2 1 1 0 010 2zm12 0a1 1 0 110-2 1 1 0 010 2z"/></svg>
+              </span>
+            {%- endif -%}
+
+            <span>{{ childlink.title }}</span>
+
+            {%- if child_badge_text != blank -%}
+              <span class="comet-menu-badge">{{ child_badge_text }}</span>
+            {%- endif -%}
+          </a>
+        </li>
+      {%- endfor -%}
+    </ul>
+  {%- endif -%}
+</li>
