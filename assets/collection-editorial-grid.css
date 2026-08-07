@@ -1,0 +1,182 @@
+/* ==========================================================================
+   Collection Editorial Grid — styles
+   Upload to: Assets/collection-editorial-grid.css
+   ========================================================================== */
+
+.ceg-wrapper{
+  --ceg-cols-desktop: 4;
+  --ceg-cols-mobile: 2;
+  --ceg-gap: 4px;
+  font-family: 'Montserrat', sans-serif;
+}
+
+/* Breadcrumb */
+.ceg-breadcrumb{
+  padding: 14px 20px;
+  font-size: 11px;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  color: #444;
+  border-bottom: 1px solid #ececec;
+}
+.ceg-breadcrumb a{ color:#444; text-decoration:none; }
+.ceg-breadcrumb a:hover{ text-decoration:underline; }
+
+/* Controls row */
+.ceg-controls{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding: 14px 20px;
+  border-bottom: 1px solid #ececec;
+}
+.ceg-view-toggle{
+  display:flex;
+  align-items:center;
+  gap:14px;
+}
+.ceg-view-toggle button{
+  background:none;
+  border:none;
+  font-size:11px;
+  letter-spacing:0.5px;
+  text-transform:uppercase;
+  font-weight:600;
+  cursor:pointer;
+  padding:4px 0;
+  color:#888;
+}
+.ceg-view-toggle button.is-active{ color:#000; border-bottom:1px solid #000; }
+
+.ceg-filter-sort-toggle{
+  background:none;
+  border:none;
+  font-size:11px;
+  letter-spacing:0.5px;
+  text-transform:uppercase;
+  font-weight:600;
+  cursor:pointer;
+  color:#000;
+}
+
+/* Grid */
+.ceg-grid{
+  display:grid;
+  grid-template-columns: repeat(var(--ceg-cols-desktop), 1fr);
+  grid-auto-rows: minmax(260px, auto);
+  grid-auto-flow: row dense;
+  gap: var(--ceg-gap);
+}
+.ceg-grid.ceg-view-2{ --ceg-cols-desktop: 2; }
+.ceg-grid.ceg-view-4{ --ceg-cols-desktop: 4; }
+
+@media (max-width: 768px){
+  .ceg-grid{ grid-template-columns: repeat(var(--ceg-cols-mobile), 1fr); }
+}
+
+/* Product card */
+.ceg-card{
+  position:relative;
+  background:#f2f2f2;
+  display:flex;
+  flex-direction:column;
+}
+.ceg-card a{ text-decoration:none; color:inherit; display:flex; flex-direction:column; height:100%; }
+.ceg-card-media{
+  position:relative;
+  flex:1;
+  overflow:hidden;
+  background:#eee;
+}
+.ceg-card-media img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  display:block;
+}
+.ceg-card.is-sold-out .ceg-card-media img{ opacity:0.5; }
+
+.ceg-card-label{
+  position:absolute;
+  top:12px;
+  left:12px;
+  font-size:10px;
+  letter-spacing:0.5px;
+  text-transform:uppercase;
+  font-weight:600;
+  color:#000;
+  z-index:2;
+}
+.ceg-card-label.is-sold-out{ color:#999; }
+
+.ceg-card-info{ padding:10px 4px 4px; text-align:left; }
+.ceg-card-title{ font-size:12px; margin:0 0 4px; font-weight:500; }
+.ceg-card-price{ font-size:12px; display:flex; align-items:center; gap:6px; flex-wrap:wrap; }
+.ceg-compare-price{ text-decoration:line-through; color:#888; font-size:11px; }
+.ceg-discount-badge{
+  background:#d60000; color:#fff; font-size:9px; font-weight:600;
+  padding:2px 5px; line-height:1;
+}
+
+/* Genuine leather / vegan badges (kept from existing product data) */
+.ceg-material-badge{ position:absolute; top:-4px; right:8px; z-index:2; }
+.ceg-material-badge img{ width:34px; height:auto; }
+
+/* Editorial tile (image-only, from collection metafield) */
+.ceg-editorial-tile{
+  position:relative;
+  grid-row: span 2;
+  overflow:hidden;
+  background:#e9e9e9;
+}
+.ceg-editorial-tile a,
+.ceg-editorial-tile .ceg-editorial-noclick{
+  display:block; width:100%; height:100%;
+}
+.ceg-editorial-tile img{
+  width:100%; height:100%; object-fit:cover; display:block;
+}
+.ceg-editorial-tile .ceg-card-label{
+  color:#fff;
+  text-shadow: 0 1px 3px rgba(0,0,0,0.5);
+}
+
+@media (max-width: 768px){
+  .ceg-editorial-tile{ grid-row: span 2; }
+  .ceg-controls{ flex-wrap:wrap; gap:10px; }
+}
+
+/* Filter / Sort drawer (shared) */
+.ceg-drawer{
+  position:fixed; top:0; right:-100%; height:100%; width:85%; max-width:340px;
+  background:#fff; overflow-y:auto; transition:right 0.3s ease; z-index:9999;
+  padding:24px; box-shadow:-2px 0 10px rgba(0,0,0,0.15);
+}
+.ceg-drawer.is-open{ right:0; }
+.ceg-drawer-header{ display:flex; justify-content:space-between; align-items:center; margin-bottom:20px; }
+.ceg-drawer-header h2{ font-size:16px; font-weight:700; text-transform:uppercase; letter-spacing:0.5px; }
+.ceg-drawer-close{ background:none; border:none; font-size:22px; cursor:pointer; line-height:1; }
+
+.ceg-sort-group{ margin-bottom:24px; }
+.ceg-sort-group label{ font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:0.5px; display:block; margin-bottom:8px; }
+.ceg-sort-group select{ width:100%; padding:10px; border:1px solid #000; background:#fff; font-family:inherit; }
+
+.ceg-filter-group{ margin-bottom:14px; border-bottom:1px solid #ececec; }
+.ceg-filter-group summary{ font-weight:600; cursor:pointer; padding:12px 0; font-size:13px; text-transform:uppercase; letter-spacing:0.3px; }
+.ceg-filter-values{ padding:4px 0 14px; }
+.ceg-filter-values label{ display:block; margin-bottom:8px; font-size:13px; }
+.ceg-filter-values input{ margin-right:8px; }
+
+.ceg-drawer-actions{
+  position:sticky; bottom:0; background:#fff; padding:14px 0; margin-top:20px;
+  display:flex; justify-content:space-between; border-top:1px solid #ddd;
+}
+.ceg-apply-btn{ background:#000; color:#fff; border:none; padding:12px 18px; font-weight:600; cursor:pointer; text-transform:uppercase; font-size:11px; letter-spacing:0.5px; }
+.ceg-clear-btn{ background:none; border:none; color:#000; text-decoration:underline; cursor:pointer; font-size:11px; text-transform:uppercase; }
+
+.ceg-overlay{ position:fixed; inset:0; background:rgba(0,0,0,0.3); z-index:9998; display:none; }
+.ceg-overlay.is-open{ display:block; }
+
+.ceg-loading{ text-align:center; padding:24px; font-size:12px; text-transform:uppercase; letter-spacing:0.5px; display:none; }
+
+.ceg-pagination-wrapper{ display:none; }

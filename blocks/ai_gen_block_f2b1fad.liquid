@@ -1,0 +1,420 @@
+{% doc %}
+  @prompt
+    MAKE A RESPONSIVE FULL SCREEN BANNER WITH MOBILE IMAGE OPTION AND URL IN THE IMAGE
+
+{% enddoc %}
+{% assign ai_gen_id = block.id | replace: '_', '' | downcase %}
+
+{% style %}
+  .ai-fullscreen-banner-{{ ai_gen_id }} {
+    position: relative;
+    width: 100%;
+    height: 95vh;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+
+  
+
+  .ai-fullscreen-banner-image-{{ ai_gen_id }} {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: 1;
+  }
+
+  .ai-fullscreen-banner-placeholder-{{ ai_gen_id }} {
+    position: absolute;
+    top: 15;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #f4f4f4;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1;
+  }
+  
+
+  @media only screen and (min-width:768px){
+            .ai-fullscreen-banner-image-atvpkvfbyk3lqafduoaigenblockf2b1fadjwktbp {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 95%;
+            object-fit: cover;
+            z-index: 1;
+        }
+
+        .ai-fullscreen-banner-atvpkvfbyk3lqafduoaigenblockf2b1fadjwktbp {
+    
+    margin-bottom: -2.5%;
+    
+}
+
+  }
+
+  .ai-fullscreen-banner-placeholder-{{ ai_gen_id }} svg {
+    width: 200px;
+    height: 200px;
+    opacity: 0.3;
+  }
+
+  .ai-fullscreen-banner-empty-state-{{ ai_gen_id }} {
+    position: absolute;
+    bottom: 40px;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 16px 24px;
+    background-color: rgba(255, 255, 255, 0.9);
+    border-radius: 8px;
+    font-size: 14px;
+    color: #666;
+    text-align: center;
+    pointer-events: none;
+    z-index: 2;
+  }
+
+  .ai-fullscreen-banner-overlay-{{ ai_gen_id }} {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: {{ block.settings.overlay_color }};
+    opacity: {{ block.settings.overlay_opacity | divided_by: 100.0 }};
+    z-index: 2;
+  }
+
+  .ai-fullscreen-banner-content-{{ ai_gen_id }} {
+    position: relative;
+    z-index: 3;
+    text-align: center;
+    color: {{ block.settings.text_color }};
+    max-width: 800px;
+    padding: 0 20px;
+  }
+
+  .ai-fullscreen-banner-heading-{{ ai_gen_id }} {
+    font-size: {{ block.settings.heading_size }}px;
+    font-weight: bold;
+    margin: 0 0 16px 0;
+    line-height: 1.2;
+  }
+
+  .ai-fullscreen-banner-subheading-{{ ai_gen_id }} {
+    font-size: {{ block.settings.subheading_size }}px;
+    margin: 0 0 24px 0;
+    line-height: 1.4;
+  }
+
+  .ai-fullscreen-banner-button-{{ ai_gen_id }} {
+    display: inline-block;
+    padding: 16px 32px;
+    background-color: {{ block.settings.button_color }};
+    color: {{ block.settings.button_text_color }};
+    text-decoration: none;
+    border-radius: {{ block.settings.button_border_radius }}px;
+    font-size: {{ block.settings.button_text_size }}px;
+    font-weight: 600;
+    transition: background-color 0.3s ease;
+  }
+
+  .ai-fullscreen-banner-button-{{ ai_gen_id }}:hover {
+    background-color: {{ block.settings.button_hover_color }};
+  }
+
+  .ai-fullscreen-banner-link-{{ ai_gen_id }} {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 4;
+    text-decoration: none;
+  }
+
+  @media screen and (max-width: 768px) {
+    .ai-fullscreen-banner-{{ ai_gen_id }} {
+      height: {{ block.settings.mobile_height }}vh;
+    }
+
+    .ai-fullscreen-banner-heading-{{ ai_gen_id }} {
+      font-size: {{ block.settings.heading_size | times: 0.8 }}px;
+    }
+
+    .ai-fullscreen-banner-subheading-{{ ai_gen_id }} {
+      font-size: {{ block.settings.subheading_size | times: 0.9 }}px;
+    }
+
+    .ai-fullscreen-banner-button-{{ ai_gen_id }} {
+      padding: 14px 28px;
+      font-size: {{ block.settings.button_text_size | times: 0.9 }}px;
+    }
+
+    .ai-fullscreen-banner-content-{{ ai_gen_id }} {
+      padding: 0 16px;
+    }
+
+    {% if block.settings.mobile_image %}
+      .ai-fullscreen-banner-image-desktop-{{ ai_gen_id }} {
+        display: none;
+      }
+    {% endif %}
+  }
+
+  @media screen and (min-width: 769px) {
+    {% if block.settings.mobile_image %}
+      .ai-fullscreen-banner-image-mobile-{{ ai_gen_id }} {
+        display: none;
+      }
+    {% endif %}
+  }
+{% endstyle %}<div
+  class="ai-fullscreen-banner-{{ ai_gen_id }}"
+  {{ block.shopify_attributes }}
+>
+  {% if block.settings.desktop_image or block.settings.mobile_image %}
+    {% if block.settings.desktop_image %}
+      <img
+        src="{{ block.settings.desktop_image | image_url: width: 2000 }}"
+        alt="{{ block.settings.desktop_image.alt | escape }}"
+        loading="lazy"
+        width="{{ block.settings.desktop_image.width }}"
+        height="{{ block.settings.desktop_image.height }}"
+        class="ai-fullscreen-banner-image-{{ ai_gen_id }} ai-fullscreen-banner-image-desktop-{{ ai_gen_id }}"
+      >
+    {% endif %}
+
+    {% if block.settings.mobile_image %}
+      <img
+        src="{{ block.settings.mobile_image | image_url: width: 1000 }}"
+        alt="{{ block.settings.mobile_image.alt | escape }}"
+        loading="lazy"
+        width="{{ block.settings.mobile_image.width }}"
+        height="{{ block.settings.mobile_image.height }}"
+        class="ai-fullscreen-banner-image-{{ ai_gen_id }} ai-fullscreen-banner-image-mobile-{{ ai_gen_id }}"
+      >
+    {% endif %}
+  {% else %}
+    <div class="ai-fullscreen-banner-placeholder-{{ ai_gen_id }}">
+      {{ 'hero-apparel-1' | placeholder_svg_tag }}
+      <div class="ai-fullscreen-banner-empty-state-{{ ai_gen_id }}">
+        Add a desktop image to get started
+      </div>
+    </div>
+  {% endif %}
+
+  {% if block.settings.show_overlay %}
+    <div class="ai-fullscreen-banner-overlay-{{ ai_gen_id }}"></div>
+  {% endif %}
+
+  {% if block.settings.show_content %}
+    <div class="ai-fullscreen-banner-content-{{ ai_gen_id }}">
+      {% if block.settings.heading != blank %}
+        <h1 class="ai-fullscreen-banner-heading-{{ ai_gen_id }}">{{ block.settings.heading }}</h1>
+      {% endif %}
+
+      {% if block.settings.subheading != blank %}
+        <p class="ai-fullscreen-banner-subheading-{{ ai_gen_id }}">{{ block.settings.subheading }}</p>
+      {% endif %}
+
+      {% if block.settings.button_text != blank and block.settings.button_url != blank %}
+        <a
+          href="{{ block.settings.button_url }}"
+          class="ai-fullscreen-banner-button-{{ ai_gen_id }}"
+        >
+          {{ block.settings.button_text }}
+        </a>
+      {% endif %}
+    </div>
+  {% endif %}
+
+  {% if block.settings.banner_url != blank and block.settings.show_content == false %}
+    <a
+      href="{{ block.settings.banner_url }}"
+      class="ai-fullscreen-banner-link-{{ ai_gen_id }}"aria-label="Navigate to {{ block.settings.banner_url }}"
+    ></a>
+  {% endif %}
+</div>
+
+{% schema %}
+{
+  "name": "Fullscreen banner",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Images"
+    },
+    {
+      "type": "image_picker",
+      "id": "desktop_image",
+      "label": "Desktop image"
+    },
+    {
+      "type": "image_picker",
+      "id": "mobile_image",
+      "label": "Mobile image"
+    },
+    {
+      "type": "header",
+      "content": "Banner settings"
+    },
+    {
+      "type": "url",
+      "id": "banner_url",
+      "label": "Banner link"
+    },
+    {
+      "type": "range",
+      "id": "mobile_height",
+      "min": 50,
+      "max": 100,
+      "step": 5,
+      "unit": "vh",
+      "label": "Mobile height",
+      "default": 70
+    },
+    {
+      "type": "header",
+      "content": "Overlay"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_overlay",
+      "label": "Show overlay",
+      "default": true
+    },
+    {
+      "type": "color",
+      "id": "overlay_color",
+      "label": "Overlay color",
+      "default": "#000000"
+    },
+    {
+      "type": "range",
+      "id": "overlay_opacity",
+      "min": 0,
+      "max": 80,
+      "step": 5,
+      "unit": "%",
+      "label": "Overlay opacity",
+      "default": 30
+    },
+    {
+      "type": "header",
+      "content": "Content"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_content",
+      "label": "Show text content",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Welcome to our store"
+    },
+    {
+      "type": "textarea",
+      "id": "subheading",
+      "label": "Subheading",
+      "default": "Discover amazing products and exceptional quality"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "range",
+      "id": "heading_size",
+      "min": 24,
+      "max": 80,
+      "step": 2,
+      "unit": "px",
+      "label": "Heading size",
+      "default": 48
+    },
+    {
+      "type": "range",
+      "id": "subheading_size",
+      "min": 14,
+      "max": 32,
+      "step": 1,
+      "unit": "px",
+      "label": "Subheading size",
+      "default": 18
+    },
+    {
+      "type": "header",
+      "content": "Button"
+    },
+    {
+      "type": "text",
+      "id": "button_text",
+      "label": "Button text",
+      "default": "Shop now"
+    },
+    {
+      "type": "url",
+      "id": "button_url",
+      "label": "Button link"
+    },
+    {
+      "type": "color",
+      "id": "button_color",
+      "label": "Button color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "button_hover_color",
+      "label": "Button hover color",
+      "default": "#f0f0f0"
+    },
+    {
+      "type": "color",
+      "id": "button_text_color",
+      "label": "Button text color",
+      "default": "#000000"
+    },
+    {
+      "type": "range",
+      "id": "button_text_size",
+      "min": 12,
+      "max": 24,
+      "step": 1,
+      "unit": "px",
+      "label": "Button text size",
+      "default": 16
+    },
+    {
+      "type": "range",
+      "id": "button_border_radius",
+      "min": 0,
+      "max": 40,
+      "step": 2,
+      "unit": "px",
+      "label": "Button border radius",
+      "default": 8
+    }
+  ],
+  "presets": [
+    {
+      "name": "Fullscreen banner"
+    }
+  ]
+}
+{% endschema %}

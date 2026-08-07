@@ -1,0 +1,34 @@
+{%- if section.settings.divider -%}<div class="section--divider">{%- endif -%}
+
+<div class="page-width page-width--narrow">
+
+  {%- if section.settings.title != blank -%}
+    <header class="section-header">
+      <h2 class="section-header__title">
+        {{ section.settings.title | escape }}
+      </h2>
+    </header>
+  {%- endif -%}
+
+  {%- if section.blocks.size > 0 -%}
+    {%- for block in section.blocks -%}
+      <div {{ block.shopify_attributes }}>
+        {% case block.type %}
+          {% when 'rich-text'%}
+            {%- render 'page-block-rich-text', section_class: 'index-section--faq', block: block -%}
+
+          {% when 'question'%}
+            {%- render 'page-block-faq', block: block -%}
+        {% endcase %}
+      </div>
+    {%- endfor -%}
+  {%- endif -%}
+
+  {%- if section.blocks.size == 0 -%}
+    <div class="placeholder-noblocks">
+      {{ 'home_page.onboarding.no_content' | t }}
+    </div>
+  {%- endif -%}
+</div>
+
+{%- if section.settings.divider -%}</div>{%- endif -%}

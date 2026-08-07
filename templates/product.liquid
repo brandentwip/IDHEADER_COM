@@ -1,0 +1,214 @@
+
+
+{% section 'product-template' %}
+{% render 'product-story-section', product: product %}
+{% section 'Comparison-table' %}
+<!-- Start of Judge.me code --><div class="jdgm-review-wrapper">
+
+  {% assign has_legacy = false %}
+  {% if product.metafields.judgeme.widget.size > 20 %}
+    {% assign has_legacy = true %}
+  {% endif %}
+
+  <div style="clear:both"></div>
+
+  <div
+    id="judgeme_product_reviews"
+    class="jdgm-widget jdgm-review-widget"
+    data-product-title="{{ product.title | escape }}"
+    data-id="{{ product.id }}"
+    data-product-id="{{ product.id }}"
+    data-widget="review"
+    data-auto-install="false"
+    data-shop-reviews-count="{{ shop.metafields.judgeme.shop_reviews_count | default: 0 | escape }}"
+    data-entry-point="review_widget.js"
+    data-entry-key="review-widget/main.js">
+
+    {% if has_legacy %}
+      <div class="jdgm-legacy-widget-content" style="display:none;">
+        {{ product.metafields.judgeme.widget }}
+      </div>
+    {% endif %}
+
+  </div><style>.jdgm-review-wrapper{
+    max-width: 1440px;
+    margin: 80px auto;
+    padding: 0 40px;
+    box-sizing: border-box;
+}
+
+@media (max-width: 1024px){
+    .jdgm-review-wrapper{
+        padding: 0 24px;
+    }
+}
+
+@media (max-width: 749px){
+    .jdgm-review-wrapper{
+        padding: 0 16px;
+        margin: 48px auto;
+    }
+}</style>
+
+  {% if product.metafields.judgeme.review_widget_data %}
+    <script>
+      jdgm.data ||= {};
+      jdgm.data.reviewWidget ||= {};
+      jdgm.data.reviewWidget[{{ product.id }}] = {{ product.metafields.judgeme.review_widget_data }};
+    </script>
+  {% endif %}
+
+</div>
+
+
+{% comment %} reviews Section {% endcomment %}
+<div
+        id="wc_review_section"
+        class="wc_review_main_content"
+        data-url="{{ shop.url }}"
+        data-handle="{{ product.handle }}"
+        data-product_id="{{ product.id }}"
+        data-limit="0"
+      ></div>
+      {% comment %}
+{% section 'product-story-sections' %}
+{% if product.id == 8514799239416 or product.id == 8514799206648 %}
+  <img src="https://cdn.shopify.com/s/files/1/0636/5128/3192/files/ID3093.jpg?v=1717504867" width="100%" height="">
+{% endif %}
+{% if product.id == 8529674764536 or product.id == 8529675059448 %}
+  <img src="https://cdn.shopify.com/s/files/1/0636/5128/3192/files/ID3092_d66f812e-3872-46b6-a307-446226a28492.jpg?v=1717569704" width="100%" height="">
+{% endif %}
+{% if product.id == 8514799042808 or product.id == 8514799010040 %}
+  <img src="https://cdn.shopify.com/s/files/1/0636/5128/3192/files/ID3091.jpg?v=1717504654" width="100%" height="">
+{% endif %}
+{% if product.id == 8514798813432 or product.id == 8514798878968 or product.id == 8514798977272 %}
+  <img src="https://cdn.shopify.com/s/files/1/0636/5128/3192/files/ID3090.jpg?v=1717504566" width="100%" height="">
+{% endif %}
+{% if product.id == 8514799993080 or product.id == 8514799960312 or product.id == 8514800025848 %}
+  <img src="https://cdn.shopify.com/s/files/1/0636/5128/3192/files/ID3089.jpg?v=1717504460" width="100%" height="">
+{% endif %}
+{% if product.id == 8514799370488 or product.id == 8514799436024 or product.id == 8514799304952 %}
+  <img src="https://cdn.shopify.com/s/files/1/0636/5128/3192/files/ID3088.jpg?v=1717504290" width="100%" height="">
+{% endif %}
+{% if product.id == 8514798452984 or product.id == 8514798780664 %}
+  <img src="https://cdn.shopify.com/s/files/1/0636/5128/3192/files/ID3087.jpg?v=1717500967" width="100%" height="">
+{% endif %}
+{% if product.id == 8514798321912 or product.id == 8514798387448 %}
+  <img src="https://cdn.shopify.com/s/files/1/0636/5128/3192/files/ID3086.jpg?v=1717500691" width="100%" height="">
+{% endif %}
+{% if product.id == 7771060404472 or product.id == 7771060371704 or product.id == 7771060338936 %}
+  <img src="https://cdn.shopify.com/s/files/1/0636/5128/3192/files/A_content.jpg?v=1662544426" width="100%" height="">
+{% endif %}
+{% if product.id == 7672258363640 or product.id == 7672258199800 or product.id == 7672258035960 %}
+  <img src="https://cdn.shopify.com/s/files/1/0636/5128/3192/files/A-plus.jpg?v=1664455528" width="100%" height="">
+{% endif %}
+{% if product.id == 7771060306168 or product.id == 7771060273400 %}
+  <img
+    src="https://cdn.shopify.com/s/files/1/0636/5128/3192/files/IMG_9465_be0fd825-8195-4f98-811c-a02d506554a1.jpg?v=1666885305"
+    width="100%"
+    height=""
+  >
+{% endif %}
+{% if product.id == 7672259772664 or product.id == 7672259444984 %}
+  <img
+    src="https://cdn.shopify.com/s/files/1/0636/5128/3192/files/A_-PDP-OFF-ROADER.png12.png?v=1668774697"
+    width="100%"
+    height=""
+  >
+{% endif %}
+{% if product.id == 7690060431608 or product.id == 7690060497144 %}
+  <img src="https://cdn.shopify.com/s/files/1/0636/5128/3192/files/57.png?v=1670776627" width="100%" height="">
+{% endif %}
+{% if product.id == 7690060529912 or product.id == 7690060562680 %}
+  <img src="https://cdn.shopify.com/s/files/1/0636/5128/3192/files/58.png?v=1670776625" width="100%" height="">
+{% endif %}
+{% if product.id == 7690060660984 or product.id == 7690060595448 %}
+  <img src="https://cdn.shopify.com/s/files/1/0636/5128/3192/files/59.png?v=1670776625" width="100%" height="">
+{% endif %}
+
+{% if product.id == 7869157572856 or product.id == 7869157605624 %}
+  <img src="https://cdn.shopify.com/s/files/1/0636/5128/3192/files/A_-banner_1.png?v=1673459168" width="100%" height="">
+{% endif %}
+{% if product.id == 7869158064376 or product.id == 7869158097144 %}
+  <img src="https://cdn.shopify.com/s/files/1/0636/5128/3192/files/A_-banner_3.png?v=1673459168" width="100%" height="">
+{% endif %}
+{% if product.id == 7869157703928 or product.id == 7869157736696 %}
+  <img src="https://cdn.shopify.com/s/files/1/0636/5128/3192/files/A_-banner_2.png?v=1673459168" width="100%" height="">
+{% endif %}
+
+{% if product.id == 7869157277944 or product.id == 7869157310712 %}
+  <img src="https://cdn.shopify.com/s/files/1/0636/5128/3192/files/pdp-1.jpg?v=1678882779" width="100%" height="">
+{% endif %}
+
+{% if product.id == 7869157507320 or product.id == 7869157540088 %}
+  <img src="https://cdn.shopify.com/s/files/1/0636/5128/3192/files/pdp-2.jpg?v=1678882779" width="100%" height="">
+{% endif %}
+
+{% if product.id == 7869157638392 or product.id == 7869157671160 %}
+  <img src="https://cdn.shopify.com/s/files/1/0636/5128/3192/files/pdp-3.jpg?v=1678882778" width="100%" height="">
+{% endif %}
+
+{% if product.id == 7672260919544 or product.id == 7672260591864 %}
+  <img src="https://cdn.shopify.com/s/files/1/0636/5128/3192/files/IX5001.jpg?v=1680691116" width="100%" height="">
+{% endif %}
+
+{% if product.id == 7672260002040 or product.id == 7672260329720 %}
+  <img src="https://cdn.shopify.com/s/files/1/0636/5128/3192/files/IX5002.jpg?v=1680691116" width="100%" height="">
+{% endif %}
+
+{% if product.id == 7672314396920 or product.id == 7672314757368 %}
+  <img src="https://cdn.shopify.com/s/files/1/0636/5128/3192/files/IX-5004-IMG.jpg?v=1681274620" width="100%" height="">
+{% endif %}
+
+{% if product.id == 7672316395768 or product.id == 7672317509880 %}
+  <img
+    src="https://cdn.shopify.com/s/files/1/0636/5128/3192/files/IX-50010-IMG.jpg?v=1681274620"
+    width="100%"
+    height=""
+  >
+{% endif %}
+
+{% if product.id == 7672315642104 or product.id == 7672315871480 %}
+  <img src="https://cdn.shopify.com/s/files/1/0636/5128/3192/files/IX-5008-IMG.jpg?v=1681274619" width="100%" height="">
+{% endif %}
+
+{% if product.id == 7690060824824 or product.id == 7690060890360 or product.id == 7690060923128 %}
+  <img src="https://cdn.shopify.com/s/files/1/0636/5128/3192/files/A_-1.jpg?v=1684918399" width="100%" height="">
+{% endif %}
+
+{% if product.id == 7690060726520 or product.id == 7690060759288 or product.id == 7690060693752 %}
+  <img src="https://cdn.shopify.com/s/files/1/0636/5128/3192/files/id_2.jpg?v=1684918401" width="100%" height="">
+{% endif %}
+
+{% if product.id == 7869157146872 or product.id == 7869157212408 or product.id == 7869157245176 %}
+  <img
+    src="https://cdn.shopify.com/s/files/1/0636/5128/3192/files/A_-banner_Dallas..png?v=1695725021"
+    width="100%"
+    height=""
+  >
+{% endif %}{% endcomment %}
+
+
+
+{% section 'product-recommendations' %}
+{% section 'recently-viewed' %}
+
+{% if collection %}
+  <div class="text-center page-content page-content--bottom">
+    <a
+      href="{% if collection.handle == 'frontpage' %}/{% else %}{{ collection.url }}{% endif %}"
+      class="btn btn--small return-link"
+    >
+      <svg
+        aria-hidden="true"
+        focusable="false"
+        role="presentation"
+        class="icon icon--wide icon-arrow-left"
+        viewBox="0 0 50 15"
+      >
+        <path d="M50 5.38v4.25H15V15L0 7.5 15 0v5.38z"/>
+      </svg>
+      {{ 'products.general.collection_return' | t: collection: collection.title }}
+    </a>
+  </div>
+{% endif %}

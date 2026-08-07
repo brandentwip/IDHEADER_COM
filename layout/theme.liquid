@@ -1,0 +1,602 @@
+<!doctype html>
+<html class="no-js" lang="{{ request.locale.iso_code }}" dir="{{ settings.text_direction }}">
+  <head>
+
+
+<!-- Gokwik theme code start -->
+
+
+<link rel="dns-prefetch" href="https://pdp.gokwik.co/">
+<link rel="dns-prefetch" href="https://api.gokwik.co">
+{% render 'gokwik' %}
+<!-- Gokwik theme code End -->
+
+<script>
+  (() => {
+    try {
+      var e = navigator,
+        t = e.userAgent,
+        r = 0,
+        a = (e, t, r) => e.setAttribute(t, r),
+        o = (e, t) => e.removeAttribute(t),
+        d = "tagName",
+        n = "forEach",
+        l = "indexOf";
+      ((e.platform[l]("x86_64") > -1 && 0 > t[l]("CrOS")) || t[l]("power") > -1 || t[l]("rix") > -1) &&
+        new MutationObserver((e) => {
+          e[n](({ addedNodes: e }) => {
+            e[n]((e) => {
+              1 === e.nodeType &&
+                ("IFRAME" === e[d] && (a(e, "loading", "lazy"), a(e, "data-src", e.src), o(e, "src")),
+                  "IMG" === e[d] && r++ > 20 && a(e, "loading", "lazy"),
+                  "SCRIPT" === e[d] && (a(e, "data-src", e.src), o(e, "src"), (e.type = "text/lazyload")));
+            });
+          });
+        }).observe(document.documentElement, { childList: !0, subtree: !0 });
+      var c = (e) => document.querySelector(e),
+        s = () => Date.now(),
+        i = s(),
+        u = () => {
+          if (!(s() - i > 500)) {
+            if (!c("body>meta")) return setTimeout(u, 5);
+            var e = c("head");
+            document.querySelectorAll("meta,link:not([rel='stylesheet']),title")[n]((t) => e.append(t));
+          }
+        };
+      u();
+    } catch (m) { }
+  })();
+</script>
+    
+    {% include 'starapps-core' %}
+
+    <title>{{ page_title }}</title>
+    {% if page_description %}<meta name="description" content="{{ page_description | escape }}">{% endif %}
+
+     {% comment %} {% render 'pagefly-head' %}  {% endcomment %}
+    {% include 'structuredDataV2' %}
+    {% comment %} {% include 'SEO-Master' %}  {% endcomment %}
+    {%- if dropinblog == 1 -%}{{ dropinblog_head_top }}{%- endif -%}
+    <meta name="facebook-domain-verification" content="1cde56yyzmrvis1nuw5dm4f7pqbigi">
+    <meta name="google-site-verification" content="mMpk2VQApwyUcrq192X0QBiHj17C0wWbvPvwRym8OtQ">
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-J4CQDSPLF7"></script>
+
+    <!-- Google Tag Manager -->
+    <script>
+      (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+      new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+      j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+      'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+      })(window,document,'script','dataLayer','GTM-KGT8HD5');
+    </script>
+    <!-- End Google Tag Manager -->
+
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=AW-767110121"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'AW-767110121');
+    </script>
+
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-VD4NR2GEZQ"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'G-VD4NR2GEZQ');
+    </script>
+
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'G-J4CQDSPLF7');
+    </script>
+
+    {% if template == 'product' %}
+      {% include 'kiwiSizing' %}
+    {% endif %}
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="theme-color" content="{{ settings.color_button }}">
+    <link rel="preconnect" href="https://cdn.shopify.com">
+    <link rel="preconnect" href="https://fonts.shopifycdn.com">
+    <link rel="dns-prefetch" href="https://productreviews.shopifycdn.com">
+    <link rel="dns-prefetch" href="https://ajax.googleapis.com">
+    <link rel="dns-prefetch" href="https://maps.googleapis.com">
+    <link rel="dns-prefetch" href="https://maps.gstatic.com">
+
+    {% if template contains 'collection' and collection %}
+  <link rel="canonical" href="{{ shop.url }}/collections/{{ collection.handle }}">
+{% else %}
+  <link rel="canonical" href="{{ canonical_url }}">
+{% endif %}
+
+
+    {%- if settings.favicon != blank -%}
+      <link rel="shortcut icon" href="{{ settings.favicon | img_url: '32x32' }}" type="image/png">
+    {%- endif -%}
+    {% render 'sr-checkout' %}
+
+    {% comment %}
+    {%- render 'seo-title' -%}
+ {% endcomment %}
+    {%- if page_description -%}
+    {%- endif -%}
+
+    {%- if dropinblog == 1 -%}
+      {{ dropinblog_head_social }}
+    {%- else -%}
+      {% render 'social-meta-tags' %}
+    {%- endif -%}
+
+    {%- render 'font-face' -%}
+    {{ 'theme.css' | asset_url | stylesheet_tag }}
+    {{ 'custom.min.css' | asset_url | stylesheet_tag }}
+  {% comment %}  {{ 'custom.css' | asset_url | stylesheet_tag }} {% endcomment %}
+    {%- render 'css-variables' -%}
+
+    <script>
+      document.documentElement.className = document.documentElement.className.replace('no-js', 'js');
+
+      window.theme = window.theme || {};
+      theme.routes = {
+        home: "{{ routes.root_url }}",
+        cart: "{{ routes.cart_url | append: '.js' }}",
+        cartPage: "{{ routes.cart_url }}",
+        cartAdd: "{{ routes.cart_add_url | append: '.js' }}",
+        cartChange: "{{ routes.cart_change_url | append: '.js' }}"
+      };
+      theme.strings = {
+        soldOut: {{ 'products.product.sold_out' | t | json }},
+        unavailable: {{ 'products.product.unavailable' | t | json }},
+        stockLabel: {{ 'products.product.stock_label' | t: count: '[count]' | json }},
+        willNotShipUntil: {{ 'products.product.will_not_ship_until' | t: date: '[date]' | json }},
+        willBeInStockAfter: {{ 'products.product.will_be_in_stock_after' | t: date: '[date]' | json }},
+        waitingForStock: {{ 'products.product.waiting_for_stock' | t | json }},
+        savePrice: {{ 'products.general.save_html' | t: saved_amount: '[saved_amount]' | json }},
+        cartEmpty: {{ 'cart.general.empty' | t | json }},
+        cartTermsConfirmation: {{ 'cart.general.terms_confirm' | t | json }},
+        searchCollections: {{ 'general.search.collections' | t | json }},
+        searchPages: {{ 'general.search.pages' | t | json }},
+        searchArticles: {{ 'general.search.articles' | t | json }}
+      };
+      theme.settings = {
+        dynamicVariantsEnable: true,
+        dynamicVariantType: {{ settings.variant_type | json }},
+        cartType: {{ settings.cart_type | json }},
+        isCustomerTemplate: {% if request.page_type contains 'customers/' %}true{% else %}false{% endif %},
+        moneyFormat: {{ shop.money_format | json }},
+        saveType: {{ settings.product_save_type | json }},
+        recentlyViewedEnabled: false,
+        productImageSize: {{ settings.product_grid_image_size | json }},
+        productImageCover: {{ settings.product_grid_image_fill }},
+        predictiveSearch: {{ settings.predictive_search_enabled }},
+        predictiveSearchType: {{ settings.search_type | json }},
+        inventoryThreshold: {{ settings.inventory_threshold }},
+        quickView: {{ settings.quick_shop_enable }},
+        themeName: 'Impulse',
+        themeVersion: "4.1.3"
+      };
+    </script>
+    <script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const links = document.querySelectorAll('a');
+    links.forEach(link => {
+      if (link.textContent.trim().toLowerCase() === 'offer') {
+        link.classList.add('blink-offer');
+      }
+    });
+  });
+</script>
+
+
+  
+    {{ content_for_header }}
+ {% unless template contains 'index' %}
+
+      {% include 'globo.swatch.script' %}
+
+    {% endunless %}
+    {% if collection.handle != 'summer-favourites' %}
+      <script type="text/javascript">
+        if(typeof(GloboFilterConfig) != "undefined")GloboFilterConfig.collection.sort = 'featured';
+      </script>
+    {% endif %}
+    <script src="{{ 'vendor-scripts-v9.js' | asset_url | split: '?' | first }}" defer="defer"></script>
+
+    {%- if shop.enabled_currencies.size > 1 -%}
+      <link
+        rel="preload"
+        as="style"
+        href="{{ 'currency-flags.css' | asset_url | split: '?' | first }}"
+        onload="this.onload=null;this.rel='stylesheet'"
+      >
+      <link rel="stylesheet" href="{{ 'currency-flags.css' | asset_url | split: '?' | first }}">
+    {%- endif -%}
+
+    <script src="{{ 'theme.js' | asset_url }}" defer="defer"></script>
+
+    {%- if request.page_type contains 'customers/' -%}
+      <script src="{{ 'shopify_common.js' | shopify_asset_url }}" defer="defer"></script>
+    {%- endif -%}
+
+     {% comment %} {% include 'pagefly-header' %}  {% endcomment %}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js" async></script>
+    <style>
+      .template-index #effectiveAppsScrollToTopBtn{
+        display:none!important;
+      }
+    </style>
+    <style>
+      /* 🔴⚫ Blink red and black */
+.blink-offer {
+  animation: blinkRedBlack 1s infinite;
+  font-weight: 600;
+}
+
+@keyframes blinkRedBlack {
+  0%, 100% {
+    color: black;
+  }
+  50% {
+    color: red;
+  }
+}
+
+       .custom_product_photos .flickity-viewport{
+         cursor:zoom-in!important;
+       }
+         .gf-actions {
+           display: flex;
+           align-items: center;
+           flex-wrap: wrap;
+           width: 100%;
+           z-index: 99999999999999;
+           background-color: white;
+           transform: translateY(0);
+           position: fixed;
+           bottom: 0;
+           right: 0;
+           left: 0;
+           padding-top: 10px;
+           margin-left:0px!important;
+           margin-right:0px!important;
+           margin-bottom:-15px!important;
+      }
+         @media(max-width: 576px) {
+         .k_grid{
+           padding-left: 3px;
+           padding-right: 3px;
+         }
+         .h4.spf-product-card__title a {
+                 font-size: 12px !important;
+         		color: #333 !important;
+           }
+
+           .spf-product-card__oldprice, .spf-product-card__saleprice,
+            .gfqv-product-card__oldprice,
+           .gfqv-product-card__saleprice, .gfqv-product-card__price{
+             font-size: 12px !important;
+         		color: #333 !important;
+           }
+           .spf-product-card__price-wrapper{
+             font-size: 12px !important;
+           }
+
+         }
+         .red{
+           color: #d21625!important;
+         }
+         .grid-product__title {
+           word-wrap: break-word!important;
+           word-break: break-word!important;
+      }
+
+         .myTitle{
+           font-size:11px!important;
+           letter-spacing:0.1em!important;
+
+         }
+    </style>
+    <meta name="facebook-domain-verification" content="nqldr8zgwl9afy79xc05ci2bno83i8">
+    {% render 'wishlisthero-styles.liquid' %}
+    {% render 'shogun-head' %}
+      {% if page.id == 97177567480 %}
+
+    {{ 'ddshop-faq.css' | asset_url | stylesheet_tag }}
+
+    {% endif %}
+    {%- if dropinblog == 1 -%}{{ dropinblog_head_bottom }}{%- endif -%}
+    <!-- {% include 'second-image-on-hover-init' %} -->
+    {% include 'grss-json-ld' %}
+    {% include 'social-widget-custom' %}
+    {% if content_for_header contains 'bss-b2b-cp' %}{% include 'bss-b2b-header' %}{% endif %}
+    <script type="text/javascript">
+      (function(c,l,a,r,i,t,y){
+          c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+          t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+          y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+      })(window, document, "clarity", "script", "j5pyuexdbf");
+    </script>
+
+
+    <meta name="facebook-domain-verification" content="hrnolvyc7syfb4gdxafe5hpbzwqna1" />
+
+    
+{% if request.page_type == 'index' %}
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "OnlineStore",
+      "url": "https://idcult.com/",
+      "sameAs": ["https://www.instagram.com/theidcult/", "https://www.facebook.com/IDbeingcult/", "https://www.youtube.com/channel/UCOWJ4sefmpwQpo66a_W0z7A"],
+      "logo": "https://idcult.com/cdn/shop/files/IMG_1033_ef5c3f5d-695f-40f3-bf1d-10ef821f0398_100x@2x.jpg",
+      "name": "ID",
+      "description": "ID is the first truly Cult Brand in the Indian footwear sphere that immediately became a rage amongst its customers, who appreciated the supple genuine high-quality leather, and the painstaking attention to detail that went into making each pair a masterpiece.",
+      "contactPoint": {
+        "contactType": "Customer Service",
+        "email": "care@idcult.com",
+        "telephone": "+919910433300"
+      },
+      "address": {
+        "@type": "PostalAddress",
+        "streetAddress": "Plot No 33, Sector 58",
+        "addressLocality": "Noida",
+        "addressCountry": "IN",
+        "addressRegion": "Uttar Pradesh",
+        "postalCode": "201301"
+      },
+      "hasMerchantReturnPolicy": {
+        "@type": "MerchantReturnPolicy",
+        "applicableCountry": ["IN"],
+        "returnPolicyCountry": "IN",
+        "returnPolicyCategory": "https://schema.org/MerchantReturnFiniteReturnWindow",
+        "merchantReturnDays": 7,
+        "returnMethod": "https://schema.org/ReturnByMail",
+        "returnFees": "https://schema.org/FreeReturn",
+        "refundType": "https://schema.org/FullRefund"
+      }}
+    </script>
+{% endif %}
+
+    {% unless template == 'index' or template contains 'blog' or template contains 'article' or request.path contains '/blog' %}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Home",
+      "item": "{{ shop.url }}"
+    },
+
+  {%- if request.page_type == 'product' -%}
+    {%- if collection -%}
+      {
+        "@type": "ListItem",
+        "position": 2,
+        "name": {{ collection.title | json }},
+        "item": "{{ shop.url }}{{ collection.url }}"
+      },
+      {
+        "@type": "ListItem",
+        "position": 3,
+        "name": {{ product.title | json }},
+        "item": "{{ shop.url }}{{ product.url }}"
+      }
+    {%- else -%}
+      {
+        "@type": "ListItem",
+        "position": 2,
+        "name": {{ product.title | json }},
+        "item": "{{ shop.url }}{{ product.url }}"
+      }
+    {%- endif -%}
+
+  {%- elsif request.page_type == 'collection' -%}
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": {{ collection.title | json }},
+      "item": "{{ shop.url }}{{ collection.url }}"
+    }
+
+  {%- elsif request.page_type == 'article' -%}
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": {{ blog.title | json }},
+      "item": "{{ shop.url }}{{ blog.url }}"
+    },
+    {
+      "@type": "ListItem",
+      "position": 3,
+      "name": {{ article.title | json }},
+      "item": "{{ shop.url }}{{ article.url }}"
+    }
+
+  {%- elsif request.page_type == 'blog' -%}
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": {{ blog.title | json }},
+      "item": "{{ shop.url }}{{ blog.url }}"
+    }
+
+  {%- elsif request.page_type == 'page' -%}
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": {{ page.title | json }},
+      "item": "{{ shop.url }}{{ page.url }}"
+    }
+  {%- endif -%}
+  ]
+}
+</script>
+{%- endunless -%}
+   <meta name="google-site-verification" content="0FWJCWP_tNOBph8iPjpQ_PlpXzwPbXG63zfspuwUpRE" /> 
+   <!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-SF5CFFXBZ6"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-SF5CFFXBZ6');
+</script>
+  </head>
+
+  <body
+    class="template-{{ template | replace: '.', ' ' | truncatewords: 1, '' | handle }} {{ page_title | handle }} {{ template.name }} {% if request.path == '/challenge' %} template-challange{% endif %}"
+    data-center-text="{{ settings.type_body_align_text }}"
+    data-button_style="{{ settings.button_style }}"
+    data-type_header_capitalize="{{ settings.type_header_capitalize }}"
+    data-type_headers_align_text="{{ settings.type_headers_align_text }}"
+    data-type_product_capitalize="{{ settings.type_product_capitalize }}"
+    data-swatch_style="{{ settings.swatch_style }}"
+    {% if settings.disable_animations %}
+      data-disable-animations="true"
+    {% endif %}
+  >
+    <!-- Google Tag Manager (noscript) -->
+    <noscript
+      ><iframe
+        src="https://www.googletagmanager.com/ns.html?id=GTM-KGT8HD5"
+        height="0"
+        width="0"
+        style="display:none;visibility:hidden"
+      ></iframe
+    ></noscript>
+    <!-- End Google Tag Manager (noscript) -->
+
+    <a class="in-page-link visually-hidden skip-link" href="#MainContent">
+      {{- 'general.accessibility.skip_to_content' | t -}}
+    </a>
+
+    <div id="PageContainer" class="page-container">
+      <div class="transition-body">
+        {%- section 'header' -%}
+
+        <main class="main-content" id="MainContent">
+          {{ content_for_layout }}
+        </main>
+
+        {%- section 'footer-promotions' -%}
+        {%- section 'footer' -%}
+      </div>
+    </div>
+
+    {%- section 'newsletter-popup' -%}
+
+    {%- liquid
+      render 'video-modal'
+      render 'photoswipe-template'
+    -%}
+      {% if page.id == 97177567480 %}
+    <script src="{{ 'ddshop-faq.js' | asset_url }}" defer="defer"></script>
+    {% endif %}
+
+    {% render 'ms-voila-snip' %}
+
+    <style>
+            .discountify_tag{
+      display: inline;
+      }
+    </style>
+
+    {% if content_for_header contains 'bss-b2b-cp' -%}
+      {%- include 'bss-b2b-jquery-341-js' -%}
+      {%- include 'bss-b2b-js' -%}
+    {%- endif %}
+    
+    {% if request.page_type == 'search' %}
+    <script id="gspfResultsTitleTemplate">{% raw %}Search: {{paginate.total}} results found for {% endraw %}"{{ search.terms | escape }}"</script>
+    {% endif %}
+    <script>
+      window.addEventListener('globoFilterRenderCompleted', function () {
+        if(document.querySelector('.header--search-count') != null && document.querySelector('div#gf-grid span.gf-summary b') != null)
+        document.querySelector('.header--search-count').innerHTML = document.querySelector('div#gf-grid span.gf-summary b').innerHTML;
+      });
+    </script>
+
+
+    <script>
+
+  document.addEventListener('DOMContentLoaded', function () {
+    // Initially hide elements
+    document.querySelector('.template-index .bestsellers').style.display = 'none';
+    document.querySelector('body .under-2599').style.display = 'none';
+    document.querySelector('.offers').style.display = 'none';
+
+    // Add event listeners for button clicks
+    document.querySelector('.btn-1').addEventListener('click', function () {
+        deactivateAll();
+        this.classList.add('actived');
+        document.querySelector('body .under-2599').style.display = 'block';
+        hideElements(['.bestsellers', '.new-arrivals', '.offers']);
+    });
+
+    document.querySelector('.btn-2').addEventListener('click', function () {
+        deactivateAll();
+        this.classList.add('actived');
+        document.querySelector('body .bestsellers').style.display = 'block';
+        hideElements(['.under-2599', '.new-arrivals', '.offers']);
+    });
+
+    document.querySelector('.btn-3').addEventListener('click', function () {
+        deactivateAll();
+        this.classList.add('actived');
+        document.querySelector('body .new-arrivals').style.display = 'block';
+        hideElements(['.under-2599', '.bestsellers', '.offers']);
+    });
+
+    document.querySelector('.btn-4').addEventListener('click', function () {
+        deactivateAll();
+        this.classList.add('actived');
+        document.querySelector('body .offers').style.display = 'block';
+        hideElements(['.under-2599', '.bestsellers', '.new-arrivals']);
+    });
+
+    // Helper function to deactivate all buttons
+    function deactivateAll() {
+        document.querySelectorAll('.btn-1, .btn-2, .btn-3, .btn-4').forEach(function (btn) {
+            btn.classList.remove('actived');
+        });
+    }
+
+    // Helper function to hide multiple elements
+    function hideElements(selectors) {
+        selectors.forEach(function (selector) {
+            const element = document.querySelector(selector);
+            if (element) {
+                element.style.display = 'none';
+            }
+        });
+    }
+});
+
+      
+    </script>
+
+
+{%- capture productTemplate -%}{% render 'globo.filter.product', themeTranslation: shop.metafields.globoFilter.themeTranslation.value[request.locale.iso_code] %}{%- endcapture -%}{%- unless productTemplate contains 'Liquid error' -%}<script id="gspfProduct" type="template/html">{{- productTemplate | replace: "script>", "scripttag>" -}}</script>{%- endunless -%} 
+{%- capture treeTemplate -%}{% render 'globo.filter.tree' %}{%- endcapture -%}{%- unless treeTemplate contains 'Liquid error' -%}<script id="gspfFilterTree" type="template/html">{{- treeTemplate | replace: "script>", "scripttag>" -}}</script>{%- endunless -%} 
+{%- capture sortTemplate -%}{% render 'globo.filter.sort' %}{%- endcapture -%}{%- unless sortTemplate contains 'Liquid error' -%}<script id="gspfFilterSort" type="template/html">{{- sortTemplate | replace: "script>", "scripttag>" -}}</script>{%- endunless -%} 
+{%- capture searchTemplate -%}{% render 'globo.filter.search' %}{%- endcapture -%}{%- unless searchTemplate contains 'Liquid error' -%}<script id="gspfSearchResult" type="template/html">{{- searchTemplate | replace: "script>", "scripttag>" -}}</script>{%- endunless -%} 
+{%- capture paginationTemplate -%}{% render 'globo.filter.pagination' %}{%- endcapture -%}{%- unless paginationTemplate contains 'Liquid error' -%}<script id="gspfPagination" type="template/html">{{- paginationTemplate | replace: "script>", "scripttag>" -}}</script>{%- endunless -%} 
+{%- capture YMMTemplate -%}{% render 'globo.filter.form' %}{%- endcapture -%}{%- unless YMMTemplate contains 'Liquid error' -%}<script id="gspfForm" type="template/html">{{- YMMTemplate | replace: "script>", "scripttag>" -}}</script>{%- endunless -%}
+  </body>
+</html>
+{% include 'change-image-onhover' %}

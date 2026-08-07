@@ -1,0 +1,380 @@
+<section class="stacked-banners height-{{ section.settings.image_height }} mobile-height-{{ section.settings.mobile_image_height }}">
+
+  {% for block in section.blocks %}
+
+    <a
+      href="{{ block.settings.link }}"
+      class="banner-item {% if block.settings.black_white %}bw{% endif %}"
+      {{ block.shopify_attributes }}
+    >
+
+      <picture>
+
+        {% if block.settings.mobile_image != blank %}
+          <source
+            media="(max-width:768px)"
+            srcset="{{ block.settings.mobile_image | image_url: width: 900 }}">
+        {% endif %}
+
+        {{
+          block.settings.image
+          | image_url: width: 1800
+          | image_tag:
+          loading: 'lazy',
+          widths: '600,900,1200,1800',
+          class: 'banner-image'
+        }}
+
+      </picture>
+
+      {% if block.settings.heading != blank %}
+        <div class="banner-content">
+
+          <h2>{{ block.settings.heading }}</h2>
+
+          {% if block.settings.button != blank %}
+            <span class="btn">
+              {{ block.settings.button }}
+            </span>
+          {% endif %}
+
+        </div>
+      {% endif %}
+
+    </a>
+
+  {% endfor %}
+
+</section>
+
+
+<style>
+
+/* ===========================================================
+   STACKED IMAGE BANNERS
+=========================================================== */
+
+    .stacked-banners{
+    width:100%;
+    display:grid;
+    grid-template-columns:repeat(2, minmax(0,1fr));
+    gap:16px;
+}
+/* Full Width */
+
+.stacked-banners{
+    width:100vw;
+    margin-left:calc(50% - 50vw);
+    margin-right:calc(50% - 50vw);
+}
+
+/* Banner */
+
+.banner-item{
+    position:relative;
+    display:block;
+    width:100%;
+    overflow:hidden;
+}
+
+.banner-image{
+    width:100%;
+    display:block;
+    transition:transform .6s ease, filter .4s ease;
+}
+
+/* ===========================================================
+   HEIGHT OPTIONS - DESKTOP
+=========================================================== */
+
+.height-adapt .banner-item{
+    height:auto;
+}
+
+.height-adapt .banner-image{
+    height:auto;
+    object-fit:unset;
+}
+
+.height-small .banner-item{
+    height:420px;
+}
+
+.height-medium .banner-item{
+    height:560px;
+}
+
+.height-large .banner-item{
+    height:720px;
+}
+
+.height-fullscreen .banner-item{
+    height:100vh;
+}
+
+.height-small .banner-image,
+.height-medium .banner-image,
+.height-large .banner-image,
+.height-fullscreen .banner-image{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+}
+
+/* ===========================================================
+   BLACK & WHITE
+=========================================================== */
+
+.banner-item.bw .banner-image{
+    filter:grayscale(100%);
+}
+
+/* ===========================================================
+   HOVER
+=========================================================== */
+
+.banner-item:hover .banner-image{
+    transform:scale(1.05);
+}
+
+/* ===========================================================
+   CONTENT
+=========================================================== */
+
+.banner-content{
+    position:absolute;
+    left:6%;
+    bottom:8%;
+    max-width:520px;
+    color:#fff;
+    z-index:2;
+}
+
+.banner-content h2{
+    margin:0 0 18px;
+    font-size:54px;
+    line-height:1.1;
+    font-weight:500;
+}
+
+.banner-content .btn{
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    padding:14px 34px;
+    border:1px solid #fff;
+    color:#fff;
+    text-decoration:none;
+    transition:.3s;
+}
+
+.banner-content .btn:hover{
+    background:#fff;
+    color:#000;
+}
+
+/* ===========================================================
+   MOBILE
+=========================================================== */
+
+@media screen and (max-width:990px){
+
+  @media screen and (max-width:990px){
+
+.stacked-banners{
+    display:flex;
+    flex-direction:column;
+}
+
+.banner-content{
+    left:24px;
+    right:24px;
+    bottom:24px;
+    max-width:90%;
+}
+
+.banner-content h2{
+    font-size:32px;
+}
+
+/* ...rest of your existing mobile CSS... */
+
+}
+
+.banner-content{
+    left:24px;
+    right:24px;
+    bottom:24px;
+    max-width:90%;
+}
+
+.banner-content h2{
+    font-size:32px;
+}
+
+/* Mobile Height Settings */
+
+.mobile-height-adapt .banner-item{
+    height:auto;
+}
+
+.mobile-height-adapt .banner-image{
+    height:auto;
+    object-fit:unset;
+}
+
+.mobile-height-small .banner-item{
+    height:280px;
+}
+
+.mobile-height-medium .banner-item{
+    height:420px;
+}
+
+.mobile-height-large .banner-item{
+    height:560px;
+}
+
+.mobile-height-fullscreen .banner-item{
+    height:100vh;
+}
+
+.mobile-height-small .banner-image,
+.mobile-height-medium .banner-image,
+.mobile-height-large .banner-image,
+.mobile-height-fullscreen .banner-image{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+}
+
+}
+
+</style>
+
+{% schema %}
+{
+  "name": "Stacked Image Banners",
+
+  "settings": [
+    {
+      "type": "select",
+      "id": "image_height",
+      "label": "Desktop Image Height",
+      "default": "adapt",
+      "options": [
+        {
+          "value": "adapt",
+          "label": "Adapt to image"
+        },
+        {
+          "value": "small",
+          "label": "Small"
+        },
+        {
+          "value": "medium",
+          "label": "Medium"
+        },
+        {
+          "value": "large",
+          "label": "Large"
+        },
+        {
+          "value": "fullscreen",
+          "label": "Full Screen"
+        }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "mobile_image_height",
+      "label": "Mobile Image Height",
+      "default": "adapt",
+      "options": [
+        {
+          "value": "adapt",
+          "label": "Adapt to image"
+        },
+        {
+          "value": "small",
+          "label": "Small"
+        },
+        {
+          "value": "medium",
+          "label": "Medium"
+        },
+        {
+          "value": "large",
+          "label": "Large"
+        },
+        {
+          "value": "fullscreen",
+          "label": "Full Screen"
+        }
+      ]
+    }
+  ],
+
+  "max_blocks": 10,
+
+  "blocks": [
+    {
+      "type": "banner",
+      "name": "Banner",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Desktop Image"
+        },
+        {
+          "type": "image_picker",
+          "id": "mobile_image",
+          "label": "Mobile Image"
+        },
+        {
+          "type": "text",
+          "id": "heading",
+          "label": "Heading"
+        },
+        {
+          "type": "text",
+          "id": "button",
+          "label": "Button Label"
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Link"
+        },
+        {
+          "type": "checkbox",
+          "id": "black_white",
+          "label": "Black & White Filter",
+          "default": false
+        }
+      ]
+    }
+  ],
+
+  "presets": [
+    {
+      "name": "Stacked Image Banners",
+      "blocks": [
+        {
+          "type": "banner"
+        },
+        {
+          "type": "banner"
+        },
+        {
+          "type": "banner"
+        },
+        {
+          "type": "banner"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

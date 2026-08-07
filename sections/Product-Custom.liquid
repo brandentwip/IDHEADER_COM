@@ -1,0 +1,249 @@
+<section class="featured-collection-section">
+  {% if section.settings.heading != blank %}
+    <h2 class="featured-collection-heading">{{ section.settings.heading }}</h2>
+  {% endif %}
+
+  {% if section.settings.collection != blank %}
+   <div class="swiper featured-collection-swiper">
+  <div class="swiper-wrapper">
+    {% for product in collections[section.settings.collection].products limit: section.settings.products_to_show %}
+      <div class="swiper-slide">
+        <div class="featured-collection-item">
+          <a href="{{ product.url }}">
+            <div class="featured-collection-image" style="position: relative;">
+              <img 
+                src="{{ product.featured_image | image_url: width: 500 }}" 
+                alt="{{ product.title }}" 
+                loading="lazy">
+
+              {%- comment -%} ✅ Genuine Leather Badge (from collection metafield) {%- endcomment -%}
+              {% if product.metafields.custom.genuineleather == true %}
+                    <div class="genuine-leather-badge">
+                      <img src="https://cdn.shopify.com/s/files/1/0636/5128/3192/files/image-removebg-preview.png?v=1758192680" alt="Genuine Leather Badge">
+                    </div>
+                  {% endif %}
+                   {%- comment -%} ✅ Best Seller Text Badge {%- endcomment -%}
+              {% if product.tags contains "bestseller2025" or product.tags contains "bestseller" %}
+                <span class="best-seller-badge">Best Seller</span>
+              {% endif %}
+
+              {%- comment -%} ✅ New Arrival Text Badge {%- endcomment -%}
+              {% if product.tags contains "New Arrivals" or product.tags contains "new2025" %}
+                <span class="new-arrival-badge">New Arrival</span>
+              {% endif %}
+
+            </div>
+            <div class="featured-collection-info">
+              <p class="product-title">{{ product.title }}</p>
+              {% if product.price_varies %}
+                <p class="product-price">
+                  From {{ product.price | money }}
+                  {% if product.compare_at_price_max > product.price %}
+                    <span class="compare-at-price" style="text-decoration: line-through; color: #999; margin-left:5px;">
+                      {{ product.compare_at_price_max | money }}
+                    </span>
+                  {% endif %}
+                </p>
+              {% else %}
+                <p class="product-price">
+                  {{ product.price | money }}
+                  {% if product.compare_at_price_max > product.price %}
+                    <span class="compare-at-price" style="text-decoration: line-through; color: #999; margin-left:5px;">
+                      {{ product.compare_at_price_max | money }}
+                    </span>
+                  {% endif %}
+                </p>
+              {% endif %}
+            </div>
+          </a>
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+  <!-- Navigation Arrows -->
+  <div class="swiper-button-next"></div>
+  <div class="swiper-button-prev"></div>
+</div>
+
+  {% endif %}
+</section>
+
+
+<!-- Swiper CDN -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.css"/>
+<script src="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.js"></script>
+
+<script>
+  document.addEventListener("DOMContentLoaded", function() {
+    new Swiper(".featured-collection-swiper", {
+      slidesPerView: 4,
+      spaceBetween: 20,
+      navigation: {
+        nextEl: ".swiper-button-next",
+        prevEl: ".swiper-button-prev"
+      },
+      breakpoints: {
+        0: {
+          slidesPerView: 2,
+          spaceBetween: 15
+        },
+        768: {
+          slidesPerView: 4,
+          spaceBetween: 20
+        }
+      }
+    });
+  });
+</script>
+
+{% schema %}
+{
+  "name": "Featured_Slider",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "New Arrivals"
+    },
+    {
+      "type": "collection",
+      "id": "collection",
+      "label": "Choose Collection"
+    },
+    {
+      "type": "range",
+      "id": "products_to_show",
+      "min": 2,
+      "max": 20,
+      "step": 1,
+      "label": "Products to display",
+      "default": 8
+    }
+  ],
+  "presets": [
+    {
+      "name": "Featured Collection Slider"
+    }
+  ]
+}
+{% endschema %}
+
+{% stylesheet %}
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;700&display=swap');
+
+.featured-collection-section {
+  padding: 40px 20px;
+  background: #fff;
+  font-family: 'Montserrat', sans-serif;
+}
+
+.genuine-leather-badge {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  z-index: 2;
+}
+
+.genuine-leather-badge img {
+  width: 60px;  /* adjust size */
+  height: auto;
+}
+.featured-collection-heading {
+  font-size: 2rem;
+  font-weight: 600;
+  text-align: center;
+  letter-spacing: 10px;
+  margin-bottom: 30px;
+}
+
+.featured-collection-item {
+  background: #F3F3F3;
+  padding: 15px;
+  transition: transform 0.3s ease;
+  height: 580px;
+}
+@media only screen and (max-width:768px){
+  .featured-collection-item{
+    height: 340px;
+  }
+}
+
+.featured-collection-item:hover {
+  transform: translateY(-5px);
+}
+
+.featured-collection-image img {
+  width: 100%;
+  height: auto;
+  object-fit: contain;
+}
+
+.featured-collection-info {
+  margin-top: 10px;
+  text-align: center;
+}
+
+.product-title {
+  font-size: 0.7rem;
+  color: #333;
+  margin-bottom: 5px;
+}
+
+.product-price {
+  font-size: 1.1rem;
+  font-weight: bold;
+  color: #000;
+}
+
+.swiper {
+  width: 100%;
+}
+
+.swiper-button-next,
+.swiper-button-prev {
+  color: #000;
+}
+
+.genuine-leather-badge {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  z-index: 2;
+}
+
+.genuine-leather-badge img {
+  width: 60px;  /* adjust size */
+  height: auto;
+}
+
+/* Best Seller text badge */
+  .best-seller-badge {
+    position: absolute;
+    top: -15px;
+    right: -15px;
+    background: #e63946;
+    color: #fff;
+    font-size: 8px;
+    font-weight: bold;
+    padding: 4px 10px;
+    border-radius: 0px;
+    text-transform: uppercase;
+    z-index: 2;
+}
+ /* New Arrival text badge */
+  .new-arrival-badge {
+    position: absolute;
+    top: 10px; /* Placed below Best Seller if both exist */
+    right: -15px;
+    background: #FFD747; /* Green/teal */
+    color: 000;
+    font-size: 8px;
+    font-weight: bold;
+    padding: 4px 8px;
+    border-radius: 0px;
+    text-transform: uppercase;
+    z-index: 2;
+  }
+
+{% endstylesheet %}

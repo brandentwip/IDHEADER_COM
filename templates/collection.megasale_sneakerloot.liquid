@@ -1,0 +1,2017 @@
+{% comment %}
+Custom Collection Template with Dynamic Price Dropdown,
+AJAX Filters, Infinite Scroll & Shopify Native Filtering
+{% endcomment %}
+
+{% assign price_filter = nil %}
+{% assign size_filter = nil %}
+{% assign price_min_param = 'filter.v.price.gte' %}
+{% assign price_max_param = 'filter.v.price.lte' %}
+
+{% for filter in collection.filters %}
+  {% assign filter_label_downcase = filter.label | downcase %}
+  {% if filter.type == 'price_range' %}
+    {% assign price_filter = filter %}
+    {% assign price_min_param = filter.min_value.param_name %}
+    {% assign price_max_param = filter.max_value.param_name %}
+  {% endif %}
+  {% if size_filter == nil and filter_label_downcase contains 'size' %}
+    {% assign size_filter = filter %}
+  {% endif %}
+{% endfor %}
+
+<section class="collection-banner">
+  {% if collection.image %}
+    <img
+      src="{{ collection.image | image_url: width: 1600 }}"
+      alt="{{ collection.title }}"
+    >
+  {% endif %}
+
+  {% if collection.description != blank %}
+    <div class="collection-description">
+      {{ collection.description }}
+    </div>
+  {% endif %}
+</section>
+
+<section class="collection-message">
+
+  <div class="collection-message-inner">
+
+    <p>
+      Your favorite sneakers. An unexpected price.
+    </p>
+
+    <p>
+      For a limited period, grab selected sneakers for just
+      <strong>₹999</strong>.
+    </p>
+
+    <p>
+      Whether you're refreshing your everyday rotation or picking up an extra pair, now's the perfect time.
+    </p>
+
+    <p class="collection-message-highlight">
+      Step in before the sale wraps up.
+    </p>
+
+  </div>
+
+</section>
+
+<section class="collection-controls">
+
+  <div class="left-controls">
+
+    <!-- GENDER FILTERS -->
+    <div class="gender-filters">
+
+      <a
+        href="{{ collection.url }}"
+        class="gender-btn"
+        data-gender="all"
+      >
+        All
+      </a>
+
+      <a
+        href="{{ collection.url }}?filter.p.m.custom.gender=men"
+        class="gender-btn"
+        data-gender="men"
+      >
+        Men
+      </a>
+
+      <a
+        href="{{ collection.url }}?filter.p.m.custom.gender=women"
+        class="gender-btn"
+        data-gender="women"
+      >
+        Women
+      </a>
+
+    </div>
+
+    <!-- EXACT PRICE DROPDOWN -->
+    <div class="price-filter-wrapper">
+
+      <label
+        class="price-filter-label"
+        for="PriceRangeDropdown"
+      >
+        Shop by budget
+      </label>
+
+      <select id="PriceRangeDropdown">
+
+        <option value="">
+          All prices
+        </option>
+
+        {% assign exact_price_filters = '799,899,999,1099' | split: ',' %}
+
+        {% for exact_price in exact_price_filters %}
+
+          <option value="{{ exact_price }}-{{ exact_price }}">
+            &#8377;{{ exact_price }}
+          </option>
+
+        {% endfor %}
+
+      </select>
+
+    </div>
+
+    {% if size_filter and size_filter.values.size > 0 %}
+
+      <!-- SIZE SWATCH FILTERS -->
+      <form
+        id="SizeSwatchFilters"
+        class="size-swatch-filters"
+        method="get"
+        action="{{ collection.url }}"
+        aria-label="Filter by size"
+      >
+
+        <span class="size-swatch-title">
+          Pick your size
+        </span>
+
+        <div class="size-swatch-list">
+
+          {% for value in size_filter.values %}
+
+            <label
+              class="size-swatch{% if value.active %} active{% endif %}{% if value.count == 0 and value.active == false %} unavailable{% endif %}"
+            >
+
+              <input
+                type="checkbox"
+                name="{{ value.param_name }}"
+                value="{{ value.value }}"
+                data-size-label="{{ value.label | escape }}"
+                {% if value.active %}
+                  checked
+                {% endif %}
+                {% if value.count == 0 and value.active == false %}
+                  disabled
+                {% endif %}
+              >
+
+              <span>
+                {{ value.label }}
+              </span>
+
+            </label>
+
+          {% endfor %}
+
+        </div>
+
+      </form>
+
+    {% endif %}
+
+    {% if collection.filters.size > 0 %}
+
+      <button
+        class="filter-toggle"
+        onclick="openFilterDrawer()"
+      >
+        Filter
+      </button>
+
+    {% endif %}
+
+  </div>
+
+  <!-- SORT -->
+  <div class="right-controls">
+
+    <form
+      id="SortByForm"
+      class="sort-filter-wrapper"
+      method="get"
+      action="{{ collection.url }}"
+    >
+
+      <label
+        class="sort-filter-label"
+        for="SortBySelect"
+      >
+        Sort by
+      </label>
+
+      <select
+        name="sort_by"
+        id="SortBySelect"
+      >
+
+        {% for option in collection.sort_options %}
+
+          <option
+            value="{{ option.value }}"
+            {% if option.value == collection.sort_by %}
+              selected
+            {% endif %}
+          >
+            {{ option.name }}
+          </option>
+
+        {% endfor %}
+
+      </select>
+
+    </form>
+
+  </div>
+
+</section>
+
+<!-- FILTER DRAWER -->
+<div id="FilterDrawer" class="filter-drawer">
+
+  <div class="filter-drawer-header">
+
+    <h2>Filters</h2>
+
+    <button
+      class="filter-close"
+      onclick="closeFilterDrawer()"
+    >
+      &times;
+    </button>
+
+  </div>
+
+  {% if collection.filters.size > 0 %}
+
+    <form
+      id="CollectionFilters"
+      class="filter-form"
+      method="get"
+      action="{{ collection.url }}"
+    >
+
+      {% for filter in collection.filters %}
+
+        {% assign filter_label_downcase = filter.label | downcase %}
+
+        {% unless filter.type == 'price_range' or filter_label_downcase contains 'size' %}
+
+          <div class="filter-group">
+
+            <details>
+
+              <summary>
+                {{ filter.label }}
+              </summary>
+
+              <div class="filter-values">
+
+                {% for value in filter.values %}
+
+                  <label>
+
+                    <input
+                      type="checkbox"
+                      name="{{ value.param_name }}"
+                      value="{{ value.value }}"
+                      {% if value.active %}
+                        checked
+                      {% endif %}
+                    >
+
+                    {{ value.label }} ({{ value.count }})
+
+                  </label>
+
+                {% endfor %}
+
+              </div>
+
+            </details>
+
+          </div>
+
+        {% endunless %}
+
+      {% endfor %}
+
+      <div class="filter-actions">
+
+        <button
+          type="submit"
+          class="apply-btn"
+        >
+          Apply
+        </button>
+
+        <a
+          href="{{ collection.url }}"
+          class="clear-btn"
+        >
+          Clear All
+        </a>
+
+      </div>
+
+    </form>
+
+  {% endif %}
+
+</div>
+
+<!-- PRODUCT GRID -->
+<section id="CollectionProductWrapper">
+
+  {% paginate collection.products by section.settings.products_per_page %}
+
+    <div class="product-grid">
+
+      {% for product in collection.products %}
+
+        {% assign available_size_values = '' %}
+        {% assign available_size_tokens = '||' %}
+
+        {% for option in product.options_with_values %}
+
+          {% assign option_name_downcase = option.name | downcase %}
+
+          {% if option_name_downcase contains 'size' %}
+
+            {% assign option_key = 'option' | append: option.position %}
+
+            {% for variant in product.variants %}
+
+              {% if variant.available %}
+
+                {% assign variant_size_value = variant[option_key] | strip %}
+                {% assign variant_size_token = '||' | append: variant_size_value | append: '||' %}
+
+                {% unless available_size_tokens contains variant_size_token %}
+                  {% assign available_size_values = available_size_values | append: variant_size_value | append: '||' %}
+                  {% assign available_size_tokens = available_size_tokens | append: variant_size_value | append: '||' %}
+                {% endunless %}
+
+              {% endif %}
+
+            {% endfor %}
+
+            {% break %}
+
+          {% endif %}
+
+        {% endfor %}
+
+        <div
+          class="product-card"
+          data-price="{{ product.price | divided_by: 100.0 }}"
+          data-price-min="{{ product.price_min | divided_by: 100.0 }}"
+          data-price-max="{{ product.price_max | divided_by: 100.0 }}"
+          data-available-sizes="{{ available_size_values | escape }}"
+        >
+
+          <a href="{{ product.url }}">
+
+            <div
+              class="product-image"
+              style="position:relative;"
+            >
+
+              <img
+                src="{{ product.featured_image | image_url: width: 600 }}"
+                alt="{{ product.title }}"
+                loading="lazy"
+              >
+
+              <!-- LEATHER / VEGAN -->
+
+              {% if product.metafields.custom.genuineleather == true %}
+
+                <div class="genuine-leather-badge">
+
+                  <img
+                    src="https://cdn.shopify.com/s/files/1/0636/5128/3192/files/image-removebg-preview.png?v=1758192680"
+                    alt="Leather Badge"
+                  >
+
+                </div>
+
+              {% else %}
+
+                <div class="vegan-badge">
+
+                  <img
+                    src="https://cdn.shopify.com/s/files/1/0636/5128/3192/files/vegan-removebg-preview.png?v=1772695454"
+                    alt="Vegan Badge"
+                  >
+
+                </div>
+
+              {% endif %}
+
+              <!-- BEST SELLER -->
+
+              {% if product.tags contains 'bestseller2025'
+                or product.tags contains 'bestseller'
+              %}
+
+                <span class="best-seller-badge">
+                  Best Seller
+                </span>
+
+              {% endif %}
+
+              <!-- NEW ARRIVAL -->
+
+              {% if product.tags contains 'New Arrivals'
+                or product.tags contains 'new2025'
+              %}
+
+                <span class="new-arrival-badge">
+                  New Arrival
+                </span>
+
+              {% endif %}
+
+            </div>
+
+            <p class="product-title">
+              {{ product.title }}
+            </p>
+
+            <p class="product-price-badge">
+
+              <span class="current-price">
+                {{ product.price | money }}
+              </span>
+
+              {% if product.compare_at_price_max > product.price %}
+
+                <span class="compare-price">
+                  {{ product.compare_at_price_max | money }}
+                </span>
+
+                {% assign discount = product.compare_at_price_max
+                  | minus: product.price
+                  | times: 100
+                  | divided_by: product.compare_at_price_max %}
+
+                <span class="price-discount-badge">
+
+                  {{ discount | round }}% OFF
+
+                </span>
+
+              {% endif %}
+
+            </p>
+
+            {% for option in product.options_with_values %}
+
+              {% assign option_name_downcase = option.name | downcase %}
+
+              {% if option_name_downcase contains 'size' %}
+
+                {% assign option_key = 'option' | append: option.position %}
+
+                <div class="product-card-variants" aria-label="Available sizes">
+
+                  {% for option_value in option.values %}
+
+                    {% assign option_value_label = option_value.name | default: option_value %}
+                    {% assign option_value_available = false %}
+
+                    {% for variant in product.variants %}
+
+                      {% if variant[option_key] == option_value_label and variant.available %}
+                        {% assign option_value_available = true %}
+                        {% break %}
+                      {% endif %}
+
+                    {% endfor %}
+
+                    <span
+                      class="product-card-variant{% unless option_value_available %} unavailable{% endunless %}"
+                    >
+                      {{ option_value_label }}
+                    </span>
+
+                  {% endfor %}
+
+                </div>
+
+                {% break %}
+
+              {% endif %}
+
+            {% endfor %}
+
+          </a>
+
+        </div>
+
+      {% endfor %}
+
+    </div>
+
+    <div
+      id="CollectionEmptyState"
+      class="collection-empty-state"
+      hidden
+    >
+      No products found
+    </div>
+
+    <!-- PAGINATION -->
+
+    <div class="pagination-wrapper">
+
+      {% render 'collection-pagination', paginate: paginate %}
+
+    </div>
+
+  {% endpaginate %}
+
+</section>
+
+<!-- LOADER -->
+
+<div
+  id="collection-loading"
+  class="loading-spinner"
+  style="display:none;"
+>
+  Loading...
+</div>
+
+<script>
+
+const PRICE_FILTER_MIN_PARAM = {{ price_min_param | json }};
+const PRICE_FILTER_MAX_PARAM = {{ price_max_param | json }};
+const SIZE_FILTER_PARAM_NAMES = [
+  {% if size_filter %}
+    {% for value in size_filter.values %}
+      {{ value.param_name | json }}{% unless forloop.last %},{% endunless %}
+    {% endfor %}
+  {% endif %}
+];
+
+/* ---------- DRAWER ---------- */
+
+function openFilterDrawer() {
+
+  document
+    .getElementById('FilterDrawer')
+    .classList.add('open');
+
+}
+
+function closeFilterDrawer() {
+
+  document
+    .getElementById('FilterDrawer')
+    .classList.remove('open');
+
+}
+
+/* ---------- LOADER ---------- */
+
+function showLoading() {
+
+  document
+    .getElementById('collection-loading')
+    .style.display = 'block';
+
+}
+
+function hideLoading() {
+
+  document
+    .getElementById('collection-loading')
+    .style.display = 'none';
+
+}
+
+function hidePagination() {
+
+  document
+    .querySelectorAll('.pagination-wrapper')
+    .forEach(wrapper => {
+
+      wrapper.style.display = 'none';
+
+    });
+
+}
+
+function hideOutOfRangeProducts() {
+
+  const params =
+    new URLSearchParams(window.location.search);
+
+  const min =
+    parseFloat(params.get(PRICE_FILTER_MIN_PARAM));
+
+  const max =
+    parseFloat(params.get(PRICE_FILTER_MAX_PARAM));
+
+  if (Number.isNaN(min) && Number.isNaN(max)) return;
+
+  document
+    .querySelectorAll('.product-card')
+    .forEach(card => {
+
+      const productMin =
+        parseFloat(card.dataset.priceMin);
+
+      const productMax =
+        parseFloat(card.dataset.priceMax);
+
+      const productPrice =
+        parseFloat(card.dataset.price);
+
+      const exactPrice =
+        !Number.isNaN(min) && !Number.isNaN(max) && min === max;
+
+      if (exactPrice) {
+
+        card.hidden =
+          productPrice !== min;
+
+        return;
+
+      }
+
+      const belowMin =
+        !Number.isNaN(min) && productMax < min;
+
+      const aboveMax =
+        !Number.isNaN(max) && productMin > max;
+
+      card.hidden =
+        belowMin || aboveMax;
+
+    });
+
+}
+
+function getSelectedSizes() {
+
+  const form =
+    document.getElementById('SizeSwatchFilters');
+
+  if (!form) return [];
+
+  return Array
+    .from(form.querySelectorAll('input:checked'))
+    .map(input => (input.dataset.sizeLabel || input.value).trim().toLowerCase())
+    .filter(Boolean);
+
+}
+
+function hideProductsWithoutSelectedAvailableSizes() {
+
+  const selectedSizes =
+    getSelectedSizes();
+
+  if (selectedSizes.length === 0) return;
+
+  document
+    .querySelectorAll('.product-card')
+    .forEach(card => {
+
+      const availableSizes =
+        (card.dataset.availableSizes || '')
+          .split('||')
+          .map(size => size.trim().toLowerCase())
+          .filter(Boolean);
+
+      const hasSelectedAvailableSize =
+        selectedSizes.some(size => availableSizes.includes(size));
+
+      if (!hasSelectedAvailableSize) {
+
+        card.hidden = true;
+
+      }
+
+    });
+
+}
+
+function updateEmptyState() {
+
+  const emptyState =
+    document.getElementById('CollectionEmptyState');
+
+  if (!emptyState) return;
+
+  const productCards =
+    Array.from(document.querySelectorAll('.product-card'));
+
+  const hasVisibleProducts =
+    productCards.some(card => !card.hidden);
+
+  emptyState.hidden =
+    productCards.length > 0 && hasVisibleProducts;
+
+}
+
+function applyClientSideProductGuards() {
+
+  hideOutOfRangeProducts();
+
+  hideProductsWithoutSelectedAvailableSizes();
+
+  updateEmptyState();
+
+}
+
+/* ---------- URL HELPERS ---------- */
+
+function getCurrentPageFromUrl(url) {
+
+  try {
+
+    const params =
+      new URL(url, window.location.origin).searchParams;
+
+    return parseInt(params.get('page')) || 1;
+
+  } catch(e) {
+
+    return 1;
+
+  }
+
+}
+
+function buildNextPageUrl(url) {
+
+  const u =
+    new URL(url, window.location.origin);
+
+  const params =
+    u.searchParams;
+
+  const current =
+    parseInt(params.get('page')) || 1;
+
+  params.set('page', current + 1);
+
+  u.search = params.toString();
+
+  return u.toString();
+
+}
+
+function getNextPageUrl() {
+
+  const paginationWrapper =
+    document.querySelector('.pagination-wrapper');
+
+  if (!paginationWrapper) {
+
+    return buildNextPageUrl(window.location.href);
+
+  }
+
+  let nextLink =
+    paginationWrapper.querySelector('a[rel="next"]');
+
+  if (!nextLink) {
+
+    const paginationItems =
+      paginationWrapper.querySelectorAll('.pagination__item');
+
+    const lastPaginationItem =
+      paginationItems[paginationItems.length - 1];
+
+    nextLink =
+      lastPaginationItem?.querySelector('a[href]');
+
+  }
+
+  if (nextLink) {
+
+    return new URL(
+      nextLink.getAttribute('href'),
+      window.location.origin
+    ).toString();
+
+  }
+
+  return buildNextPageUrl(window.location.href);
+
+}
+
+/* ---------- INFINITE SCROLL ---------- */
+
+let isLoading = false;
+let reachedEnd = false;
+let lastFetchTime = 0;
+
+const MIN_FETCH_INTERVAL = 600;
+
+async function loadNextPage() {
+
+  if (isLoading || reachedEnd) return;
+
+  const now = Date.now();
+
+  if (now - lastFetchTime < MIN_FETCH_INTERVAL) return;
+
+  lastFetchTime = now;
+
+  const nextUrl =
+    getNextPageUrl();
+
+  isLoading = true;
+
+  showLoading();
+
+  try {
+
+    const resText =
+      await fetch(nextUrl, {
+        credentials: 'same-origin'
+      }).then(r => r.text());
+
+    const parser =
+      new DOMParser();
+
+    const html =
+      parser.parseFromString(resText, 'text/html');
+
+    const incomingGrid =
+      html.querySelector('.product-grid');
+
+    const incomingPaginationWrapper =
+      html.querySelector('.pagination-wrapper');
+
+    const currentPaginationWrapper =
+      document.querySelector('.pagination-wrapper');
+
+    if (!incomingGrid) {
+
+      reachedEnd = true;
+
+      return;
+
+    }
+
+    const newItemsHTML =
+      incomingGrid.innerHTML.trim();
+
+    if (!newItemsHTML) {
+
+      reachedEnd = true;
+
+      return;
+
+    }
+
+    const productGrid =
+      document.querySelector('.product-grid');
+
+    const temp =
+      document.createElement('div');
+
+    temp.innerHTML = newItemsHTML;
+
+    const incomingCards =
+      Array.from(temp.children);
+
+    const existingHrefs =
+      new Set(
+        Array.from(
+          productGrid.querySelectorAll('.product-card a')
+        )
+        .map(a => a.getAttribute('href'))
+        .filter(Boolean)
+      );
+
+    let appendedCount = 0;
+
+    incomingCards.forEach(card => {
+
+      const a =
+        card.querySelector('a[href]');
+
+      const href =
+        a ? a.getAttribute('href') : null;
+
+      if (href && existingHrefs.has(href)) return;
+
+      productGrid.insertAdjacentElement('beforeend', card);
+
+      appendedCount++;
+
+    });
+
+    if (currentPaginationWrapper) {
+
+      currentPaginationWrapper.innerHTML =
+        incomingPaginationWrapper
+          ? incomingPaginationWrapper.innerHTML
+          : '';
+
+    }
+
+    applyClientSideProductGuards();
+
+    hidePagination();
+
+    if (appendedCount === 0) {
+
+      reachedEnd = true;
+
+    } else {
+
+      const newPage =
+        getCurrentPageFromUrl(nextUrl);
+
+      const newUrl =
+        new URL(window.location.href);
+
+      newUrl.searchParams.set('page', newPage);
+
+      window.history.replaceState({}, '', newUrl.toString());
+
+    }
+
+  } catch(err) {
+
+    console.error(err);
+
+  } finally {
+
+    isLoading = false;
+
+    hideLoading();
+
+  }
+
+}
+
+/* ---------- THROTTLE ---------- */
+
+function throttle(fn, wait) {
+
+  let last = 0;
+  let timeout = null;
+
+  return function(...args) {
+
+    const now = Date.now();
+
+    const remaining =
+      wait - (now - last);
+
+    if (remaining <= 0) {
+
+      if (timeout) {
+
+        clearTimeout(timeout);
+
+        timeout = null;
+
+      }
+
+      last = now;
+
+      fn.apply(this, args);
+
+    } else if (!timeout) {
+
+      timeout = setTimeout(() => {
+
+        last = Date.now();
+
+        timeout = null;
+
+        fn.apply(this, args);
+
+      }, remaining);
+
+    }
+
+  };
+
+}
+
+/* ---------- SCROLL TRIGGER ---------- */
+
+function onScrollTrigger() {
+
+  if (reachedEnd) return;
+
+  const scrollPos =
+    window.scrollY + window.innerHeight;
+
+  const triggerPoint =
+    document.body.offsetHeight - 800;
+
+  if (scrollPos >= triggerPoint) {
+
+    loadNextPage();
+
+  }
+
+}
+
+const throttledScroll =
+  throttle(onScrollTrigger, 200);
+
+window.addEventListener('scroll', throttledScroll);
+
+/* ---------- AJAX UPDATE ---------- */
+
+function updateCollection(url) {
+
+  showLoading();
+
+  fetch(url)
+
+    .then(res => res.text())
+
+    .then(data => {
+
+      const parser =
+        new DOMParser();
+
+      const htmlDoc =
+        parser.parseFromString(data, 'text/html');
+
+      const newContent =
+        htmlDoc.querySelector('#CollectionProductWrapper')?.innerHTML;
+
+      if (newContent) {
+
+        document.querySelector('#CollectionProductWrapper').innerHTML =
+          newContent;
+
+        reachedEnd = false;
+        isLoading = false;
+        lastFetchTime = 0;
+
+        window.history.pushState({}, '', url);
+
+        applyClientSideProductGuards();
+
+        hidePagination();
+
+      }
+
+      hideLoading();
+
+    })
+
+    .catch(err => {
+
+      console.error(err);
+
+      hideLoading();
+
+    });
+
+}
+
+/* ---------- FILTER FORM ---------- */
+
+function appendCheckedInputsToParams(form, params) {
+
+  if (!form) return;
+
+  const formData =
+    new FormData(form);
+
+  formData.forEach((value, key) => {
+
+    params.append(key, value);
+
+  });
+
+}
+
+function isSizeFilterParam(key) {
+
+  return SIZE_FILTER_PARAM_NAMES.includes(key);
+
+}
+
+document
+  .getElementById('CollectionFilters')
+  ?.addEventListener('submit', function(e) {
+
+    e.preventDefault();
+
+    const params =
+      new URLSearchParams(window.location.search);
+
+    Array
+      .from(params.keys())
+      .forEach(key => {
+
+        if (
+          key.startsWith('filter.') &&
+          key !== PRICE_FILTER_MIN_PARAM &&
+          key !== PRICE_FILTER_MAX_PARAM &&
+          !isSizeFilterParam(key)
+        ) {
+
+          params.delete(key);
+
+        }
+
+      });
+
+    appendCheckedInputsToParams(this, params);
+
+    params.delete('page');
+
+    updateCollection(
+      `${window.location.pathname}?${params.toString()}`
+    );
+
+});
+
+/* ---------- SIZE SWATCHES ---------- */
+
+function initSizeSwatchFilters() {
+
+  const form =
+    document.getElementById('SizeSwatchFilters');
+
+  if (!form) return;
+
+  const syncActiveSwatches = () => {
+
+    form
+      .querySelectorAll('.size-swatch')
+      .forEach(label => {
+
+        const input =
+          label.querySelector('input');
+
+        label.classList.toggle(
+          'active',
+          Boolean(input?.checked)
+        );
+
+      });
+
+  };
+
+  syncActiveSwatches();
+
+  form.addEventListener('change', function() {
+
+    syncActiveSwatches();
+
+    const params =
+      new URLSearchParams(window.location.search);
+
+    Array
+      .from(params.keys())
+      .forEach(key => {
+
+        if (isSizeFilterParam(key)) {
+
+          params.delete(key);
+
+        }
+
+      });
+
+    appendCheckedInputsToParams(form, params);
+
+    params.delete('page');
+
+    updateCollection(
+      `${window.location.pathname}?${params.toString()}`
+    );
+
+  });
+
+}
+
+/* ---------- SORT ---------- */
+
+document
+  .getElementById('SortBySelect')
+  ?.addEventListener('change', function() {
+
+    const params =
+      new URLSearchParams(window.location.search);
+
+    params.set('sort_by', this.value);
+
+    params.delete('page');
+
+    updateCollection(
+      `${window.location.pathname}?${params.toString()}`
+    );
+
+});
+
+/* ---------- PRICE DROPDOWN ---------- */
+
+function initPriceDropdownFilter() {
+
+  const dropdown =
+    document.getElementById('PriceRangeDropdown');
+
+  if (!dropdown) return;
+
+  const params =
+    new URLSearchParams(window.location.search);
+
+  const currentMin =
+    params.get(PRICE_FILTER_MIN_PARAM);
+
+  const currentMax =
+    params.get(PRICE_FILTER_MAX_PARAM);
+
+  if (currentMin && currentMax) {
+
+    dropdown.value =
+      `${currentMin}-${currentMax}`;
+
+  }
+
+  dropdown.addEventListener('change', function() {
+
+    const params =
+      new URLSearchParams(window.location.search);
+
+    params.delete('page');
+
+    if (this.value) {
+
+      const values =
+        this.value.split('-');
+
+      params.set(
+        PRICE_FILTER_MIN_PARAM,
+        values[0]
+      );
+
+      params.set(
+        PRICE_FILTER_MAX_PARAM,
+        values[1]
+      );
+
+    } else {
+
+      params.delete(PRICE_FILTER_MIN_PARAM);
+
+      params.delete(PRICE_FILTER_MAX_PARAM);
+
+    }
+
+    const newUrl =
+      `${window.location.pathname}?${params.toString()}`;
+
+    updateCollection(newUrl);
+
+  });
+
+}
+
+/* ---------- ACTIVE GENDER ---------- */
+
+function setActiveGenderButton() {
+
+  const urlParams =
+    new URLSearchParams(window.location.search);
+
+  const gender =
+    urlParams.get('filter.p.m.custom.gender');
+
+  document
+    .querySelectorAll('.gender-btn')
+    .forEach(btn => btn.classList.remove('active'));
+
+  if (gender === 'men') {
+
+    document
+      .querySelector('[data-gender="men"]')
+      ?.classList.add('active');
+
+  } else if (gender === 'women') {
+
+    document
+      .querySelector('[data-gender="women"]')
+      ?.classList.add('active');
+
+  } else {
+
+    document
+      .querySelector('[data-gender="all"]')
+      ?.classList.add('active');
+
+  }
+
+}
+
+/* ---------- INIT ---------- */
+
+document.addEventListener('DOMContentLoaded', function() {
+
+  hidePagination();
+
+  hideLoading();
+
+  setActiveGenderButton();
+
+  initPriceDropdownFilter();
+
+  initSizeSwatchFilters();
+
+  applyClientSideProductGuards();
+
+});
+
+</script>
+
+<style>
+
+/* ---------- BANNER ---------- */
+
+.collection-banner {
+  text-align:center;
+  background:#f9f9f9;
+}
+
+.collection-banner img {
+  max-width:100%;
+  height:auto;
+}
+
+.collection-description {
+  max-width:800px;
+  margin:0 auto;
+  color:#555;
+}
+
+/* ---------- CONTROLS ---------- */
+
+.collection-controls {
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  flex-wrap:nowrap;
+  gap:10px;
+  padding:14px 20px;
+  border-top:1px solid #ececec;
+  border-bottom:1px solid #ececec;
+  background:#fbfbfb;
+  overflow-x:auto;
+  overflow-y:hidden;
+  scrollbar-width:none;
+}
+
+.collection-controls::-webkit-scrollbar {
+  display:none;
+}
+
+.left-controls {
+  display:flex;
+  align-items:center;
+  gap:10px;
+  flex-wrap:nowrap;
+  min-width:max-content;
+}
+
+.right-controls {
+  display:flex;
+  align-items:center;
+  flex:0 0 auto;
+}
+
+.sort-filter-wrapper {
+  display:flex;
+  align-items:center;
+  gap:9px;
+  min-height:42px;
+  padding:5px 6px 5px 12px;
+  border:1px solid #dedede;
+  border-radius:8px;
+  background:#fff;
+  box-shadow:0 6px 18px rgba(0,0,0,0.04);
+  flex:0 0 auto;
+}
+
+.sort-filter-label {
+  color:#555;
+  font-size:11px;
+  font-weight:700;
+  text-transform:uppercase;
+  letter-spacing:0;
+  white-space:nowrap;
+}
+
+.gender-filters {
+  display:none;
+  gap:10px;
+}
+
+.gender-btn {
+  text-decoration:none;
+  color:#000;
+  border:1px solid #000;
+  padding:10px 18px;
+  font-size:14px;
+  font-weight:600;
+}
+
+.gender-btn.active,
+.gender-btn:hover {
+  background:#000;
+  color:#fff;
+}
+
+/* ---------- SIZE SWATCHES ---------- */
+
+.size-swatch-filters {
+  display:flex;
+  align-items:center;
+  gap:10px;
+  flex-wrap:nowrap;
+  min-height:42px;
+  padding:5px 8px 5px 12px;
+  border:1px solid #dedede;
+  border-radius:8px;
+  background:#fff;
+  box-shadow:0 6px 18px rgba(0,0,0,0.04);
+  flex:0 0 auto;
+}
+
+.size-swatch-title {
+  font-size:11px;
+  font-weight:700;
+  text-transform:uppercase;
+  color:#555;
+  white-space:nowrap;
+}
+
+.size-swatch-list {
+  display:flex;
+  align-items:center;
+  gap:6px;
+  flex-wrap:nowrap;
+}
+
+.size-swatch {
+  min-width:34px;
+  min-height:30px;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  padding:7px 10px;
+  border:1px solid #dedede;
+  border-radius:7px;
+  background:#f8f8f8;
+  color:#111;
+  font-size:12px;
+  font-weight:700;
+  line-height:1;
+  text-align:center;
+  cursor:pointer;
+  box-shadow:inset 0 0 0 1px transparent;
+  transition:background 0.2s ease,color 0.2s ease,border-color 0.2s ease,box-shadow 0.2s ease,transform 0.2s ease;
+}
+
+.size-swatch input {
+  position:absolute;
+  opacity:0;
+  pointer-events:none;
+}
+
+.size-swatch.active,
+.size-swatch:has(input:checked) {
+  background:#111;
+  color:#fff;
+  border-color:#111;
+  box-shadow:0 2px 6px rgba(0,0,0,0.16);
+}
+
+.size-swatch:not(.unavailable):hover {
+  border-color:#111;
+  transform:translateY(-1px);
+}
+
+.size-swatch.unavailable {
+  color:#888;
+  border-color:#ccc;
+  background:#f5f5f5;
+  cursor:not-allowed;
+  text-decoration:line-through;
+}
+
+.size-swatch:focus-within {
+  outline:2px solid #111;
+  outline-offset:2px;
+}
+
+/* ---------- PRICE DROPDOWN ---------- */
+
+.price-filter-wrapper {
+
+  display:flex;
+
+  align-items:center;
+
+  gap:9px;
+
+  min-height:42px;
+
+  padding:5px 6px 5px 12px;
+
+  border:1px solid #dedede;
+
+  border-radius:8px;
+
+  background:#fff;
+
+  box-shadow:0 6px 18px rgba(0,0,0,0.04);
+
+  flex:0 0 auto;
+
+}
+
+.price-filter-label {
+
+  color:#555;
+
+  font-size:11px;
+
+  font-weight:700;
+
+  text-transform:uppercase;
+
+  letter-spacing:0;
+
+  white-space:nowrap;
+
+}
+
+.price-filter-wrapper select {
+
+  min-height:30px;
+
+  padding:6px 14px;
+
+  border:1px solid #dedede;
+
+  border-radius:7px;
+
+  background:#f8f8f8;
+
+  font-size:13px;
+
+  font-weight:600;
+
+  font-family:'Montserrat',sans-serif;
+
+  cursor:pointer;
+
+  appearance:none;
+
+  -webkit-appearance:none;
+
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23000' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+
+  background-repeat:no-repeat;
+
+  background-position:right 12px center;
+
+  padding-right:34px;
+
+  min-width:230px;
+
+}
+
+.price-filter-wrapper select:focus {
+
+  outline:2px solid #111;
+
+  outline-offset:2px;
+
+}
+
+.price-filter-wrapper select:hover,
+#SortBySelect:hover {
+  border-color:#111;
+}
+
+/* ---------- FILTER BUTTON ---------- */
+
+.filter-toggle {
+  display:none;
+  padding:10px 18px;
+  border:1px solid #000;
+  background:#fff;
+  cursor:pointer;
+  font-weight:600;
+}
+
+/* ---------- SORT ---------- */
+
+#SortBySelect {
+  min-height:30px;
+  padding:6px 38px 6px 14px;
+  border:1px solid #dedede;
+  border-radius:7px;
+  background:#f8f8f8;
+  font-size:13px;
+  font-weight:600;
+  font-family:'Montserrat',sans-serif;
+  cursor:pointer;
+  appearance:none;
+  -webkit-appearance:none;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23000' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+  background-repeat:no-repeat;
+  background-position:right 12px center;
+}
+
+#SortBySelect:focus {
+  outline:2px solid #111;
+  outline-offset:2px;
+}
+
+/* ---------- GRID ---------- */
+
+.product-grid {
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(250px,1fr));
+  gap:5px;
+  padding:1%;
+}
+
+.product-card {
+  background:#f2f2f2;
+  padding:8%;
+  text-align:center;
+}
+
+.product-card a {
+  text-decoration:none;
+  color:inherit;
+}
+
+.collection-empty-state {
+  padding:48px 20px;
+  text-align:center;
+  color:#555;
+  font-size:15px;
+  font-weight:600;
+}
+
+.product-image img {
+  width:100%;
+  height:auto;
+}
+
+/* ---------- BADGES ---------- */
+
+.genuine-leather-badge,
+.vegan-badge {
+  position:absolute;
+  top:-7px;
+  left:-15px;
+}
+
+.genuine-leather-badge img {
+  width:60px;
+}
+
+.vegan-badge img {
+  width:35px;
+}
+
+.best-seller-badge {
+  position:absolute;
+  top:-15px;
+  right:-15px;
+  background:#e63946;
+  color:#fff;
+  font-size:8px;
+  padding:4px 10px;
+}
+
+.new-arrival-badge {
+  position:absolute;
+  top:10px;
+  right:-15px;
+  background:#FFD747;
+  color:#000;
+  font-size:8px;
+  padding:4px 8px;
+}
+
+/* ---------- PRODUCT PRICE ---------- */
+
+.product-price-badge {
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:6px;
+  flex-wrap:wrap;
+}
+
+.compare-price {
+  text-decoration:line-through;
+  color:#777;
+}
+
+.price-discount-badge {
+  background:#d60000;
+  color:#fff;
+  padding:2px 5px;
+  font-size:10px;
+}
+
+/* ---------- PRODUCT VARIANTS ---------- */
+
+.product-card-variants {
+  display:flex;
+  justify-content:center;
+  gap:3px;
+  flex-wrap:wrap;
+  margin-top:10px;
+}
+
+.product-card-variant {
+    min-width: 28px;
+    min-height: 18px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 3px 7px;
+    border: 1px solid #d8d8d8;
+    border-radius: 999px;
+    background: #fff;
+    color: #111;
+    font-size: 10px;
+    font-weight: 600;
+    line-height: 1;
+    position: relative;
+}
+
+.product-card-variant.unavailable {
+  color:#999;
+  background:#fafafa;
+}
+
+.product-card-variant.unavailable::after {
+  content:'';
+  position:absolute;
+  left:7px;
+  right:7px;
+  top:50%;
+  border-top:1px solid currentColor;
+  transform:rotate(-12deg);
+}
+
+/* ---------- DRAWER ---------- */
+
+.filter-drawer {
+  position:fixed;
+  top:0;
+  left:-100%;
+  width:80%;
+  max-width:320px;
+  height:100%;
+  background:#fff;
+  z-index:9999;
+  padding:20px;
+  overflow-y:auto;
+  transition:left 0.3s ease;
+}
+
+.filter-drawer.open {
+  left:0;
+}
+
+.filter-drawer-header {
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+}
+
+.filter-close {
+  background:none;
+  border:none;
+  font-size:2rem;
+}
+
+.filter-group {
+  margin-bottom:15px;
+}
+
+.filter-group summary {
+  cursor:pointer;
+  font-weight:600;
+}
+
+.filter-values {
+  padding-top:10px;
+}
+
+.filter-values label {
+  display:block;
+  margin-bottom:6px;
+}
+
+.filter-actions {
+  display:flex;
+  justify-content:space-between;
+  margin-top:20px;
+}
+
+.apply-btn {
+  background:#000;
+  color:#fff;
+  border:none;
+  padding:10px 15px;
+}
+
+.clear-btn {
+  text-decoration:none;
+  color:#000;
+}
+
+/* ---------- LOADER ---------- */
+
+#collection-loading {
+  text-align:center;
+  padding:20px;
+  font-weight:bold;
+}
+
+
+.collection-message {
+    background:#f7f7f7;
+    padding:14px 20px;
+    margin-top: 6px;
+    text-align:center;
+}
+.collection-message-inner {
+    max-width: 920px;
+    margin: 0 auto;
+    padding: 12px 18px;
+    /* border: 1px solid #ffffff00; */
+    /* border-left: 4px solid #111; */
+    background: #ffffff00;
+    /* box-shadow: 0 6px 18px rgba(0,0,0,0.04); */
+}
+.collection-message p{
+  font-size:13px;
+  line-height:1.45;
+  color:#222;
+  margin:0 0 6px;
+  font-family:'Montserrat', sans-serif;
+}
+
+.collection-message p:last-child{
+  margin-bottom:0;
+}
+
+.collection-message strong{
+  font-weight:700;
+    }
+
+.collection-message-highlight{
+  font-weight:700;
+  color:#111;
+}
+
+@media(max-width:768px){
+
+  .collection-message{
+    padding:10px 12px;
+  }
+
+  .collection-message-inner{
+    padding:10px 12px;
+  }
+
+  .collection-message p{
+    font-size:12px;
+    line-height:1.4;
+    margin-bottom:5px;
+  }
+
+  .collection-message-highlight{
+    font-size:12px;
+  }
+
+}
+
+
+
+label {
+    display: block;
+    margin-bottom: 0px;
+}
+
+
+
+
+
+/* ---------- MOBILE ---------- */
+
+@media (max-width:768px) {
+
+  .product-grid {
+    grid-template-columns:repeat(2,1fr);
+  }
+
+  .collection-controls {
+    flex-direction:column;
+    align-items:stretch;
+    gap:10px;
+    padding:14px 16px;
+    margin-inline:0;
+    overflow-x:visible;
+  }
+
+  .left-controls {
+    width:100%;
+    min-width:0;
+    flex-direction:column;
+    align-items:stretch;
+    flex-wrap:nowrap;
+    gap:10px;
+  }
+
+  .price-filter-wrapper {
+    width:100%;
+    box-sizing:border-box;
+    display:grid;
+    grid-template-columns:1fr;
+    gap:6px;
+    justify-content:stretch;
+    padding:10px;
+  }
+
+  .size-swatch-filters {
+    width:100%;
+    box-sizing:border-box;
+    align-items:flex-start;
+    flex-direction:column;
+    gap:8px;
+    padding:10px;
+  }
+
+  .size-swatch-list {
+    width:100%;
+    gap:6px;
+    flex-wrap:wrap;
+    min-width:0;
+  }
+
+  .size-swatch {
+    flex:0 0 auto;
+    min-width:34px;
+    min-height:30px;
+    padding:7px 9px;
+    font-size:12px;
+  }
+
+  .right-controls,
+  .sort-filter-wrapper {
+    width:100%;
+  }
+
+  .sort-filter-wrapper {
+    box-sizing:border-box;
+    display:grid;
+    grid-template-columns:1fr;
+    gap:6px;
+    justify-content:stretch;
+    padding:10px;
+  }
+
+  #SortBySelect {
+    min-width:0;
+    max-width:100%;
+    width:100%;
+    font-size:12px;
+  }
+
+  .price-filter-wrapper select {
+    min-width:0;
+    max-width:100%;
+    width:100%;
+    font-size:12px;
+  }
+
+}
+</style>
+

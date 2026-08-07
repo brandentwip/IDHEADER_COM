@@ -1,0 +1,304 @@
+{% doc %}
+  @prompt
+    Make a responsive section for features like free delivery vegan leather and so on, I should choose images, Remove every thing just I just need a icon grod not heading just image option, 4 icons only, bg transparent and fit should be contain
+
+{% enddoc %}
+{% assign ai_gen_id = block.id | replace: '_', '' | downcase %}
+
+{% style %}
+  .ai-icon-grid-{{ ai_gen_id }} {
+    padding: {{ block.settings.section_padding }}px20px;
+    background-color: {{ block.settings.background_color }};
+  }
+
+  .ai-icon-container-{{ ai_gen_id }} {
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .ai-icon-grid-wrapper-{{ ai_gen_id }} {
+    display: grid;
+    grid-template-columns: repeat({{ block.settings.columns_desktop }}, 1fr);
+    gap: {{ block.settings.grid_gap }}px;
+    justify-items: center;
+    align-items: center;
+  }
+
+  .ai-icon-item-{{ ai_gen_id }} {
+    width: {{ block.settings.icon_size }}px;
+    height: {{ block.settings.icon_size }}px;
+    border-radius: {{ block.settings.icon_border_radius }}px;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: transparent;
+    border: {{ block.settings.icon_border_width }}px solid {{ block.settings.icon_border_color }};
+  }
+
+  .ai-icon-item-{{ ai_gen_id }} img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
+
+  .ai-icon-placeholder-{{ ai_gen_id }} {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+  }
+
+  .ai-icon-placeholder-{{ ai_gen_id }} svg {
+    width: 60%;
+    height: 60%;
+    color: {{ block.settings.placeholder_color }};
+  }
+
+  .ai-icon-empty-state-{{ ai_gen_id }} {
+    position: absolute;
+    bottom: -25px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 10px;
+    color: #999;
+    white-space: nowrap;
+    pointer-events: none;
+  }
+
+  @media screen and (max-width: 768px) {
+    .ai-icon-grid-wrapper-{{ ai_gen_id }} {
+      grid-template-columns: repeat({{ block.settings.columns_mobile }}, 1fr);
+    }
+
+    .ai-icon-grid-{{ ai_gen_id }} {
+      padding: {{ block.settings.section_padding | times: 0.7 }}px 15px;
+    }
+
+    .ai-icon-item-{{ ai_gen_id }} {
+      width: {{ block.settings.icon_size | times: 0.8 }}px;
+      height: {{ block.settings.icon_size | times: 0.8 }}px;
+    }
+  }
+
+  @media screen and (max-width: 480px) {
+    .ai-icon-grid-wrapper-{{ ai_gen_id }} {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+{% endstyle %}<div class="ai-icon-grid-{{ ai_gen_id }}" {{ block.shopify_attributes }}>
+  <div class="ai-icon-container-{{ ai_gen_id }}">
+    <div class="ai-icon-grid-wrapper-{{ ai_gen_id }}">
+      {% if block.settings.icon_1 %}
+        <div class="ai-icon-item-{{ ai_gen_id }}">
+          <img
+            src="{{ block.settings.icon_1 | image_url: width: 200}}"
+            alt="{{ block.settings.icon_1.alt | escape }}"
+            loading="lazy"
+            width="200"
+            height="200"
+          >
+        </div>
+      {% else %}
+        <div class="ai-icon-item-{{ ai_gen_id }}">
+          <div class="ai-icon-placeholder-{{ ai_gen_id }}">
+            {{'image' | placeholder_svg_tag }}<div class="ai-icon-empty-state-{{ ai_gen_id }}">Add icon</div>
+          </div>
+        </div>
+      {% endif %}
+
+      {% if block.settings.icon_2 %}
+        <div class="ai-icon-item-{{ ai_gen_id }}">
+          <img
+            src="{{ block.settings.icon_2 | image_url: width: 200 }}"
+            alt="{{ block.settings.icon_2.alt | escape }}"
+            loading="lazy"
+            width="200"
+            height="200"
+          >
+        </div>
+      {% else %}
+        <div class="ai-icon-item-{{ ai_gen_id }}">
+          <div class="ai-icon-placeholder-{{ ai_gen_id }}">
+            {{ 'image' | placeholder_svg_tag }}
+            <div class="ai-icon-empty-state-{{ ai_gen_id }}">Add icon</div>
+          </div>
+        </div>
+      {% endif %}
+
+      {% if block.settings.icon_3 %}
+        <div class="ai-icon-item-{{ ai_gen_id }}">
+          <img
+            src="{{ block.settings.icon_3 | image_url: width: 200 }}"
+            alt="{{ block.settings.icon_3.alt | escape }}"
+            loading="lazy"
+            width="200"
+            height="200"
+          >
+        </div>
+      {% else %}
+        <div class="ai-icon-item-{{ ai_gen_id }}">
+          <div class="ai-icon-placeholder-{{ ai_gen_id }}">
+            {{ 'image' | placeholder_svg_tag }}
+            <div class="ai-icon-empty-state-{{ ai_gen_id }}">Add icon</div>
+          </div>
+        </div>
+      {% endif %}
+
+      {% if block.settings.icon_4 %}
+        <div class="ai-icon-item-{{ ai_gen_id }}">
+          <img
+            src="{{ block.settings.icon_4 | image_url: width: 200 }}"
+            alt="{{ block.settings.icon_4.alt | escape }}"
+            loading="lazy"
+            width="200"
+            height="200"
+          >
+        </div>
+      {% else %}
+        <div class="ai-icon-item-{{ ai_gen_id }}">
+          <div class="ai-icon-placeholder-{{ ai_gen_id }}">
+            {{ 'image' | placeholder_svg_tag }}
+            <div class="ai-icon-empty-state-{{ ai_gen_id }}">Add icon</div>
+          </div>
+        </div>
+      {% endif %}
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Icon grid",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "select",
+      "id": "columns_desktop",
+      "label": "Columns on desktop",
+      "options": [
+        {"value": "2", "label": "2"},
+        {"value": "4", "label": "4"}
+      ],
+      "default": "4"
+    },
+    {
+      "type": "select",
+      "id": "columns_mobile",
+      "label": "Columns on mobile",
+      "options": [
+        {"value": "2", "label": "2"},
+        {"value": "4", "label": "4"}
+      ],
+      "default": "2"
+    },
+    {
+      "type": "range",
+      "id": "grid_gap",
+      "min": 10,
+      "max": 50,
+      "step": 5,
+      "unit": "px",
+      "label": "Grid gap",
+      "default": 20
+    },
+    {
+      "type": "range",
+      "id": "section_padding",
+      "min": 10,
+      "max": 80,
+      "step": 5,
+      "unit": "px",
+      "label": "Section padding",
+      "default": 40
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "header",
+      "content": "Icon styling"
+    },
+    {
+      "type": "range",
+      "id": "icon_size",
+      "min": 40,
+      "max": 120,
+      "step": 5,
+      "unit": "px",
+      "label": "Icon size",
+      "default": 80
+    },
+    {
+      "type": "range",
+      "id": "icon_border_radius",
+      "min": 0,
+      "max": 50,
+      "step": 5,
+      "unit": "px",
+      "label": "Border radius",
+      "default": 10
+    },
+    {
+      "type": "range",
+      "id": "icon_border_width",
+      "min": 0,
+      "max": 4,
+      "step": 1,
+      "unit": "px",
+      "label": "Border width",
+      "default": 0
+    },
+    {
+      "type": "color",
+      "id": "icon_border_color",
+      "label": "Border color",
+      "default": "#e5e5e5"
+    },
+    {
+      "type": "color",
+      "id": "placeholder_color",
+      "label": "Placeholder color",
+      "default": "#cccccc"
+    },
+    {
+      "type": "header",
+      "content": "Icons"
+    },
+    {
+      "type": "image_picker",
+      "id": "icon_1",
+      "label": "Icon 1"
+    },
+    {
+      "type": "image_picker",
+      "id": "icon_2",
+      "label": "Icon 2"
+    },
+    {
+      "type": "image_picker",
+      "id": "icon_3",
+      "label": "Icon 3"
+    },
+    {
+      "type": "image_picker",
+      "id": "icon_4",
+      "label": "Icon 4"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Icon grid"
+    }
+  ],
+  "tag": null
+}
+{% endschema %}

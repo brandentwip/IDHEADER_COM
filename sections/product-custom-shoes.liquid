@@ -1,0 +1,214 @@
+{% comment %}
+  Custom product page section for Men's Formal Shoes
+  Matches both desktop and mobile designs as per provided reference
+{% endcomment %}
+
+<section class="custom-product-page">
+  <div class="container">
+    <div class="product-wrapper">
+      
+      <!-- Product Images -->
+      <div class="product-images">
+        {% if product.images.size > 0 %}
+          <div class="main-image">
+            <img src="{{ product.featured_image | img_url: '800x' }}" alt="{{ product.title }}" />
+          </div>
+          {% if product.images.size > 1 %}
+            <div class="thumbs">
+              {% for image in product.images %}
+                <img src="{{ image | img_url: '200x' }}" alt="{{ product.title }} thumbnail" />
+              {% endfor %}
+            </div>
+          {% endif %}
+        {% endif %}
+      </div>
+
+      <!-- Product Info -->
+      <div class="product-info">
+        <h1 class="product-title">{{ product.title }}</h1>
+        <p class="product-subtitle">{{ product.options_by_name['Color'] | default: product.selected_or_first_available_variant.option1 }}</p>
+
+        <div class="product-description">
+          {{ product.description }}
+        </div>
+
+        <!-- Variant Size Selector -->
+        {% if product.variants.size > 1 %}
+          <div class="variant-sizes">
+            {% for variant in product.variants %}
+              <button 
+                class="size-btn {% if variant.available == false %}disabled{% endif %}" 
+                {% if variant.available %}onclick="window.location='{{ variant.url }}'"{% endif %}
+              >
+                {{ variant.option1 }}
+              </button>
+            {% endfor %}
+          </div>
+        {% endif %}
+        
+        <!-- Add to cart and price -->
+        <div class="add-cart-row">
+          <form method="post" action="/cart/add">
+            <input type="hidden" name="id" value="{{ product.selected_or_first_available_variant.id }}">
+            <button type="submit" class="add-to-cart">Add to cart</button>
+          </form>
+          <span class="price">{{ product.price | money }}</span>
+        </div>
+
+        <!-- Product Details -->
+        {% comment %} <div class="product-details">
+          <h3>Details</h3>
+          <ul>
+            <li><strong>Brand:</strong> {{ product.vendor }}</li>
+            <li><strong>Color:</strong> {{ product.options_by_name['Color'] }}</li>
+            <li><strong>Type:</strong> Formals</li>
+            <li><strong>Upper Material:</strong> Leatherite</li>
+            <li><strong>Material:</strong> Leather</li>
+            <li><strong>Sole Material:</strong> Rubber</li>
+            <li><strong>Toe Type:</strong> Round</li>
+            <li><strong>Style Code:</strong> ID2271TAN</li>
+            <li><strong>Net Quantity:</strong> 2 N (1 Pair)</li>
+          </ul>
+        </div> {% endcomment %}
+      </div>
+    </div>
+
+    <!-- Also Like Section -->
+    {% if collections.all.products.size > 1 %}
+      <div class="related-products">
+        <h2>Also like</h2>
+        <div class="related-grid">
+          {% for related_product in collections.all.products limit:4 %}
+            {% if related_product.id != product.id %}
+              <div class="related-card">
+                <a href="{{ related_product.url }}">
+                  <img src="{{ related_product.featured_image | img_url: '300x' }}" alt="{{ related_product.title }}">
+                  <p>{{ related_product.title }}</p>
+                </a>
+              </div>
+            {% endif %}
+          {% endfor %}
+        </div>
+      </div>
+    {% endif %}
+  </div>
+</section>
+
+<style>
+  .custom-product-page {
+    padding: 40px 20px;
+  }
+  .product-wrapper {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 40px;
+  }
+  .product-images {
+    flex: 1 1 45%;
+  }
+  .product-images img {
+    width: 100%;
+    border-radius: 8px;
+  }
+  .thumbs {
+    display: flex;
+    gap: 10px;
+    margin-top: 10px;
+  }
+  .thumbs img {
+    width: 80px;
+    cursor: pointer;
+  }
+  .product-info {
+    flex: 1 1 45%;
+  }
+  .product-title {
+    font-size: 28px;
+    font-weight: 700;
+    margin-bottom: 10px;
+  }
+  .product-subtitle {
+    font-size: 18px;
+    margin-bottom: 20px;
+  }
+  .product-description {
+    font-size: 15px;
+    margin-bottom: 20px;
+  }
+  .variant-sizes {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 20px;
+  }
+  .size-btn {
+    padding: 10px 20px;
+    border: 1px solid #000;
+    cursor: pointer;
+    background: #fff;
+  }
+  .size-btn.disabled {
+    opacity: 0.4;
+    pointer-events: none;
+  }
+  .add-cart-row {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    margin-bottom: 20px;
+  }
+  .add-to-cart {
+    background: #000;
+    color: #fff;
+    padding: 12px 24px;
+    font-weight: 600;
+    border: none;
+    cursor: pointer;
+  }
+  .price {
+    font-size: 20px;
+    font-weight: 700;
+  }
+  .product-details ul {
+    list-style: none;
+    padding: 0;
+  }
+  .product-details li {
+    margin-bottom: 6px;
+    font-size: 15px;
+  }
+  .related-products {
+    margin-top: 60px;
+  }
+  .related-products h2 {
+    font-size: 22px;
+    margin-bottom: 20px;
+  }
+  .related-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 20px;
+  }
+  .related-card img {
+    width: 100%;
+    border-radius: 6px;
+  }
+  .related-card p {
+    text-align: center;
+    font-size: 14px;
+    margin-top: 10px;
+  }
+
+  /* Mobile styles */
+  @media (max-width: 768px) {
+    .product-wrapper {
+      flex-direction: column;
+    }
+    .product-title {
+      font-size: 24px;
+    }
+    .price {
+      font-size: 18px;
+    }
+  }
+</style>

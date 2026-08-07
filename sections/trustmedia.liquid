@@ -1,0 +1,701 @@
+{% liquid
+  assign media_height = section.settings.desktop_height
+  assign mobile_height = section.settings.mobile_height
+  assign media_position = section.settings.media_position
+%}
+
+<section
+  class="trust-media {% if media_position == 'right' %}media-right{% endif %}"
+  id="trust-media-{{ section.id }}"
+  style="
+    padding-top:{{ section.settings.padding_top }}px;
+    padding-bottom:{{ section.settings.padding_bottom }}px;
+    background:{{ section.settings.section_background }};
+  "
+>
+
+  <div class="trust-media__wrapper">
+
+    <div class="trust-media__media">
+
+      {% if section.settings.media_type == 'video' %}
+
+        {% if section.settings.shopify_video != blank %}
+          {{
+            section.settings.shopify_video
+            | video_tag:
+              image_size: '1100x',
+              autoplay: section.settings.autoplay,
+              loop: section.settings.loop,
+              muted: true,
+              controls: false,
+              class: 'trust-media__video'
+          }}
+        {% elsif section.settings.video_url != blank %}
+          <div class="trust-media__video-embed">
+            {{
+              section.settings.video_url
+              | external_video_tag: autoplay: section.settings.autoplay, loop: section.settings.loop, muted: true, controls: false
+            }}
+          </div>
+        {% elsif section.settings.poster_image != blank %}
+          {{
+            section.settings.poster_image
+            | image_url: width: 1600
+            | image_tag: loading: 'lazy', widths: '550,750,1100,1500,1600', class: 'trust-media__image'
+          }}
+        {% else %}
+          {{ 'lifestyle-1' | placeholder_svg_tag: 'placeholder-svg' }}
+        {% endif %}
+
+      {% else %}
+
+        {% if section.settings.poster_image != blank %}
+          <picture>
+            {% if section.settings.mobile_poster_image != blank %}
+              <source
+                media="(max-width:749px)"
+                srcset="{{ section.settings.mobile_poster_image | image_url: width:900 }}"
+              >
+            {% endif %}
+            {{
+              section.settings.poster_image
+              | image_url: width: 1600
+              | image_tag: loading: 'lazy', widths: '550,750,1100,1500,1600', class: 'trust-media__image'
+            }}
+          </picture>
+        {% else %}
+          {{ 'lifestyle-1' | placeholder_svg_tag: 'placeholder-svg' }}
+        {% endif %}
+
+      {% endif %}
+
+      <div class="trust-media__overlay"></div>
+
+      {% if section.settings.overlay_heading != blank %}
+        <div
+          class="trust-media__overlay-text"
+          style="color:{{ section.settings.overlay_text_color }};"
+        >
+          {{ section.settings.overlay_heading }}
+        </div>
+      {% endif %}
+
+    </div>
+
+    <div class="trust-media__content">
+
+      <div class="trust-media__blocks">
+
+        {% for block in section.blocks %}
+
+          {% case block.type %}
+
+            {% when 'rating' %}
+              <div class="trust-media__block trust-media__block--rating" {{ block.shopify_attributes }}>
+                <div class="trust-media__rating-value" style="color:{{ section.settings.heading_color }};">
+                  {{ block.settings.rating_value }}
+                </div>
+                <div
+                  class="trust-media__stars"
+                  style="--rating:{{ block.settings.rating_value }};color:{{ section.settings.accent_color }};"
+                  aria-label="Rated {{ block.settings.rating_value }} out of 5"
+                >★★★★★</div>
+                <div class="trust-media__rating-platform" style="color:{{ section.settings.body_color }};">
+                  Reviews on
+                  {% if block.settings.platform_logo != blank %}
+                    <img
+                      src="{{ block.settings.platform_logo | image_url: width: 160 }}"
+                      alt="{{ block.settings.platform_name | escape }}"
+                      class="trust-media__platform-logo"
+                      loading="lazy"
+                      width="80"
+                    >
+                  {% else %}
+                    <span class="trust-media__platform-name">{{ block.settings.platform_name }}</span>
+                  {% endif %}
+                </div>
+              </div>
+
+            {% when 'feature' %}
+              <div class="trust-media__block trust-media__block--feature" {{ block.shopify_attributes }}>
+                <span class="trust-media__icon" style="color:{{ section.settings.accent_color }};">
+                  {% if block.settings.icon == 'heart' %}
+                    <svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M14 24.5s-9.5-5.85-9.5-13.02C4.5 7.95 7.35 5 10.85 5c1.98 0 3.7 1 4.65 2.55.44.72.5.72.94 0C17.4 6 19.12 5 21.1 5 24.6 5 27 7.95 27 11.48 27 18.65 14 24.5 14 24.5z" transform="translate(-3 -2.5)" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg>
+                  {% elsif block.settings.icon == 'bag' %}
+                    <svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="4" y="10" width="20" height="14" rx="1.5" stroke="currentColor" stroke-width="1.5"/><path d="M9 10V8a5 5 0 0110 0v2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+                  {% elsif block.settings.icon == 'package' %}
+                    <svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M14 3.5l10 5.5v10l-10 5.5-10-5.5v-10l10-5.5z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><path d="M4 9l10 5.5L24 9M14 14.5V24.5" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><path d="M22 6.5l-9.5 5.5" stroke="currentColor" stroke-width="1.5"/></svg>
+                  {% elsif block.settings.icon == 'users' %}
+                    <svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="10" cy="9" r="3.25" stroke="currentColor" stroke-width="1.5"/><circle cx="19" cy="9" r="2.75" stroke="currentColor" stroke-width="1.3"/><path d="M3.5 23c.6-4 3.2-6.5 6.5-6.5s5.9 2.5 6.5 6.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><path d="M17 17c2.7.3 4.7 2.5 5.2 6" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
+                  {% elsif block.settings.icon == 'shield' %}
+                    <svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M14 3.5l9 3.2v6.4c0 6-3.8 10.2-9 11.9-5.2-1.7-9-5.9-9-11.9V6.7l9-3.2z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><path d="M9.8 14l2.8 2.8 5.6-5.9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                  {% else %}
+                    <svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M14 3l2.9 7.6 8.1.3-6.4 5 2.4 7.7-6.9-4.6-6.9 4.6 2.4-7.7-6.4-5 8.1-.3L14 3z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg>
+                  {% endif %}
+                </span>
+                <span class="trust-media__feature-text" style="color:{{ section.settings.body_color }};">
+                  {{ block.settings.feature_text }}
+                </span>
+              </div>
+
+            {% when 'link' %}
+              <div class="trust-media__block trust-media__block--link" {{ block.shopify_attributes }}>
+                {% if block.settings.link_url != blank %}
+                  <a
+                    href="{{ block.settings.link_url }}"
+                    class="trust-media__text-link"
+                    style="color:{{ section.settings.accent_color }};"
+                  >{{ block.settings.link_label }}</a>
+                {% else %}
+                  <span
+                    class="trust-media__text-link"
+                    style="color:{{ section.settings.accent_color }};"
+                  >{{ block.settings.link_label }}</span>
+                {% endif %}
+              </div>
+
+          {% endcase %}
+
+        {% endfor %}
+
+      </div>
+
+    </div>
+
+  </div>
+
+</section>
+
+<style>
+
+{{ section.settings.body_font | font_face }}
+
+#trust-media-{{ section.id }}{
+
+  font-family:{{ section.settings.body_font.family }}, sans-serif;
+  font-weight:{{ section.settings.body_font.weight }};
+
+  --desktop-height:
+  {% case media_height %}
+    {% when 'small' %}420px
+    {% when 'medium' %}560px
+    {% when 'large' %}680px
+    {% when 'fullscreen' %}100vh
+    {% else %}auto
+  {% endcase %};
+
+  --mobile-height:
+  {% case mobile_height %}
+    {% when '350' %}350px
+    {% when '450' %}450px
+    {% when '550' %}550px
+    {% else %}auto
+  {% endcase %};
+
+}
+
+#trust-media-{{ section.id }} .trust-media__wrapper{
+    padding: 5%;
+    max-width:1600px;
+    margin:auto;
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    align-items:stretch;
+    gap:0;
+}
+
+#trust-media-{{ section.id }}.media-right .trust-media__wrapper{
+    direction:rtl;
+}
+
+#trust-media-{{ section.id }}.media-right .trust-media__media,
+#trust-media-{{ section.id }}.media-right .trust-media__content{
+    direction:ltr;
+}
+
+/* ---------- Media ---------- */
+
+#trust-media-{{ section.id }} .trust-media__media{
+    position:relative;
+    height:var(--desktop-height);
+    overflow:hidden;
+    background:#111;
+}
+
+#trust-media-{{ section.id }} .trust-media__video,
+#trust-media-{{ section.id }} .trust-media__image{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    display:block;
+}
+
+#trust-media-{{ section.id }} .trust-media__video-embed{
+    position:relative;
+    width:100%;
+    height:100%;
+}
+
+#trust-media-{{ section.id }} .trust-media__video-embed iframe,
+#trust-media-{{ section.id }} .trust-media__video-embed video{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    position:absolute;
+    inset:0;
+}
+
+#trust-media-{{ section.id }} .trust-media__overlay{
+    position:absolute;
+    inset:0;
+    background:linear-gradient(to top, rgba(0,0,0,.45), rgba(0,0,0,0) 45%);
+    pointer-events:none;
+}
+
+#trust-media-{{ section.id }} .trust-media__overlay-text{
+    position:absolute;
+    left:40px;
+    right:40px;
+    bottom:40px;
+    font-size:22px;
+    line-height:1.35;
+    z-index:2;
+}
+
+#trust-media-{{ section.id }} .trust-media__overlay-text p{
+    margin:0 0 6px;
+}
+
+#trust-media-{{ section.id }} .trust-media__overlay-text p:first-child{
+    font-size:14px;
+    opacity:.85;
+}
+
+/* ---------- Content ---------- */
+
+#trust-media-{{ section.id }} .trust-media__content{
+    display:flex;
+    align-items:center;
+    padding:60px;
+}
+
+#trust-media-{{ section.id }} .trust-media__blocks{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    column-gap:60px;
+    row-gap:34px;
+    width:100%;
+}
+
+#trust-media-{{ section.id }} .trust-media__block--link{
+    grid-column:1 / -1;
+}
+
+/* Rating block */
+
+#trust-media-{{ section.id }} .trust-media__rating-value{
+    font-size:47.25px;
+    line-height:1;
+    font-family: "Jost", sans-serif !important;
+    font-weight: 200;
+}
+
+#trust-media-{{ section.id }} .trust-media__stars{
+    position:relative;
+    display:inline-block;
+    font-size:18px;
+    letter-spacing:2px;
+    color:#ddd;
+    margin:12px 0 10px;
+}
+
+#trust-media-{{ section.id }} .trust-media__stars::before{
+    content:'★★★★★';
+    position:absolute;
+    top:0;
+    left:0;
+    width:calc(var(--rating) / 5 * 100%);
+    overflow:hidden;
+    white-space:nowrap;
+}
+
+#trust-media-{{ section.id }} .trust-media__rating-platform{
+    display:flex;
+    align-items:center;
+    gap:6px;
+    font-size:15px;
+}
+
+#trust-media-{{ section.id }} .trust-media__platform-logo{
+    height:16px;
+    width:auto;
+}
+
+#trust-media-{{ section.id }} .trust-media__platform-name{
+    font-weight:600;
+}
+
+/* Feature block */
+
+#trust-media-{{ section.id }} .trust-media__block--feature{
+    display:flex;
+    align-items:flex-start;
+    gap:16px;
+}
+
+#trust-media-{{ section.id }} .trust-media__icon{
+    flex-shrink:0;
+    display:flex;
+}
+
+#trust-media-{{ section.id }} .trust-media__feature-text{
+    font-size:15px;
+    line-height:1.5;
+}
+
+/* Link block */
+
+#trust-media-{{ section.id }} .trust-media__text-link{
+    display:inline-block;
+    font-size:12px;
+    letter-spacing:.14em;
+    text-transform:uppercase;
+    text-decoration:none;
+    border-bottom:1px solid currentColor;
+    padding-bottom:4px;
+}
+
+/* ---------- Adapt to image ---------- */
+
+{% if media_height == 'adapt' %}
+#trust-media-{{ section.id }} .trust-media__media{
+    height:auto;
+}
+{% endif %}
+
+/* ---------- Mobile ---------- */
+
+@media screen and (max-width:989px){
+
+#trust-media-{{ section.id }} .trust-media__wrapper{
+    grid-template-columns:1fr;
+}
+
+#trust-media-{{ section.id }}.media-right .trust-media__wrapper{
+    direction:ltr;
+}
+
+#trust-media-{{ section.id }} .trust-media__media{
+    height:var(--mobile-height);
+}
+
+{% if mobile_height == 'adapt' %}
+#trust-media-{{ section.id }} .trust-media__media{
+    height:auto;
+}
+{% endif %}
+
+#trust-media-{{ section.id }} .trust-media__content{
+    padding:40px 24px;
+}
+
+#trust-media-{{ section.id }} .trust-media__blocks{
+    grid-template-columns:1fr 1fr;
+    column-gap:24px;
+    row-gap:26px;
+}
+
+#trust-media-{{ section.id }} .trust-media__rating-value{
+    font-size:38px;
+}
+
+#trust-media-{{ section.id }} .trust-media__overlay-text{
+    left:24px;
+    right:24px;
+    bottom:24px;
+    font-size:16px;
+}
+
+#trust-media-{{ section.id }} .trust-media__overlay-text p:first-child{
+    font-size:12px;
+}
+
+}
+
+@media screen and (max-width:479px){
+
+#trust-media-{{ section.id }} .trust-media__blocks{
+    grid-template-columns:1fr;
+}
+
+#trust-media-{{ section.id }} .trust-media__block--link{
+    grid-column:1;
+}
+
+}
+
+</style>
+
+
+{% schema %}
+{
+  "name": "Trust Media Panel",
+  "tag": "section",
+  "class": "trust-media-section",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Media"
+    },
+    {
+      "type": "select",
+      "id": "media_type",
+      "label": "Media Type",
+      "default": "video",
+      "options": [
+        { "value": "video", "label": "Video" },
+        { "value": "image", "label": "Image" }
+      ]
+    },
+    {
+      "type": "video",
+      "id": "shopify_video",
+      "label": "Video (uploaded)",
+      "info": "Used when Media Type is Video. Takes priority over the video URL below."
+    },
+    {
+      "type": "video_url",
+      "id": "video_url",
+      "label": "Video URL",
+      "accept": ["youtube", "vimeo"],
+      "info": "Used when no uploaded video is set."
+    },
+    {
+      "type": "image_picker",
+      "id": "poster_image",
+      "label": "Image / Video Poster",
+      "info": "Shown while video loads, and used as the image when Media Type is Image."
+    },
+    {
+      "type": "image_picker",
+      "id": "mobile_poster_image",
+      "label": "Mobile Image (optional)"
+    },
+    {
+      "type": "checkbox",
+      "id": "autoplay",
+      "label": "Autoplay Video",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "loop",
+      "label": "Loop Video",
+      "default": true
+    },
+    {
+      "type": "textarea",
+      "id": "overlay_heading",
+      "label": "Overlay Text",
+      "default": "We're not in the business of making clothes\nWe're in the business of making you look & feel your best."
+    },
+    {
+      "type": "color",
+      "id": "overlay_text_color",
+      "label": "Overlay Text Color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "select",
+      "id": "desktop_height",
+      "label": "Desktop Media Height",
+      "default": "large",
+      "options": [
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" },
+        { "value": "fullscreen", "label": "Full Screen" },
+        { "value": "adapt", "label": "Adapt to Image" }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "mobile_height",
+      "label": "Mobile Media Height",
+      "default": "450",
+      "options": [
+        { "value": "350", "label": "350px" },
+        { "value": "450", "label": "450px" },
+        { "value": "550", "label": "550px" },
+        { "value": "adapt", "label": "Adapt to Image" }
+      ]
+    },
+
+    {
+      "type": "header",
+      "content": "Typography"
+    },
+    {
+      "type": "font_picker",
+      "id": "body_font",
+      "label": "Body Font",
+      "default": "poppins_n4"
+    },
+
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "select",
+      "id": "media_position",
+      "label": "Media Position (desktop)",
+      "default": "left",
+      "options": [
+        { "value": "left", "label": "Left" },
+        { "value": "right", "label": "Right" }
+      ]
+    },
+
+    {
+      "type": "header",
+      "content": "Colors"
+    },
+    {
+      "type": "color",
+      "id": "section_background",
+      "label": "Section Background",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "heading_color",
+      "label": "Rating Number Color",
+      "default": "#111111"
+    },
+    {
+      "type": "color",
+      "id": "body_color",
+      "label": "Text Color",
+      "default": "#333333"
+    },
+    {
+      "type": "color",
+      "id": "accent_color",
+      "label": "Accent Color (stars, icons, links)",
+      "default": "#c9932f"
+    },
+
+    {
+      "type": "header",
+      "content": "Spacing"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Top Padding",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "default": 0,
+      "unit": "px"
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Bottom Padding",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "default": 0,
+      "unit": "px"
+    }
+  ],
+
+  "blocks": [
+    {
+      "type": "rating",
+      "name": "Rating",
+      "settings": [
+        {
+          "type": "text",
+          "id": "rating_value",
+          "label": "Rating Value",
+          "default": "4.7"
+        },
+        {
+          "type": "text",
+          "id": "platform_name",
+          "label": "Platform Name",
+          "default": "Google"
+        },
+        {
+          "type": "image_picker",
+          "id": "platform_logo",
+          "label": "Platform Logo (optional)"
+        }
+      ]
+    },
+    {
+      "type": "feature",
+      "name": "Feature",
+      "settings": [
+        {
+          "type": "select",
+          "id": "icon",
+          "label": "Icon",
+          "default": "heart",
+          "options": [
+            { "value": "heart", "label": "Heart" },
+            { "value": "bag", "label": "Bag" },
+            { "value": "package", "label": "Package" },
+            { "value": "users", "label": "Users" },
+            { "value": "shield", "label": "Shield" },
+            { "value": "star", "label": "Star" }
+          ]
+        },
+        {
+          "type": "text",
+          "id": "feature_text",
+          "label": "Text",
+          "default": "Over 2 lakh happy customers"
+        }
+      ]
+    },
+    {
+      "type": "link",
+      "name": "Text Link",
+      "settings": [
+        {
+          "type": "text",
+          "id": "link_label",
+          "label": "Label",
+          "default": "Read Reviews"
+        },
+        {
+          "type": "url",
+          "id": "link_url",
+          "label": "Link"
+        }
+      ]
+    }
+  ],
+
+  "presets": [
+    {
+      "name": "Trust Media Panel",
+      "blocks": [
+        { "type": "rating", "settings": { "rating_value": "4.7", "platform_name": "Google" } },
+        { "type": "rating", "settings": { "rating_value": "4.3", "platform_name": "Meta" } },
+        { "type": "link", "settings": { "link_label": "Read Reviews" } },
+        { "type": "feature", "settings": { "icon": "heart", "feature_text": "Over 2 lakh happy customers" } },
+        { "type": "feature", "settings": { "icon": "bag", "feature_text": "Free Tote with your First Purchase" } },
+        { "type": "feature", "settings": { "icon": "package", "feature_text": "60 Days risk free returns & exchanges" } },
+        { "type": "feature", "settings": { "icon": "users", "feature_text": "White Glove Customer Service" } },
+        { "type": "link", "settings": { "link_label": "Pick Something To Try Out" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

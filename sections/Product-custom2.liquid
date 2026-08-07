@@ -1,0 +1,350 @@
+{% comment %}
+Featured Collection (Grid/Slider)
+- Desktop grid: 4 columns (4/4 = 8 products -> two rows)
+- Mobile grid: 2 columns
+- Slider mode: 4 per view desktop, 2 per view mobile
+- "View all" if collection has more than the number shown
+- Uses Montserrat, spacious cards, rounded corners
+{% endcomment %}
+
+{% liquid
+  assign limit_count = section.settings.products_to_show | plus: 0
+  assign coll = section.settings.collection
+
+  if coll == blank
+    assign coll = collections[section.settings.collection]
+  endif
+
+  if coll
+    assign total_count = coll.all_products_count | default: coll.products_count | plus: 0
+  endif
+%}
+
+<section id="fc-{{ section.id }}" class="fc-section {% if section.settings.layout_mode == 'slider' %}mode-slider{% else %}mode-grid{% endif %}">
+  {% if section.settings.heading != blank %}
+    <h2 class="fc-heading">{{ section.settings.heading }}</h2>
+  {% endif %}
+
+  {% if coll and total_count > 0 %}
+    {% if section.settings.layout_mode == 'grid' %}
+      <div class="fc-grid">
+        {% for product in coll.products limit: limit_count %}
+          <div class="fc-card">
+            <a href="{{ product.url }}" class="fc-link">
+              <div class="fc-image-wrap" style="position: relative;">
+                {% if product.featured_image %}
+                  <img
+                    src="{{ product.featured_image | image_url: width: 700 }}"
+                    alt="{{ product.title | escape }}"
+                    loading="lazy"
+                    class="fc-image"
+                  >
+                {% endif %}
+
+                {%- comment -%} ✅ Genuine Leather Badge (from product metafield) {%- endcomment -%}
+                {% if product.metafields.custom.genuineleather == true %}
+                  <div class="genuine-leather-badge">
+                    <img src="https://cdn.shopify.com/s/files/1/0636/5128/3192/files/image-removebg-preview.png?v=1758192680" alt="Genuine Leather Badge">
+                  </div>
+                {% endif %}
+
+                {%- comment -%} ✅ Best Seller Badge {%- endcomment -%}
+                {% if product.tags contains "bestseller2025" or product.tags contains "bestseller" %}
+                  <div class="badge badge-bestseller">Best Seller</div>
+                {% endif %}
+
+                {%- comment -%} ✅ New Arrival Badge {%- endcomment -%}
+                {% if product.tags contains "New Arrivals" or product.tags contains "new2025" %}
+                  <div class="badge badge-new">New Arrival</div>
+                {% endif %}
+              </div>
+              <div class="fc-info">
+                <p class="fc-title">{{ product.title }}</p>
+                <p class="fc-price">
+                  {% if product.price_varies %}From {% endif %}{{ product.price | money }}
+                </p>
+              </div>
+            </a>
+          </div>
+        {% endfor %}
+      </div>
+    {% else %}
+      <div class="fc-slider">
+        <button class="fc-nav fc-prev"{% if limit_count <= 4 %} style="display:none"{% endif %} aria-label="Previous">&#10094;</button>
+
+        <div class="fc-track" id="track-{{ section.id }}">
+          {% for product in coll.products limit: limit_count %}
+            <div class="fc-slide">
+              <a href="{{ product.url }}" class="fc-link">
+                <div class="fc-image-wrap" style="position: relative;">
+                  {% if product.featured_image %}
+                    <img
+                      src="{{ product.featured_image | image_url: width: 700 }}"
+                      alt="{{ product.title | escape }}"
+                      loading="lazy"
+                      class="fc-image"
+                    >
+                  {% endif %}
+
+                  {%- comment -%} ✅ Genuine Leather Badge (from product metafield) {%- endcomment -%}
+                  {% if product.metafields.custom.genuineleather == true %}
+                    <div class="genuine-leather-badge">
+                      <img src="https://cdn.shopify.com/s/files/1/0636/5128/3192/files/image-removebg-preview.png?v=1758192680" alt="Genuine Leather Badge">
+                    </div>
+                  {% endif %}
+
+                  {%- comment -%} ✅ Best Seller Badge {%- endcomment -%}
+                  {% if product.tags contains "bestseller2025" or product.tags contains "bestseller" %}
+                    <div class="badge badge-bestseller">Best Seller</div>
+                  {% endif %}
+
+                  {%- comment -%} ✅ New Arrival Badge {%- endcomment -%}
+                  {% if product.tags contains "New Arrivals" or product.tags contains "new2025" %}
+                    <div class="badge badge-new">New Arrival</div>
+                  {% endif %}
+                </div>
+                <div class="fc-info">
+                  <p class="fc-title">{{ product.title }}</p>
+                  <p class="fc-price">
+                    {% if product.price_varies %}From {% endif %}{{ product.price | money }}
+                  </p>
+                </div>
+              </a>
+            </div>
+          {% endfor %}
+        </div>
+
+        <button class="fc-nav fc-next"{% if limit_count <= 4 %} style="display:none"{% endif %} aria-label="Next">&#10095;</button>
+      </div>
+    {% endif %}
+
+    {% if section.settings.show_view_all and total_count > limit_count %}
+      <div class="fc-viewall">
+        <a class="fc-viewall-btn" href="{{ coll.url }}">View all</a>
+      </div>
+    {% endif %}
+  {% else %}
+    <p class="fc-empty">Select a collection that has products.</p>
+  {% endif %}
+</section>
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap');
+
+.fc-section {
+  width: 100%;
+  padding: 48px 20px;
+  background: #fff;
+  font-family: 'Montserrat', sans-serif;
+}
+
+.fc-heading {
+  font-size: 2rem;
+  letter-spacing:10px;
+  font-weight: 400;
+  text-align: center;
+  margin: 0 0 28px;
+}
+
+.fc-link { text-decoration: none; color: inherit; display: block; }
+
+/* Card */
+.fc-card, .fc-slide {
+    border: 0px solid #eee;
+    border-radius: 0px;
+    background: #f3f3f3;
+    overflow: hidden;
+    transition: transform .25s ease;
+}
+.fc-card:hover, .fc-slide:hover { transform: translateY(-4px); }
+
+.fc-image-wrap { aspect-ratio: 1 / 1; background: #f3f3f3; position: relative; }
+.fc-image { width: 100%; height: 100%; object-fit: cover; display: block; padding:5%;}
+
+.fc-info { padding: 12px 14px; text-align: center; }
+.fc-title { font-size: 0.7rem; font-weight: 400; margin: 6px 0 4px; color: #222; }
+.fc-price { font-size: 1rem; color: #111; font-weight:600;}
+
+/* ✅ Badges */
+.badge {
+    position: absolute;
+    top: 2px;
+    
+    left: 125px;
+    padding: 4px 8px;
+    border-radius: 0px;
+    font-size: 8px;
+    font-weight: 600;
+    color: #fff;
+    z-index: 5;
+}
+@media only screen and (min-width:768px){
+      .badge {
+        left:250px;
+      }
+}
+
+.badge-bestseller {
+    background-color: #e60000;
+    padding-left: 12px;
+}
+
+.badge-new {
+    background-color: #ffd747;
+    color: black;
+    top: 24px;
+}
+
+.genuine-leather-badge {
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+  width: 60px;
+  height: auto;
+  z-index: 5;
+}
+.genuine-leather-badge img { max-width: 100%; height: auto; }
+
+/* GRID MODE */
+.fc-grid {
+  display: grid;
+  gap: 3px;
+  grid-template-columns: repeat(2, 1fr);
+}
+@media (min-width: 768px) {
+  .fc-grid { grid-template-columns: repeat(3, 1fr); }
+}
+@media (min-width: 1024px) {
+  .fc-grid { grid-template-columns: repeat(4, 1fr); }
+}
+
+/* SLIDER MODE */
+.fc-slider { position: relative; }
+.fc-track {
+  display: flex;
+  gap: 16px;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+  padding: 4px 0;
+}
+.fc-track::-webkit-scrollbar { height: 8px; }
+.fc-track::-webkit-scrollbar-thumb { background: #d3d3d3; border-radius: 4px; }
+.fc-track::-webkit-scrollbar-track { background: transparent; }
+
+.fc-slide {
+  scroll-snap-align: start;
+  flex: 0 0 50%;   /* 2 per view on mobile */
+}
+@media (min-width: 1024px) {
+  .fc-slide { flex-basis: 25%; } /* 4 per view on desktop */
+}
+
+/* Slider arrows */
+.fc-nav {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: #000;
+  color: #fff;
+  border: 0;
+  width: 36px;
+  height: 36px;
+  border-radius: 999px;
+  cursor: pointer;
+  z-index: 2;
+  opacity: 0.9;
+}
+.fc-prev { left: 6px; }
+.fc-next { right: 6px; }
+.fc-nav:disabled { opacity: 0.3; cursor: default; }
+
+/* View all */
+.fc-viewall { text-align: center; margin-top: 24px; }
+.fc-viewall-btn {
+  display: inline-block;
+  padding: 12px 22px;
+  border: 1px solid #000;
+  color: #000;
+  text-decoration: none;
+  border-radius: 0px;
+  font-weight: 600;
+}
+
+/* Empty */
+.fc-empty { text-align: center; color: #666; }
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  document.querySelectorAll('.fc-section.mode-slider').forEach(function(sectionEl){
+    const track = sectionEl.querySelector('.fc-track');
+    if (!track) return;
+
+    const prevBtn = sectionEl.querySelector('.fc-prev');
+    const nextBtn = sectionEl.querySelector('.fc-next');
+
+    function stepWidth() {
+      const slide = track.querySelector('.fc-slide');
+      if (!slide) return 0;
+      const gap = parseFloat(window.getComputedStyle(track).columnGap || window.getComputedStyle(track).gap || 16);
+      return slide.getBoundingClientRect().width + gap;
+    }
+
+    function scrollPrev(){ track.scrollBy({ left: -stepWidth(), behavior: 'smooth' }); }
+    function scrollNext(){ track.scrollBy({ left:  stepWidth(), behavior: 'smooth' }); }
+
+    if (prevBtn) prevBtn.addEventListener('click', scrollPrev);
+    if (nextBtn) nextBtn.addEventListener('click', scrollNext);
+  });
+});
+</script>
+
+{% schema %}
+{
+  "name": "Prod (Grid/Slider)",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Featured Products"
+    },
+    {
+      "type": "collection",
+      "id": "collection",
+      "label": "Choose collection"
+    },
+    {
+      "type": "range",
+      "id": "products_to_show",
+      "label": "Number of products to display",
+      "min": 4,
+      "max": 24,
+      "step": 1,
+      "default": 8
+    },
+    {
+      "type": "select",
+      "id": "layout_mode",
+      "label": "Layout mode",
+      "default": "grid",
+      "options": [
+        { "value": "grid", "label": "Grid (4 per row desktop, 2 mobile)" },
+        { "value": "slider", "label": "Slider (4 per view desktop, 2 mobile)" }
+      ]
+    },
+    {
+      "type": "checkbox",
+      "id": "show_view_all",
+      "label": "Show 'View all' button when more products exist",
+      "default": true
+    }
+  ],
+  "presets": [
+    {
+      "name": "prod (Grid/Slider)"
+    }
+  ]
+}
+{% endschema %}

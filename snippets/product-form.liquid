@@ -1,0 +1,540 @@
+{%- capture form_id -%}AddToCartForm-{{ section_id }}{%- endcapture -%}
+{%- form 'product', product, id: form_id, class: 'product-single__form' -%}
+  {%- unless product.has_only_default_variant -%}
+    {%- for option in product.options_with_values -%}
+      {%- liquid
+        if settings.product_color_swatches
+          assign is_color = false
+          assign color_option_index = 0
+          assign swatch_trigger = 'products.general.color_swatch_trigger' | t | downcase
+          assign color_option_index = forloop.index0
+          assign downcased_option = option.name | downcase
+          if downcased_option contains swatch_trigger
+            assign is_color = true
+          elsif swatch_trigger == 'color' and downcased_option contains 'colour'
+            assign is_color = true
+          endif
+        endif
+      -%}
+
+      {%- if settings.variant_type == 'button' -%}
+        {%- render 'variant-button',
+          product: product,
+          section_id: section_id,
+          option: option,
+          forloop: forloop,
+          is_color: is_color,
+          color_option_index: color_option_index
+        -%}
+      {%- else -%}
+        {%- render 'variant-dropdown',
+          product: product,
+          section_id: section_id,
+          option: option,
+          forloop: forloop
+        -%}
+      {%- endif -%}
+    {%- endfor -%}
+  {%- endunless -%}
+
+  <select name="id" id="ProductSelect-{{ section_id }}" class="product-single__variants no-js">
+    {%- for variant in product.variants -%}
+      {%- if variant.available -%}
+        <option {% if variant == product.selected_or_first_available_variant %}
+          selected="selected"{% endif %}
+          value="{{ variant.id }}">
+          {{ variant.title }} - <span bss-b2b-product-id="{{ product.id }}" bss-b2b-variant-price bss-b2b-variant-id="{{ product.selected_or_first_available_variant.id }}" bss-b2b-variant-price>{{ variant.price | money_with_currency }}</span>
+        </option>
+      {%- else -%}
+        <option disabled="disabled" value="{{variant.id}}">
+          {{ variant.title }} - {{ 'products.product.sold_out' | t }}
+        </option>
+      {%- endif -%}
+    {%- endfor -%}
+  </select>
+
+  {%- if settings.quantity_enable -%}
+    <div class="product__quantity product__quantity--{{ settings.variant_type }}">
+      <label for="Quantity-{{ section_id }}">{{ 'products.product.quantity' | t }}</label>
+      {%- render 'quantity-input', id: section_id, qty: 1, min: 1 -%}
+    </div>
+  {%- endif -%}
+
+  {%- assign inventory_visible = false -%}
+  {%- if settings.inventory_enable and current_variant.inventory_management == 'shopify' -%}
+    {%- if current_variant.inventory_quantity <= settings.inventory_threshold and current_variant.inventory_quantity >= 0 -%}
+      {%- assign inventory_visible = true -%}
+    {%- endif -%}
+  {%- endif -%}
+
+  {%- liquid
+    if current_variant.inventory_quantity == 0 or current_variant.inventory_policy == 'continue'
+      assign inventory_visible = false
+    endif
+
+    assign show_incoming = false
+    if current_variant.incoming and inventory_visible == false and current_variant.inventory_quantity <= settings.inventory_threshold
+      assign show_incoming = true
+    endif
+  -%}
+
+  {%- if settings.inventory_enable -%}
+    <div
+      id="ProductInventory-{{ section_id }}"
+      class="product__inventory{% unless inventory_visible %} hide{% endunless %}"
+      >
+      {%- if current_variant.available -%}
+        {{ 'products.product.stock_label' | t: count: current_variant.inventory_quantity }}
+      {%- endif -%}
+    </div>
+  {%- endif -%}
+
+  {%- if settings.inventory_transfers_enable -%}
+    <div
+      id="ProductIncomingInventory-{{ section_id }}"
+      class="product__inventory{% if inventory_visible %} hide{% endif %}">
+      {%- if show_incoming == true -%}
+        {%- if current_variant.next_incoming_date -%}
+          {%- assign date = current_variant.next_incoming_date | date: format: 'date' -%}
+          {%- if current_variant.available -%}
+            {{ 'products.product.will_not_ship_until' | t: date: date }}
+          {%- else -%}
+            {{ 'products.product.will_be_in_stock_after' | t: date: date }}
+          {%- endif -%}
+        {%- else -%}
+          {{ 'products.product.waiting_for_stock' | t }}
+        {%- endif -%}
+      {%- endif -%}
+    </div>
+  {%- endif -%}
+
+  {%- liquid
+    assign enable_dynamic_buttons = false
+    if settings.enable_payment_button and template != 'product.preorder'
+      assign enable_dynamic_buttons = true
+    endif
+  -%}
+
+  {%- if enable_dynamic_buttons -%}
+    <div class="payment-buttons">
+  {%- endif -%}
+
+    {%- liquid
+      assign default_text = 'products.product.add_to_cart' | t
+      assign button_text = 'products.product.add_to_cart' | t
+      if template == 'product.preorder'
+        assign default_text = 'products.product.preorder' | t
+        assign button_text = 'products.product.preorder' | t
+      endif
+      unless current_variant.available
+        assign button_text = 'products.product.sold_out' | t
+      endunless
+    -%}
+    <div class="size-select-warning">
+      <span>Please select a size</span>
+    </div>
+    <button
+      {% if product.empty? %}type="button"{% else %}type="submit"{% endif %}
+      name="add"
+      id="AddToCart-{{ section_id }}"
+      class="btn btn--full add-to-cart disabled{% if enable_dynamic_buttons and product.selling_plan_groups == empty %} btn--secondary{% endif %}"
+      {% unless current_variant.available %} disabled="disabled"{% endunless %}>
+      <span id="AddToCartText-{{ section_id }}" data-default-text="{{ default_text }}">
+        {{ button_text }}
+      </span>
+    </button>
+
+   {% render 'gokwik-buy-now' %}
+  
+
+  <div class="essential-estimated-delivery-block-liquid"></div>
+
+{% comment %} <a href="/pages/return-policy" class="return-refund">Return/Refund Policy +</a> {% endcomment %}
+ 
+{% comment %} <div class="idc-return-wrapper">
+  <button class="idc-return-header">
+    Return Policy
+    {% if product.collections contains collections['clearancesale'] %}
+      <span class="idc-clearance-badge">NO EXCHANGE / NO RETURN ON CLEARANCE SALE ITEMS</span>
+    {% endif %}
+  </button>
+
+  <div class="idc-return-body">
+    {% if product.collections contains collections['clearancesale'] %}
+      <p class="idc-clearance-alert">
+        <strong>Note:</strong> This item is part of our <strong>Clearance Sale</strong>.
+        Therefore, it is <strong>not eligible for return or exchange</strong>.
+        Please confirm your selection before completing your purchase.
+        Please also note that  Clearance Sale items are <strong>not eligible for any other schemes / promotions on our website.</strong>
+      </p>
+    {% endif %}
+
+    <p>
+      Return and Exchange Policy offer you the option to return or exchange items purchased on
+      <strong>IDCult.com</strong> within 7 days of receipt. If you choose to exchange the item for reason of mismatch,
+      size, or receipt of a defective item, you will be provided with a replacement of the item, free of cost. However,
+      an exchange is subject to the availability of the item in our stock.
+    </p>
+
+    <p>
+      Please make sure that products are returned with the tags and the packaging intact, in an unwashed and undamaged
+      condition. Refund/replacement shall be issued after a thorough quality check of the product(s).
+    </p>
+
+    <p>
+      Please note that any product along with a gift/ combo must be returned in its entirety.
+    </p>
+
+    <p>
+      In case you want to return or exchange the product for any reason, within 7 days of delivery, please contact our
+      customer care department through email at
+      <a href="mailto:care@idcult.com">care@idcult.com</a> or call
+      <a href="tel:+919910433300">+91-9910433300</a> (9:30 AM till 6:00 PM; Mon-Sat).
+    </p>
+  </div>
+  
+
+</div> {% endcomment %}
+
+{% if product.selected_or_first_available_variant.available %}
+  <div class="stock-badge in-stock">
+    <span class="stock-dot"></span>
+    <span>In stock, ready to ship</span>
+  </div>
+{% else %}
+  <div class="stock-badge out-of-stock">
+    <span class="stock-dot"></span>
+    <span>Out of stock</span>
+  </div>
+{% endif %}
+
+
+<style>
+.idc-return-wrapper {
+  width: 100%;
+  max-width: 800px;
+  margin: 20px auto;
+  background: #fff;
+  border: 1px solid #000;
+}
+
+
+.stock-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 18px;
+  border-radius: 999px;
+  font-size: 15px;
+  font-weight: 600;
+  line-height: 1;
+  margin-top: 30px;
+  margin-bottom: 0px;
+}
+
+.stock-badge .stock-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+/* In Stock */
+.stock-badge.in-stock {
+  background: #F1F8E7;
+  color: #6F9C3A;
+}
+
+.stock-badge.in-stock .stock-dot {
+  background: #6F9C3A;
+  box-shadow: 0 0 0 3px rgba(111, 156, 58, 0.15);
+}
+
+/* Out of Stock */
+.stock-badge.out-of-stock {
+  background: #FDECEC;
+  color: #C62828;
+}
+
+.stock-badge.out-of-stock .stock-dot {
+  background: #C62828;
+  box-shadow: 0 0 0 3px rgba(198, 40, 40, 0.15);
+}
+
+.idc-return-header {
+  width: 100%;
+  padding: 15px 20px;
+  background: #fff;
+  border: none;
+  font-size: 18px;
+  font-weight: bold;
+  text-align: left;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.idc-clearance-badge {
+  background: #ffeb3b;
+  color: #d32f2f;
+  font-size: 13px;
+  font-weight: bold;
+  padding: 5px 10px;
+  border-radius: 4px;
+}
+
+.idc-return-body {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.4s ease;
+  padding: 0 20px;
+}
+
+.idc-return-body p {
+  font-size: 15px;
+  line-height: 1.6;
+  margin: 15px 0;
+}
+
+.idc-clearance-alert {
+  background: #fff3cd;
+  border-left: 4px solid #ff9800;
+  padding: 10px 15px;
+  margin: 15px 0;
+}
+/* =========================================
+   PRODUCT PURCHASE AREA — SPACING & TYPE
+   ========================================= */
+
+/* -------------------------
+   ADD TO CART
+------------------------- */
+
+.product-single__form .add-to-cart {
+  width: 100%;
+  min-height: 58px;
+  height: 58px;
+
+  padding: 0 20px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 3px;
+
+  font-size: 15px;
+  line-height: 1;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+
+/* -------------------------
+   SIZE WARNING
+------------------------- */
+
+.product-single__form .size-select-warning {
+  margin: 0 0 10px;
+
+  font-size: 13px;
+  line-height: 1.4;
+}
+
+
+/* -------------------------
+   PAYMENT BUTTON AREA
+------------------------- */
+
+.product-single__form .payment-buttons {
+  margin-top: 0;
+}
+
+.product-single__form .payment-buttons > * {
+  margin-bottom: 0;
+}
+
+
+/* -------------------------
+   STOCK BADGE
+------------------------- */
+
+.product-single__form .stock-badge {
+  display: inline-flex;
+  align-items: center;
+
+  gap: 8px;
+
+  padding: 7px 12px;
+
+  margin-top: 18px;
+  margin-bottom: 0;
+
+  border-radius: 999px;
+
+  font-size: 13px;
+  line-height: 1;
+  font-weight: 500;
+}
+
+.product-single__form .stock-badge .stock-dot {
+  width: 8px;
+  height: 8px;
+
+  box-shadow: none;
+}
+
+
+/* -------------------------
+   ESTIMATED DELIVERY
+------------------------- */
+
+.product-single__form .essential-estimated-delivery-block-liquid {
+  margin-top: 16px;
+}
+
+
+/* =========================================
+   MOBILE
+   ========================================= */
+
+@media screen and (max-width: 749px) {
+
+  .product-single__form .add-to-cart {
+    height: 58px;
+    min-height: 58px;
+
+    font-size: 14px;
+    letter-spacing: 0.04em;
+  }
+
+  .product-single__form .stock-badge {
+    margin-top: 16px;
+    font-size: 13px;
+  }
+
+}
+
+</style>
+
+<script>
+document.querySelectorAll(".idc-return-header").forEach(header => {
+  header.addEventListener("click", function (e) {
+    e.preventDefault();
+    const body = this.nextElementSibling;
+
+    if (body.style.maxHeight) {
+      body.style.maxHeight = null;
+    } else {
+      body.style.maxHeight = body.scrollHeight + "px";
+    }
+  });
+});
+</script>
+
+
+
+
+
+
+
+
+
+  <div class="shopify-payment-terms product__policies">{{ form | payment_terms }}</div>
+
+  <textarea id="VariantsJson-{{ section_id }}" class="hide" aria-hidden="true" aria-label="Product JSON">
+    {{ product.variants | json }}
+  </textarea>
+  {%- if product.options.size > 1 -%}
+    <textarea id="CurrentVariantJson-{{ section_id }}" class="hide" aria-hidden="true" aria-label="Variant JSON">
+      {{ current_variant | json }}
+    </textarea>
+  {%- endif -%}
+{% render 'ZooomyBackinStock' %}{% endform %}
+
+<script>
+  
+  const swatchInterval = setInterval(swatchTimer, 1500);
+  function swatchTimer(){
+    let swatches = document.querySelectorAll('#swatch-option1 li.swatch-view-item');
+    if (swatches.length>1){
+      clearInterval(swatchInterval);
+      var atcButton = document.querySelector('.btn.btn--full.add-to-cart');
+      atcButton.classList.remove("cursor-not-allowed");
+      swatches.forEach(buy=>{ 
+  buy.onclick = function(){
+
+    let errorMessage = document.querySelector(".size-select-warning");
+
+    errorMessage.classList.remove("show-warning");
+
+    /* Enable Add To Cart */
+    atcButton.classList.remove('disabled');
+
+    /* Mark selected size */
+    swatches.forEach(swatch=>{
+      swatch.classList.remove("size-selected");
+    });
+
+    this.classList.add("size-selected");
+
+    /* Enable GoKwik Buy Now */
+    var goKwikButton = document.querySelector('#gokwik-buy-now');
+
+    if (goKwikButton) {
+      goKwikButton.disabled = false;
+      goKwikButton.classList.remove('disabled');
+    }
+
+  };
+});
+    }
+    else if (swatches.length == 1){
+
+  var atcButton = document.querySelector('.btn.btn--full.add-to-cart');
+
+  atcButton.classList.remove("disabled");
+
+  swatches.forEach(swatch=>{
+    swatch.classList.add("size-selected");
+  });
+
+  /* Enable GoKwik Buy Now */
+  var goKwikButton = document.querySelector('#gokwik-buy-now');
+
+  if (goKwikButton) {
+    goKwikButton.disabled = false;
+    goKwikButton.classList.remove('disabled');
+  }
+
+}
+    else{
+      var atcButton = document.querySelector('.btn.btn--full.add-to-cart');
+      atcButton.classList.add("cursor-not-allowed");  
+    }
+  };
+
+  var atcButton = document.querySelector(".btn.btn--full.add-to-cart");
+  atcButton.onclick = function(e){
+    var conditionalVariable = false;
+    let swatches = document.querySelectorAll('#swatch-option1 li.swatch-view-item');
+    swatches.forEach(swatch=>{ 
+      console.log("swatch", swatch);
+      if(swatch.classList.contains("size-selected")){
+        conditionalVariable = true;
+      }
+    });
+    if(conditionalVariable){
+      let errorMessage =  document.querySelector(".size-select-warning");
+      errorMessage.classList.remove("show-warning");
+      atcButton.click();
+    }
+    else{
+        e.preventDefault();
+         let errorMessage =  document.querySelector(".size-select-warning");
+        errorMessage.classList.add("show-warning"); 
+      }
+  }
+</script>

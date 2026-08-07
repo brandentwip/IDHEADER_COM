@@ -1,0 +1,189 @@
+<section class="category-section">
+  <div class="category-wrapper">
+    <!-- Men Section -->
+    <div class="category-row">
+      <a href="{{ section.settings.men_link }}" class="category-label men-label">
+        MEN
+      </a>
+      <div class="category-items men-items">
+        {% for block in section.blocks %}
+          {% if block.type == 'men_category' %}
+            <a href="{{ block.settings.link }}" class="category-card">
+              <div class="image-wrapper">
+                <img 
+                  src="{{ block.settings.image | image_url: width: 400 }}" 
+                  alt="{{ block.settings.title }}" 
+                  loading="lazy"
+                >
+              </div>
+              <span>{{ block.settings.title }}</span>
+            </a>
+          {% endif %}
+        {% endfor %}
+      </div>
+    </div>
+
+    <!-- Women Section -->
+    <div class="category-row">
+      <a href="{{ section.settings.women_link }}" class="category-label women-label">
+        WOMEN
+      </a>
+      <div class="category-items women-items">
+        {% for block in section.blocks %}
+          {% if block.type == 'women_category' %}
+            <a href="{{ block.settings.link }}" class="category-card">
+              <div class="image-wrapper">
+                <img 
+                  src="{{ block.settings.image | image_url: width: 400 }}" 
+                  alt="{{ block.settings.title }}" 
+                  loading="lazy"
+                >
+              </div>
+              <span>{{ block.settings.title }}</span>
+            </a>
+          {% endif %}
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+.category-section {
+  width: 100%;
+  padding: 40px 20px;
+}
+.category-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 50px;
+}
+.category-row {
+  display: flex;
+  align-items: center;
+}
+
+/* Clickable vertical label */
+.category-label {
+  writing-mode: vertical-rl;
+  transform: rotate(180deg);
+  font-weight: bold;
+  font-size: 28px;
+  margin-right: 20px;
+  text-decoration: none;
+  color: transparent;
+  -webkit-text-stroke: 1.5px black;
+  transition: all 0.3s ease;
+}
+
+
+.category-items {
+  flex: 1;
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+  flex-wrap: nowrap;
+}
+.category-card {
+  text-align: center;
+  text-decoration: none;
+  color: black;
+  flex: 1;
+}
+.image-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 160px;
+}
+.category-card img {
+  max-height: 140px;
+  width: auto;
+  object-fit: contain;
+}
+.category-card span {
+  display: block;
+  margin-top: 8px;
+  font-size: 14px;
+}
+
+/* Mobile scroll */
+@media (max-width: 768px) {
+  .category-items {
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+  }
+  .category-card {
+    flex: 0 0 calc((100% - 30px) / 3);
+    scroll-snap-align: start;
+  }
+}
+</style>
+
+{% schema %}
+{
+  "name": "Men & Women Category Grid",
+  "settings": [
+    {
+      "type": "url",
+      "id": "men_link",
+      "label": "MEN section link"
+    },
+    {
+      "type": "url",
+      "id": "women_link",
+      "label": "WOMEN section link"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "men_category",
+      "name": "Men Category",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Category Image"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Category Title"
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Category Link"
+        }
+      ]
+    },
+    {
+      "type": "women_category",
+      "name": "Women Category",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Category Image"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Category Title"
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Category Link"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Men & Women Category Grid"
+    }
+  ]
+}
+{% endschema %}

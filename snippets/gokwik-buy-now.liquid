@@ -1,0 +1,161 @@
+{% if settings.goBuynowEnable %}            
+<button
+  type="button"
+  class="button disabled"
+  disabled
+  onclick="idcGoKwikBuyNow(this)"
+  id="gokwik-buy-now"
+  {% if settings.hideFlow %}style="display:none !important;"{% endif %}
+>
+  <div style="display:none" class="addloadr" id="btn-loader">
+    <div class="cir-loader">Loading..</div>
+  </div>
+
+  <span class="btn-text">
+    <span>{{ settings.buyNowText }}</span>
+    <span>{{ settings.sub-titile }}</span>
+  </span>
+
+  <span class="pay-opt-icon">
+    {% if settings.enableLogo %}
+      <img src="https://cdn.gokwik.co/v4/images/upi-icons.svg">
+      <img src="https://cdn.gokwik.co/v4/images/right-arrow.svg">
+    {% endif %}
+  </span>
+</button>
+
+<script>
+function idcGoKwikBuyNow(button) {
+
+  /* Check if size has been selected */
+  var selectedSize = document.querySelector(
+    '#swatch-option1 li.swatch-view-item.size-selected'
+  );
+
+  /* No size selected */
+  if (!selectedSize) {
+
+    var errorMessage = document.querySelector('.size-select-warning');
+
+    if (errorMessage) {
+      errorMessage.classList.add('show-warning');
+    }
+
+    return false;
+  }
+
+  /* Size selected → allow GoKwik */
+  onBuyNowClick(button);
+}
+</script>
+{% endif %}
+<style>
+
+/* =========================================
+   GOKWIK BUY NOW BUTTON
+   ========================================= */
+
+#gokwik-buy-now {
+  width: 100% !important;
+  height: 58px !important;
+  min-height: 58px !important;
+
+  margin: 10px 0 0 !important;
+  padding: 0 20px !important;
+
+  background: #FFD747 !important;
+  color: #000000 !important;
+
+  border: none !important;
+  border-radius: 4px !important;
+
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+
+  position: relative !important;
+
+  font-size: 15px !important;
+  font-weight: 600 !important;
+  letter-spacing: 1.8px !important;
+  line-height: 1 !important;
+
+  opacity: 1 !important;
+  box-shadow: none !important;
+  cursor: pointer !important;
+}
+
+
+/* Remove disabled/grey appearance */
+#gokwik-buy-now.disabled,
+#gokwik-buy-now:disabled {
+  background: #FFD747 !important;
+  color: #000000 !important;
+  opacity: 1 !important;
+}
+
+
+/* Main text */
+#gokwik-buy-now .btn-text {
+  color: #000000 !important;
+
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+
+  gap: 5px !important;
+}
+
+
+/* Text inside btn-text */
+#gokwik-buy-now .btn-text span {
+  color: #000000 !important;
+}
+
+
+/* Payment icons */
+#gokwik-buy-now .pay-opt-icon {
+  display: flex !important;
+  align-items: center !important;
+
+  margin-left: 8px !important;
+}
+
+
+/* UPI icons */
+#gokwik-buy-now .pay-opt-icon img {
+  display: block !important;
+  max-height: 24px !important;
+  width: auto !important;
+}
+
+
+/* Arrow */
+#gokwik-buy-now .pay-opt-icon img:last-child {
+  margin-left: 6px !important;
+  max-height: 18px !important;
+}
+
+
+/* Loading */
+#gokwik-buy-now .addloadr {
+  color: #000000 !important;
+}
+
+
+/* MOBILE */
+@media screen and (max-width: 749px) {
+
+  #gokwik-buy-now {
+    height: 54px !important;
+    min-height: 54px !important;
+
+    font-size: 14px !important;
+    letter-spacing: 1.5px !important;
+  }
+
+}
+
+</style>
+
+

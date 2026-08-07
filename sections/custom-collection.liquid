@@ -1,0 +1,2379 @@
+{% comment %}
+  ============================================================
+  EDITORIAL COLLECTION PAGE
+  ============================================================
+
+  REQUIRED COLLECTION METAFIELD:
+
+  custom.collection_editorial_blocks
+  Type: List of Metaobjects
+
+  Metaobject fields:
+  - image    → File / Image
+  - link     → URL
+  - position → Integer
+
+  Position example:
+  3 = editorial image appears before product #3
+  7 = editorial image appears before product #7
+  12 = editorial image appears before product #12
+
+  ============================================================
+{% endcomment %}
+
+
+<!-- ==========================================================
+     COLLECTION HEADER
+     ========================================================== -->
+
+<section class="editorial-collection-header">
+
+  <div class="editorial-header-left">
+
+    <div class="editorial-breadcrumb">
+      {% if collection.metafields.custom.parent_collection != blank %}
+        {{ collection.metafields.custom.parent_collection }}
+        /
+      {% endif %}
+      {{ collection.title }}
+    </div>
+
+    <h1 class="editorial-collection-title">
+      {{ collection.title }}
+    </h1>
+
+  </div>
+
+  <div class="editorial-header-right">
+
+    <span class="collection-product-count">
+      {{ collection.products_count }} PRODUCTS
+    </span>
+
+  </div>
+
+</section>
+
+
+<!-- ==========================================================
+     COLLECTION CONTROLS
+     ========================================================== -->
+
+<section class="editorial-collection-controls">
+
+  <div class="editorial-controls-left">
+
+    <!-- GENDER NAVIGATION -->
+
+    <div class="editorial-gender-navigation">
+
+      <a
+        href="{{ collection.url }}"
+        class="editorial-gender-link"
+        data-gender="all"
+      >
+        All
+      </a>
+
+      <a
+        href="{{ collection.url }}?filter.p.m.custom.gender=men"
+        class="editorial-gender-link"
+        data-gender="men"
+      >
+        Men
+      </a>
+
+      <a
+        href="{{ collection.url }}?filter.p.m.custom.gender=women"
+        class="editorial-gender-link"
+        data-gender="women"
+      >
+        Women
+      </a>
+
+    </div>
+
+
+    <!-- FILTER -->
+
+    {% if collection.filters.size > 0 %}
+
+      <button
+        type="button"
+        class="editorial-filter-button"
+        onclick="openEditorialFilter()"
+      >
+        Filter
+      </button>
+
+    {% endif %}
+
+  </div>
+
+
+  <!-- SORT -->
+
+  <div class="editorial-sort-wrapper">
+
+    <form
+      id="EditorialSortForm"
+      method="get"
+      action="{{ collection.url }}"
+    >
+
+      <select
+        name="sort_by"
+        id="EditorialSortSelect"
+        aria-label="Sort products"
+      >
+
+        {% for option in collection.sort_options %}
+
+          <option
+            value="{{ option.value }}"
+            {% if option.value == collection.sort_by %}
+              selected
+            {% endif %}
+          >
+            {{ option.name }}
+          </option>
+
+        {% endfor %}
+
+      </select>
+
+    </form>
+
+  </div>
+
+</section>
+
+
+
+<!-- ==========================================================
+     FILTER DRAWER
+     ========================================================== -->
+
+<div
+  id="EditorialFilterDrawer"
+  class="editorial-filter-drawer"
+  aria-hidden="true"
+>
+
+  <div class="editorial-filter-overlay" onclick="closeEditorialFilter()"></div>
+
+
+  <div class="editorial-filter-panel">
+
+    <div class="editorial-filter-header">
+
+      <span>Filter</span>
+
+      <button
+        type="button"
+        class="editorial-filter-close"
+        onclick="closeEditorialFilter()"
+        aria-label="Close filters"
+      >
+        ×
+      </button>
+
+    </div>
+
+
+    {% if collection.filters.size > 0 %}
+
+      <form
+        id="EditorialCollectionFilters"
+        class="editorial-filter-form"
+        method="get"
+        action="{{ collection.url }}"
+      >
+
+        {% for filter in collection.filters %}
+
+          <details class="editorial-filter-group">
+
+            <summary>
+              <span>{{ filter.label }}</span>
+              <span>+</span>
+            </summary>
+
+            <div class="editorial-filter-values">
+
+              {% for value in filter.values %}
+
+                <label class="editorial-filter-value">
+
+                  <input
+                    type="checkbox"
+                    name="{{ value.param_name }}"
+                    value="{{ value.value }}"
+                    {% if value.active %}
+                      checked
+                    {% endif %}
+                  >
+
+                  <span>
+                    {{ value.label }}
+                  </span>
+
+                  <span class="editorial-filter-count">
+                    {{ value.count }}
+                  </span>
+
+                </label>
+
+              {% endfor %}
+
+            </div>
+
+          </details>
+
+        {% endfor %}
+
+
+        <div class="editorial-filter-actions">
+
+          <a
+            href="{{ collection.url }}"
+            class="editorial-clear-filter"
+          >
+            Clear all
+          </a>
+
+          <button
+            type="submit"
+            class="editorial-apply-filter"
+          >
+            Apply
+          </button>
+
+        </div>
+
+      </form>
+
+    {% endif %}
+
+  </div>
+
+</div>
+
+
+
+<!-- ==========================================================
+     PRODUCT + EDITORIAL GRID
+     ========================================================== -->
+
+<section id="EditorialCollectionWrapper">
+
+  {% paginate collection.products by section.settings.products_per_page %}
+
+    <div class="editorial-product-grid">
+
+
+      {% comment %}
+        Get editorial blocks attached specifically
+        to THIS collection.
+      {% endcomment %}
+
+      {% assign editorial_blocks =
+        collection.metafields.custom.collection_editorial_blocks.value
+      %}
+
+
+      {% for product in collection.products %}
+
+
+        {% assign page_offset =
+          paginate.current_page
+          | minus: 1
+          | times: paginate.page_size
+        %}
+
+        {% assign absolute_product_position =
+          page_offset
+          | plus: forloop.index
+        %}
+
+
+        <!-- ==================================================
+             EDITORIAL IMAGE
+             ================================================== -->
+
+        {% if editorial_blocks != blank %}
+
+          {% for editorial in editorial_blocks %}
+
+            {% assign editorial_position =
+              editorial.position.value
+            %}
+
+
+            {% if editorial_position == absolute_product_position %}
+
+              {% assign editorial_image =
+                editorial.image.value
+              %}
+
+              {% assign editorial_link =
+                editorial.link.value
+              %}
+
+
+              {% if editorial_image != blank %}
+
+                <div class="editorial-card">
+
+                  {% if editorial_link != blank %}
+
+                    <a
+                      href="{{ editorial_link }}"
+                      class="editorial-card-link"
+                      aria-label="Explore {{ collection.title }}"
+                    >
+
+                  {% endif %}
+
+
+                    <div class="editorial-image-wrapper">
+
+                      <img
+                        src="{{ editorial_image | image_url: width: 1200 }}"
+                        alt="{{ editorial_image.alt | default: collection.title | escape }}"
+                        loading="lazy"
+                        width="{{ editorial_image.width }}"
+                        height="{{ editorial_image.height }}"
+                      >
+
+                    </div>
+
+
+                  {% if editorial_link != blank %}
+
+                    </a>
+
+                  {% endif %}
+
+                </div>
+
+              {% endif %}
+
+            {% endif %}
+
+          {% endfor %}
+
+        {% endif %}
+
+
+
+        <!-- ==================================================
+             PRODUCT CARD
+             ================================================== -->
+
+        <article class="editorial-product-card">
+
+          <a
+            href="{{ product.url }}"
+            class="editorial-product-link"
+          >
+
+
+            <!-- PRODUCT IMAGE -->
+
+            <div class="editorial-product-image">
+
+
+              {% if product.featured_image != blank %}
+
+                <img
+                  src="{{ product.featured_image | image_url: width: 900 }}"
+                  alt="{{ product.featured_image.alt | default: product.title | escape }}"
+                  loading="lazy"
+                  width="{{ product.featured_image.width }}"
+                  height="{{ product.featured_image.height }}"
+                >
+
+              {% else %}
+
+                {{ 'product-1' | placeholder_svg_tag }}
+
+              {% endif %}
+
+
+
+              <!-- ==================================================
+                   LEATHER / VEGAN BADGE
+                   ================================================== -->
+
+              {% if product.metafields.custom.genuineleather == true %}
+
+                <div class="editorial-material-badge editorial-leather-badge">
+
+                  <img
+                    src="https://cdn.shopify.com/s/files/1/0636/5128/3192/files/image-removebg-preview.png?v=1758192680"
+                    alt="Genuine Leather"
+                    loading="lazy"
+                  >
+
+                </div>
+
+              {% else %}
+
+                <div class="editorial-material-badge editorial-vegan-badge">
+
+                  <img
+                    src="https://cdn.shopify.com/s/files/1/0636/5128/3192/files/vegan-removebg-preview.png?v=1772695454"
+                    alt="Vegan"
+                    loading="lazy"
+                  >
+
+                </div>
+
+              {% endif %}
+
+
+
+              <!-- ==================================================
+                   PRODUCT LABELS
+                   ================================================== -->
+
+              {% if product.tags contains 'bestseller2025'
+                or product.tags contains 'bestseller' %}
+
+                <span class="editorial-product-label editorial-best-seller">
+                  Best Seller
+                </span>
+
+              {% endif %}
+
+
+              {% if product.tags contains 'New Arrivals'
+                or product.tags contains 'new2025' %}
+
+                <span class="editorial-product-label editorial-new-arrival">
+                  New Arrival
+                </span>
+
+              {% endif %}
+
+            </div>
+
+
+
+            <!-- ==================================================
+                 PRODUCT INFO
+                 ================================================== -->
+
+            <div class="editorial-product-info">
+
+
+              <div class="editorial-product-name">
+                {{ product.title }}
+              </div>
+
+
+              <div class="editorial-product-price">
+
+                <span class="editorial-current-price">
+                  {{ product.price | money }}
+                </span>
+
+
+                {% if product.compare_at_price_max > product.price %}
+
+                  <span class="editorial-compare-price">
+                    {{ product.compare_at_price_max | money }}
+                  </span>
+
+
+                  {% assign discount =
+                    product.compare_at_price_max
+                    | minus: product.price
+                    | times: 100
+                    | divided_by: product.compare_at_price_max
+                  %}
+
+
+                  <span class="editorial-discount">
+                    {{ discount | round }}% OFF
+                  </span>
+
+                {% endif %}
+
+              </div>
+
+            </div>
+
+          </a>
+
+        </article>
+
+
+      {% endfor %}
+
+    </div>
+
+
+
+    <!-- ========================================================
+         PAGINATION
+         ======================================================== -->
+
+    <div class="editorial-pagination">
+
+      {% render 'collection-pagination', paginate: paginate %}
+
+    </div>
+
+
+  {% endpaginate %}
+
+</section>
+
+
+
+<!-- ==========================================================
+     LOADING INDICATOR
+     ========================================================== -->
+
+<div
+  id="EditorialCollectionLoading"
+  class="editorial-loading"
+  aria-hidden="true"
+>
+  Loading
+</div>
+
+
+
+<!-- ==========================================================
+     CSS
+     ========================================================== -->
+
+<style>
+
+/* ============================================================
+   BASE
+   ============================================================ */
+
+.editorial-collection-header,
+.editorial-collection-controls,
+.editorial-product-grid,
+.editorial-filter-panel {
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+.editorial-collection-header *,
+.editorial-collection-controls *,
+.editorial-product-grid * {
+  box-sizing: border-box;
+}
+
+
+
+/* ============================================================
+   COLLECTION HEADER
+   ============================================================ */
+
+.editorial-collection-header {
+
+  width: 100%;
+
+  padding: 14px 16px 11px;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+
+  border-bottom: 1px solid #e6e6e6;
+
+  background: #fff;
+
+}
+
+.editorial-header-left {
+
+  display: flex;
+  flex-direction: column;
+
+  gap: 5px;
+
+}
+
+.editorial-breadcrumb {
+
+  font-size: 8px;
+
+  line-height: 1;
+
+  text-transform: uppercase;
+
+  letter-spacing: .04em;
+
+  color: #777;
+
+}
+
+.editorial-collection-title {
+
+  margin: 0;
+
+  font-size: 10px;
+
+  line-height: 1;
+
+  font-weight: 500;
+
+  text-transform: uppercase;
+
+  letter-spacing: .025em;
+
+}
+
+.editorial-header-right {
+
+  font-size: 8px;
+
+  text-transform: uppercase;
+
+  color: #777;
+
+}
+
+
+
+/* ============================================================
+   CONTROLS
+   ============================================================ */
+
+.editorial-collection-controls {
+
+  width: 100%;
+
+  min-height: 38px;
+
+  padding: 10px 16px;
+
+  display: flex;
+
+  justify-content: space-between;
+
+  align-items: center;
+
+  background: #fff;
+
+  border-bottom: 1px solid #e6e6e6;
+
+}
+
+.editorial-controls-left {
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 20px;
+
+}
+
+.editorial-gender-navigation {
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 18px;
+
+}
+
+.editorial-gender-link,
+.editorial-filter-button,
+#EditorialSortSelect {
+
+  font-family: Arial, Helvetica, sans-serif;
+
+  font-size: 8px;
+
+  line-height: 1;
+
+  font-weight: 400;
+
+  text-transform: uppercase;
+
+  letter-spacing: .035em;
+
+}
+
+.editorial-gender-link {
+
+  color: #111;
+
+  text-decoration: none;
+
+}
+
+.editorial-gender-link:hover {
+
+  opacity: .45;
+
+}
+
+.editorial-gender-link.active {
+
+  font-weight: 600;
+
+  text-decoration: underline;
+
+  text-underline-offset: 3px;
+
+}
+
+.editorial-filter-button {
+
+  border: 0;
+
+  background: transparent;
+
+  padding: 0;
+
+  color: #111;
+
+  cursor: pointer;
+
+}
+
+.editorial-sort-wrapper {
+
+  display: flex;
+
+  align-items: center;
+
+}
+
+#EditorialSortSelect {
+
+  border: 0;
+
+  background: transparent;
+
+  padding: 0 13px 0 0;
+
+  color: #111;
+
+  cursor: pointer;
+
+  appearance: none;
+
+  background-image:
+    linear-gradient(45deg, transparent 50%, #111 50%),
+    linear-gradient(135deg, #111 50%, transparent 50%);
+
+  background-position:
+    calc(100% - 5px) 3px,
+    100% 3px;
+
+  background-size: 4px 4px;
+
+  background-repeat: no-repeat;
+
+}
+
+
+
+/* ============================================================
+   MAIN GRID
+   ============================================================ */
+
+.editorial-product-grid {
+
+  width: 100%;
+
+  display: grid;
+
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+
+  gap: 1px;
+
+  background: #fff;
+
+  margin: 0;
+
+  padding: 0;
+
+}
+
+
+
+/* ============================================================
+   PRODUCT CARD
+   ============================================================ */
+
+.editorial-product-card {
+
+  position: relative;
+
+  width: 100%;
+
+  min-width: 0;
+
+  background: #f1f1f1;
+
+  overflow: hidden;
+
+}
+
+.editorial-product-link {
+
+  display: block;
+
+  width: 100%;
+
+  color: inherit;
+
+  text-decoration: none;
+
+}
+
+
+
+/* ============================================================
+   PRODUCT IMAGE
+   ============================================================ */
+
+.editorial-product-image {
+
+  position: relative;
+
+  width: 100%;
+
+  aspect-ratio: 1 / 1;
+
+  overflow: hidden;
+
+  background: #f1f1f1;
+
+}
+
+.editorial-product-image > img {
+
+  display: block;
+
+  width: 100%;
+
+  height: 100%;
+
+  object-fit: cover;
+
+  transition:
+    transform .55s cubic-bezier(.2,.6,.2,1);
+
+}
+
+.editorial-product-card:hover
+.editorial-product-image > img {
+
+  transform: scale(1.015);
+
+}
+
+
+
+/* ============================================================
+   EDITORIAL IMAGE CARD
+   ============================================================ */
+
+.editorial-card {
+
+  position: relative;
+
+  width: 100%;
+
+  min-width: 0;
+
+  background: #f1f1f1;
+
+  overflow: hidden;
+
+}
+
+.editorial-card-link {
+
+  display: block;
+
+  width: 100%;
+
+  height: 100%;
+
+  text-decoration: none;
+
+}
+
+.editorial-image-wrapper {
+
+  position: relative;
+
+  width: 100%;
+
+  aspect-ratio: 1 / 1;
+
+  overflow: hidden;
+
+  background: #f1f1f1;
+
+}
+
+.editorial-image-wrapper img {
+
+  display: block;
+
+  width: 100%;
+
+  height: 100%;
+
+  object-fit: cover;
+
+  transition:
+    transform .7s cubic-bezier(.2,.6,.2,1);
+
+}
+
+.editorial-card:hover
+.editorial-image-wrapper img {
+
+  transform: scale(1.025);
+
+}
+
+
+
+/* ============================================================
+   PRODUCT INFORMATION
+   ============================================================ */
+
+.editorial-product-info {
+
+  width: 100%;
+
+  padding: 6px 7px 7px;
+
+  display: flex;
+
+  justify-content: space-between;
+
+  align-items: flex-start;
+
+  gap: 8px;
+
+  background: #f1f1f1;
+
+}
+
+.editorial-product-name {
+
+  min-width: 0;
+
+  flex: 1;
+
+  font-size: 8px;
+
+  line-height: 1.25;
+
+  font-weight: 400;
+
+  text-transform: uppercase;
+
+  letter-spacing: .01em;
+
+  white-space: nowrap;
+
+  overflow: hidden;
+
+  text-overflow: ellipsis;
+
+  color: #111;
+
+}
+
+.editorial-product-price {
+
+  flex-shrink: 0;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: flex-end;
+
+  gap: 5px;
+
+  font-size: 8px;
+
+  line-height: 1.25;
+
+  white-space: nowrap;
+
+}
+
+.editorial-current-price {
+
+  font-weight: 400;
+
+  color: #111;
+
+}
+
+.editorial-compare-price {
+
+  color: #777;
+
+  text-decoration: line-through;
+
+  font-size: 7px;
+
+}
+
+.editorial-discount {
+
+  color: #777;
+
+  font-size: 7px;
+
+}
+
+
+
+/* ============================================================
+   MATERIAL BADGES
+   ============================================================ */
+
+.editorial-material-badge {
+
+  position: absolute;
+
+  top: 9px;
+
+  left: 9px;
+
+  z-index: 4;
+
+}
+
+.editorial-material-badge img {
+
+  display: block;
+
+  height: auto;
+
+}
+
+.editorial-leather-badge img {
+
+  width: 48px;
+
+}
+
+.editorial-vegan-badge img {
+
+  width: 28px;
+
+}
+
+
+
+/* ============================================================
+   PRODUCT LABELS
+   ============================================================ */
+
+.editorial-product-label {
+
+  position: absolute;
+
+  right: 9px;
+
+  z-index: 4;
+
+  padding: 5px 7px;
+
+  border: 1px solid #111;
+
+  background: #fff;
+
+  color: #111;
+
+  font-size: 6px;
+
+  line-height: 1;
+
+  font-weight: 500;
+
+  text-transform: uppercase;
+
+  letter-spacing: .025em;
+
+}
+
+.editorial-best-seller {
+
+  top: 9px;
+
+}
+
+.editorial-new-arrival {
+
+  top: 31px;
+
+}
+
+
+
+/* ============================================================
+   FILTER DRAWER
+   ============================================================ */
+
+.editorial-filter-drawer {
+
+  position: fixed;
+
+  inset: 0;
+
+  z-index: 99999;
+
+  pointer-events: none;
+
+  visibility: hidden;
+
+}
+
+.editorial-filter-drawer.open {
+
+  pointer-events: auto;
+
+  visibility: visible;
+
+}
+
+.editorial-filter-overlay {
+
+  position: absolute;
+
+  inset: 0;
+
+  background: rgba(0,0,0,.22);
+
+  opacity: 0;
+
+  transition: opacity .3s ease;
+
+}
+
+.editorial-filter-drawer.open
+.editorial-filter-overlay {
+
+  opacity: 1;
+
+}
+
+.editorial-filter-panel {
+
+  position: absolute;
+
+  top: 0;
+
+  right: 0;
+
+  width: 360px;
+
+  max-width: 90vw;
+
+  height: 100%;
+
+  overflow-y: auto;
+
+  background: #fff;
+
+  transform: translateX(100%);
+
+  transition: transform .35s cubic-bezier(.2,.6,.2,1);
+
+}
+
+.editorial-filter-drawer.open
+.editorial-filter-panel {
+
+  transform: translateX(0);
+
+}
+
+.editorial-filter-header {
+
+  height: 60px;
+
+  padding: 0 20px;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: space-between;
+
+  border-bottom: 1px solid #ddd;
+
+  font-size: 10px;
+
+  text-transform: uppercase;
+
+}
+
+.editorial-filter-close {
+
+  border: 0;
+
+  background: transparent;
+
+  padding: 0;
+
+  font-size: 24px;
+
+  line-height: 1;
+
+  cursor: pointer;
+
+}
+
+.editorial-filter-form {
+
+  padding: 0 20px;
+
+}
+
+.editorial-filter-group {
+
+  border-bottom: 1px solid #ddd;
+
+}
+
+.editorial-filter-group summary {
+
+  padding: 17px 0;
+
+  display: flex;
+
+  justify-content: space-between;
+
+  cursor: pointer;
+
+  list-style: none;
+
+  font-size: 9px;
+
+  text-transform: uppercase;
+
+}
+
+.editorial-filter-group summary::-webkit-details-marker {
+
+  display: none;
+
+}
+
+.editorial-filter-values {
+
+  padding: 0 0 15px;
+
+}
+
+.editorial-filter-value {
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 8px;
+
+  margin-bottom: 10px;
+
+  font-size: 9px;
+
+}
+
+.editorial-filter-value input {
+
+  width: 12px;
+
+  height: 12px;
+
+  margin: 0;
+
+}
+
+.editorial-filter-count {
+
+  margin-left: auto;
+
+  color: #999;
+
+}
+
+.editorial-filter-actions {
+
+  position: sticky;
+
+  bottom: 0;
+
+  padding: 15px 0;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: space-between;
+
+  background: #fff;
+
+  border-top: 1px solid #ddd;
+
+}
+
+.editorial-clear-filter {
+
+  color: #111;
+
+  text-decoration: underline;
+
+  text-underline-offset: 3px;
+
+  font-size: 8px;
+
+  text-transform: uppercase;
+
+}
+
+.editorial-apply-filter {
+
+  padding: 11px 25px;
+
+  border: 1px solid #111;
+
+  background: #111;
+
+  color: #fff;
+
+  font-size: 8px;
+
+  text-transform: uppercase;
+
+  cursor: pointer;
+
+}
+
+
+
+/* ============================================================
+   LOADING
+   ============================================================ */
+
+.editorial-loading {
+
+  display: none;
+
+  padding: 25px;
+
+  text-align: center;
+
+  font-size: 8px;
+
+  text-transform: uppercase;
+
+  letter-spacing: .08em;
+
+}
+
+.editorial-loading.active {
+
+  display: block;
+
+}
+
+
+
+/* ============================================================
+   PAGINATION
+   ============================================================ */
+
+.editorial-pagination {
+
+  display: none;
+
+}
+
+
+
+/* ============================================================
+   TABLET
+   ============================================================ */
+
+@media screen and (max-width: 1024px) {
+
+  .editorial-product-grid {
+
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+
+  }
+
+}
+
+
+
+/* ============================================================
+   MOBILE
+   ============================================================ */
+
+@media screen and (max-width: 768px) {
+
+  .editorial-collection-header {
+
+    padding: 12px;
+
+  }
+
+  .editorial-collection-controls {
+
+    padding: 10px 12px;
+
+  }
+
+  .editorial-controls-left {
+
+    gap: 12px;
+
+  }
+
+  .editorial-gender-navigation {
+
+    gap: 12px;
+
+  }
+
+  .editorial-gender-link,
+  .editorial-filter-button,
+  #EditorialSortSelect {
+
+    font-size: 7px;
+
+  }
+
+  .editorial-product-grid {
+
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+
+  }
+
+  .editorial-product-info {
+
+    padding: 5px 5px 6px;
+
+    gap: 4px;
+
+  }
+
+  .editorial-product-name {
+
+    font-size: 7px;
+
+  }
+
+  .editorial-product-price {
+
+    font-size: 7px;
+
+    gap: 3px;
+
+  }
+
+  .editorial-current-price {
+
+    font-size: 7px;
+
+  }
+
+  .editorial-compare-price,
+  .editorial-discount {
+
+    font-size: 6px;
+
+  }
+
+  .editorial-material-badge {
+
+    top: 6px;
+
+    left: 6px;
+
+  }
+
+  .editorial-leather-badge img {
+
+    width: 38px;
+
+  }
+
+  .editorial-vegan-badge img {
+
+    width: 23px;
+
+  }
+
+  .editorial-product-label {
+
+    right: 6px;
+
+    padding: 4px 5px;
+
+    font-size: 5px;
+
+  }
+
+  .editorial-best-seller {
+
+    top: 6px;
+
+  }
+
+  .editorial-new-arrival {
+
+    top: 25px;
+
+  }
+
+}
+
+
+
+/* ============================================================
+   VERY SMALL MOBILE
+   ============================================================ */
+
+@media screen and (max-width: 380px) {
+
+  .editorial-product-info {
+
+    display: block;
+
+  }
+
+  .editorial-product-name {
+
+    margin-bottom: 3px;
+
+  }
+
+  .editorial-product-price {
+
+    justify-content: flex-start;
+
+  }
+
+}
+
+</style>
+
+
+
+<!-- ==========================================================
+     JAVASCRIPT
+     ========================================================== -->
+
+<script>
+
+(function() {
+
+  'use strict';
+
+
+  /* ==========================================================
+     FILTER DRAWER
+     ========================================================== */
+
+  window.openEditorialFilter = function() {
+
+    const drawer =
+      document.getElementById('EditorialFilterDrawer');
+
+    if (!drawer) return;
+
+    drawer.classList.add('open');
+
+    drawer.setAttribute('aria-hidden', 'false');
+
+    document.body.style.overflow = 'hidden';
+
+  };
+
+
+  window.closeEditorialFilter = function() {
+
+    const drawer =
+      document.getElementById('EditorialFilterDrawer');
+
+    if (!drawer) return;
+
+    drawer.classList.remove('open');
+
+    drawer.setAttribute('aria-hidden', 'true');
+
+    document.body.style.overflow = '';
+
+  };
+
+
+  /* ESC closes drawer */
+
+  document.addEventListener('keydown', function(event) {
+
+    if (event.key === 'Escape') {
+
+      closeEditorialFilter();
+
+    }
+
+  });
+
+
+
+  /* ==========================================================
+     ACTIVE GENDER
+     ========================================================== */
+
+  function setActiveGender() {
+
+    const params =
+      new URLSearchParams(window.location.search);
+
+    const gender =
+      params.get('filter.p.m.custom.gender');
+
+
+    document
+      .querySelectorAll('.editorial-gender-link')
+      .forEach(function(link) {
+
+        link.classList.remove('active');
+
+      });
+
+
+    let activeSelector =
+      '.editorial-gender-link[data-gender="all"]';
+
+
+    if (gender === 'men') {
+
+      activeSelector =
+        '.editorial-gender-link[data-gender="men"]';
+
+    }
+
+
+    if (gender === 'women') {
+
+      activeSelector =
+        '.editorial-gender-link[data-gender="women"]';
+
+    }
+
+
+    const activeLink =
+      document.querySelector(activeSelector);
+
+    if (activeLink) {
+
+      activeLink.classList.add('active');
+
+    }
+
+  }
+
+
+  setActiveGender();
+
+
+
+  /* ==========================================================
+     LOADING
+     ========================================================== */
+
+  function showLoading() {
+
+    const loader =
+      document.getElementById('EditorialCollectionLoading');
+
+    if (loader) {
+
+      loader.classList.add('active');
+
+    }
+
+  }
+
+
+  function hideLoading() {
+
+    const loader =
+      document.getElementById('EditorialCollectionLoading');
+
+    if (loader) {
+
+      loader.classList.remove('active');
+
+    }
+
+  }
+
+
+
+  /* ==========================================================
+     URL HELPERS
+     ========================================================== */
+
+  function getPageFromUrl(url) {
+
+    try {
+
+      const parsed =
+        new URL(url, window.location.origin);
+
+      return (
+        parseInt(parsed.searchParams.get('page')) || 1
+      );
+
+    } catch (error) {
+
+      return 1;
+
+    }
+
+  }
+
+
+  function buildNextPageUrl() {
+
+    const currentUrl =
+      new URL(
+        window.location.href,
+        window.location.origin
+      );
+
+    const currentPage =
+      parseInt(
+        currentUrl.searchParams.get('page')
+      ) || 1;
+
+
+    currentUrl.searchParams.set(
+      'page',
+      currentPage + 1
+    );
+
+
+    return currentUrl.toString();
+
+  }
+
+
+
+  /* ==========================================================
+     INFINITE SCROLL
+     ========================================================== */
+
+  let loadingNextPage = false;
+
+  let reachedEnd = false;
+
+  let lastFetchTime = 0;
+
+  const FETCH_DELAY = 600;
+
+
+  async function loadNextPage() {
+
+    if (loadingNextPage || reachedEnd) {
+
+      return;
+
+    }
+
+
+    const now = Date.now();
+
+
+    if (
+      now - lastFetchTime <
+      FETCH_DELAY
+    ) {
+
+      return;
+
+    }
+
+
+    lastFetchTime = now;
+
+    loadingNextPage = true;
+
+    showLoading();
+
+
+    try {
+
+      const nextUrl =
+        buildNextPageUrl();
+
+
+      const response =
+        await fetch(
+          nextUrl,
+          {
+            credentials: 'same-origin'
+          }
+        );
+
+
+      if (!response.ok) {
+
+        throw new Error(
+          'Unable to load next collection page'
+        );
+
+      }
+
+
+      const responseText =
+        await response.text();
+
+
+      const parser =
+        new DOMParser();
+
+
+      const documentHTML =
+        parser.parseFromString(
+          responseText,
+          'text/html'
+        );
+
+
+      const incomingGrid =
+        documentHTML.querySelector(
+          '.editorial-product-grid'
+        );
+
+
+      const currentGrid =
+        document.querySelector(
+          '.editorial-product-grid'
+        );
+
+
+      if (
+        !incomingGrid ||
+        !currentGrid
+      ) {
+
+        reachedEnd = true;
+
+        return;
+
+      }
+
+
+      const incomingCards =
+        Array.from(
+          incomingGrid.children
+        );
+
+
+      if (!incomingCards.length) {
+
+        reachedEnd = true;
+
+        return;
+
+      }
+
+
+      /*
+        Prevent duplicate products when
+        filters/sorting are involved.
+      */
+
+      const existingLinks =
+        new Set(
+          Array.from(
+            currentGrid.querySelectorAll(
+              '.editorial-product-card a'
+            )
+          ).map(function(link) {
+
+            return link.getAttribute('href');
+
+          })
+        );
+
+
+      let addedProducts = 0;
+
+
+      incomingCards.forEach(function(card) {
+
+        const productLink =
+          card.querySelector(
+            '.editorial-product-card a'
+          );
+
+
+        if (productLink) {
+
+          const href =
+            productLink.getAttribute('href');
+
+
+          if (
+            href &&
+            existingLinks.has(href)
+          ) {
+
+            return;
+
+          }
+
+
+          if (href) {
+
+            existingLinks.add(href);
+
+          }
+
+
+          addedProducts++;
+
+        }
+
+
+        currentGrid.appendChild(card);
+
+      });
+
+
+      if (!addedProducts) {
+
+        reachedEnd = true;
+
+        return;
+
+      }
+
+
+      /*
+        Update URL to reflect current
+        infinite-scroll page.
+      */
+
+      const updatedUrl =
+        new URL(
+          window.location.href,
+          window.location.origin
+        );
+
+
+      updatedUrl.searchParams.set(
+        'page',
+        getPageFromUrl(nextUrl)
+      );
+
+
+      window.history.replaceState(
+        {},
+        '',
+        updatedUrl.toString()
+      );
+
+
+      /*
+        Detect whether another page exists.
+      */
+
+      const incomingPagination =
+        documentHTML.querySelector(
+          '.editorial-pagination'
+        );
+
+
+      if (incomingPagination) {
+
+        const nextLinks =
+          Array.from(
+            incomingPagination.querySelectorAll(
+              'a[href]'
+            )
+          );
+
+
+        const currentPage =
+          getPageFromUrl(
+            window.location.href
+          );
+
+
+        const hasHigherPage =
+          nextLinks.some(function(link) {
+
+            try {
+
+              const linkPage =
+                parseInt(
+                  new URL(
+                    link.href,
+                    window.location.origin
+                  )
+                  .searchParams
+                  .get('page')
+                ) || 0;
+
+
+              return linkPage > currentPage;
+
+            } catch (error) {
+
+              return false;
+
+            }
+
+          });
+
+
+        if (!hasHigherPage) {
+
+          /*
+            Don't immediately stop if cards
+            were successfully loaded.
+            The next request will confirm.
+          */
+
+        }
+
+      }
+
+    } catch (error) {
+
+      console.error(
+        'Editorial collection infinite scroll:',
+        error
+      );
+
+    } finally {
+
+      loadingNextPage = false;
+
+      hideLoading();
+
+    }
+
+  }
+
+
+
+  /* ==========================================================
+     SCROLL TRIGGER
+     ========================================================== */
+
+  function checkInfiniteScroll() {
+
+    if (reachedEnd) return;
+
+
+    const scrollPosition =
+      window.scrollY +
+      window.innerHeight;
+
+
+    const pageHeight =
+      document.documentElement.scrollHeight;
+
+
+    /*
+      Start loading before reaching
+      the bottom of the page.
+    */
+
+    const triggerDistance =
+      window.innerWidth <= 768
+        ? 1200
+        : 800;
+
+
+    if (
+      scrollPosition >=
+      pageHeight - triggerDistance
+    ) {
+
+      loadNextPage();
+
+    }
+
+  }
+
+
+  let scrollTimeout;
+
+
+  window.addEventListener(
+    'scroll',
+    function() {
+
+      if (scrollTimeout) {
+
+        return;
+
+      }
+
+
+      scrollTimeout =
+        setTimeout(function() {
+
+          checkInfiniteScroll();
+
+          scrollTimeout = null;
+
+        }, 150);
+
+    },
+    {
+      passive: true
+    }
+  );
+
+
+
+  /* ==========================================================
+     AJAX COLLECTION UPDATE
+     ========================================================== */
+
+  async function updateEditorialCollection(url) {
+
+    showLoading();
+
+
+    try {
+
+      const response =
+        await fetch(url, {
+          credentials: 'same-origin'
+        });
+
+
+      if (!response.ok) {
+
+        throw new Error(
+          'Collection request failed'
+        );
+
+      }
+
+
+      const text =
+        await response.text();
+
+
+      const parser =
+        new DOMParser();
+
+
+      const incomingDocument =
+        parser.parseFromString(
+          text,
+          'text/html'
+        );
+
+
+      const incomingWrapper =
+        incomingDocument.querySelector(
+          '#EditorialCollectionWrapper'
+        );
+
+
+      const currentWrapper =
+        document.querySelector(
+          '#EditorialCollectionWrapper'
+        );
+
+
+      if (
+        incomingWrapper &&
+        currentWrapper
+      ) {
+
+        currentWrapper.innerHTML =
+          incomingWrapper.innerHTML;
+
+
+        /*
+          Reset infinite scroll.
+        */
+
+        loadingNextPage = false;
+
+        reachedEnd = false;
+
+        lastFetchTime = 0;
+
+
+        /*
+          Remove page number after filtering/sorting.
+        */
+
+        const cleanUrl =
+          new URL(
+            url,
+            window.location.origin
+          );
+
+
+        cleanUrl.searchParams.delete('page');
+
+
+        window.history.pushState(
+          {},
+          '',
+          cleanUrl.toString()
+        );
+
+
+        setActiveGender();
+
+      }
+
+    } catch (error) {
+
+      console.error(
+        'Editorial collection update:',
+        error
+      );
+
+    } finally {
+
+      hideLoading();
+
+      closeEditorialFilter();
+
+    }
+
+  }
+
+
+
+  /* ==========================================================
+     FILTER FORM
+     ========================================================== */
+
+  const filterForm =
+    document.getElementById(
+      'EditorialCollectionFilters'
+    );
+
+
+  if (filterForm) {
+
+    filterForm.addEventListener(
+      'submit',
+      function(event) {
+
+        event.preventDefault();
+
+
+        const formData =
+          new FormData(filterForm);
+
+
+        const params =
+          new URLSearchParams(
+            formData
+          );
+
+
+        updateEditorialCollection(
+          window.location.pathname +
+          '?' +
+          params.toString()
+        );
+
+      }
+    );
+
+  }
+
+
+
+  /* ==========================================================
+     SORT
+     ========================================================== */
+
+  const sortSelect =
+    document.getElementById(
+      'EditorialSortSelect'
+    );
+
+
+  if (sortSelect) {
+
+    sortSelect.addEventListener(
+      'change',
+      function() {
+
+        const params =
+          new URLSearchParams(
+            window.location.search
+          );
+
+
+        params.set(
+          'sort_by',
+          this.value
+        );
+
+
+        params.delete('page');
+
+
+        updateEditorialCollection(
+          window.location.pathname +
+          '?' +
+          params.toString()
+        );
+
+      }
+    );
+
+  }
+
+
+
+  /* ==========================================================
+     BROWSER BACK / FORWARD
+     ========================================================== */
+
+  window.addEventListener(
+    'popstate',
+    function() {
+
+      setActiveGender();
+
+    }
+  );
+
+})();
+
+</script>
+
+
+

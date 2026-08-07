@@ -1,0 +1,125 @@
+<style>
+  .pswp_img{
+    display: block;
+	width: auto!important;
+	height: 725px!important;
+  }
+  .btn_class_slider{	
+    justify-content:space-around;	
+    top:40%;	
+    transform:translateY(-50%);	
+  }	
+  .pswp__ui { position:relative; }	
+  .left, .right { margin: 0!important; }	
+  .close{	
+    	
+    right: 0 !important;	
+    top: 0 !important;	
+    position: absolute;	
+    margin: 0;	
+    margin-top: 0px;	
+    margin-right: 0px;	
+    margin-top: 2%!important;	
+    margin-right: 4%!important;	
+  }	
+  
+  a.btn:hover {
+      box-shadow: inset 300px 0 0 0 var(--colorBtnPrimaryLight);
+      -webkit-transition: ease-out .4s;
+      -moz-transition: ease-out .4s;
+      transition: ease-out .8s!important;
+      border: #000;
+  }
+  /*.pswp__zoom-wrap. {
+    transform: scale(1) !important;
+  }
+  .pswp--zoom-allowed .pswp__img {
+    left: 50%;
+    transform: translateX(-50%);
+    transition: 0.5s ease-in;
+  }*/
+
+  @media only screen and (max-width:480px) {	
+   	.btn_class_slider {	
+        justify-content: space-between!important;	
+        top: 50%!important;	
+        transform: translateY(-50%)!important;	
+    } 
+    .btn--circle.btn--large {
+        padding: 10px!important;
+    }
+    .btn--circle .icon {
+        width: 20px!important;
+        height: 20px!important;
+    }
+  }
+</style>
+
+<script type="text/javascript">
+jQuery(document).ready(function(){
+  
+ 	$(".close").click(function(){
+        location.reload(); 
+    });
+    
+});
+  
+var alterClass = function() {
+       
+    var ww = document.body.clientWidth;
+
+    if (ww < 600) {
+      
+      	// $(".pswp__img:first-child").css("display", "block");
+      	// $(".pswp__img:last-child").css("display", "none");
+        $('.product-slideshow').addClass('js-photoswipe__zoom');
+    } else{
+        $('.product-slideshow').removeClass('js-photoswipe__zoom');
+    };
+};
+$(window).resize(function(){
+    alterClass();
+});
+alterClass();
+  
+</script>
+<div class="pswp k_product_slider" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="pswp__bg"></div>
+  <div class="pswp__scroll-wrap">
+    <div class="pswp__container">
+      <div class="pswp__item" id="previous_image"></div>
+      <div class="pswp__item" id="current_image"></div>
+      <div class="pswp__item" id="next_image"></div>
+    </div>
+      	         
+<!--     <div class="pswp__thumbnails_container"> -->
+    <section class="images_slider">
+      <div class="primary-images">
+        
+      </div>
+    </section>
+	
+<!--     </div> -->
+    
+
+    <div class="pswp__ui btn_class_slider pswp__ui--hidden">
+      <button class="btn btn--body btn--circle pswp__button pswp__button--arrow--left left" title="{{ 'general.pagination.previous' | t }}">
+        <svg aria-hidden="true" focusable="false" role="presentation" class="icon icon-chevron-left" viewBox="0 0 284.49 498.98"><path d="M249.49 0a35 35 0 0 1 24.75 59.75L84.49 249.49l189.75 189.74a35.002 35.002 0 1 1-49.5 49.5L10.25 274.24a35 35 0 0 1 0-49.5L224.74 10.25A34.89 34.89 0 0 1 249.49 0z"/></svg>
+      </button>
+
+     
+
+      <button onclick="return false;" class="btn btn--body btn--circle pswp__button pswp__button--arrow--right right" title="{{ 'general.pagination.next' | t }}">
+        <svg aria-hidden="true" focusable="false" role="presentation" class="icon icon-chevron-right" viewBox="0 0 284.49 498.98"><path d="M35 498.98a35 35 0 0 1-24.75-59.75l189.74-189.74L10.25 59.75a35.002 35.002 0 0 1 49.5-49.5l214.49 214.49a35 35 0 0 1 0 49.5L59.75 488.73A34.89 34.89 0 0 1 35 498.98z"/></svg>
+      </button>
+    </div>
+    <div class="pswp__ui  pswp__ui--hidden">
+     	<button class="btn btn--body btn--circle btn--large pswp__button pswp__button--close close" title="{{ 'general.accessibility.close_modal' | t }}">
+        	<svg aria-hidden="true" focusable="false" role="presentation" class="icon icon-close" viewBox="0 0 64 64"><path d="M19 17.61l27.12 27.13m0-27.12L19 44.74"/></svg>
+      	</button>
+    </div>
+    
+  </div>
+</div>
+
+ 

@@ -1,0 +1,657 @@
+{% doc %}
+  @prompt
+    Make a triple banner section with 2images on top and 1 banner big banner at the bottom also give option for mobile image aswell
+
+{% enddoc %}
+{% assign ai_gen_id = block.id | replace: '_', '' | downcase %}
+
+{% style %}
+  .ai-triple-banner-{{ ai_gen_id }} {
+    display: grid;
+    gap: {{ block.settings.spacing }}px;
+    max-width: 100%;
+  }
+
+  .ai-triple-banner__top-row-{{ ai_gen_id }} {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: {{ block.settings.spacing }}px;
+  }
+
+  .ai-triple-banner__banner-{{ ai_gen_id }} {
+    position: relative;
+    overflow: hidden;
+    border-radius: {{ block.settings.border_radius }}px;
+    background-color: {{ block.settings.fallback_bg_color }};
+    min-height: 200px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .ai-triple-banner__banner-small-{{ ai_gen_id }} {
+    aspect-ratio: {{ block.settings.top_aspect_ratio }};
+  }
+
+  .ai-triple-banner__banner-large-{{ ai_gen_id }} {
+    aspect-ratio: {{ block.settings.bottom_aspect_ratio }};
+    display:none;
+  }
+
+  .ai-triple-banner__image-{{ ai_gen_id }} {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+  }
+
+  .ai-triple-banner__overlay-{{ ai_gen_id }} {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: {{ block.settings.overlay_color }};
+    opacity: {{ block.settings.overlay_opacity | divided_by: 100.0 }};
+    z-index: 1;
+  }
+
+  .ai-triple-banner__content-{{ ai_gen_id }} {
+    position: relative;
+    z-index: 2;
+    text-align: center;
+    color: {{ block.settings.text_color }};
+    padding: 20px;
+    width: 100%;
+  }
+
+  .ai-triple-banner__title-{{ ai_gen_id }} {
+    font-size: {{ block.settings.title_size }}px;
+    font-weight: 700;
+    margin: 0 0 8px;
+    line-height: 1.2;
+  }
+
+  .ai-triple-banner__subtitle-{{ ai_gen_id }} {
+    font-size: {{ block.settings.subtitle_size }}px;
+    margin: 0 0 16px;
+    opacity: 0.9;
+    line-height: 1.4;
+  }
+
+  .ai-triple-banner__button-{{ ai_gen_id }} {
+    display: inline-block;
+    padding: 12px 24px;
+    background-color: {{ block.settings.button_bg_color }};
+    color: {{ block.settings.button_text_color }};
+    text-decoration: none;
+    border-radius: {{ block.settings.button_border_radius }}px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    border: none;
+    cursor: pointer;
+  }
+
+  .ai-triple-banner__button-{{ ai_gen_id }}:hover {
+    background-color: {{ block.settings.button_hover_bg_color }};
+    transform: translateY(-2px);
+  }
+
+  .ai-triple-banner__link-{{ ai_gen_id }} {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 3;
+    text-decoration: none;
+  }
+
+  .ai-triple-banner__placeholder-{{ ai_gen_id }} {
+    width: 100%;
+    height: 100%;
+    background-color: #f4f4f4;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+  }
+
+  .ai-triple-banner__placeholder-{{ ai_gen_id }} svg {
+    width: 60px;
+    height: 60px;
+    opacity: 0.3;
+    margin-bottom: 12px;
+  }
+
+  .ai-triple-banner__empty-state-{{ ai_gen_id }} {
+    font-size: 14px;
+    color: #666;
+    text-align: center;
+    padding: 0 20px;
+  }
+
+  @media screen and (max-width: 749px) {
+    .ai-triple-banner__top-row-{{ ai_gen_id }} {
+      grid-template-columns: {% if block.settings.columns_mobile == '1' %}1fr{% else %}1fr 1fr{% endif %};
+    }
+
+    .ai-triple-banner__title-{{ ai_gen_id }} {
+      font-size: {{ block.settings.title_size | times: 0.8 }}px;
+    }
+
+    .ai-triple-banner__subtitle-{{ ai_gen_id }} {
+      font-size: {{ block.settings.subtitle_size | times: 0.9 }}px;
+    }
+
+    .ai-triple-banner__content-{{ ai_gen_id }} {
+      padding: 16px;
+    }
+
+    .ai-triple-banner__button-{{ ai_gen_id }} {
+      padding: 10px 20px;
+      font-size: 14px;
+    }
+  }
+{% endstyle %}
+
+<div class="ai-triple-banner-{{ ai_gen_id }}" {{ block.shopify_attributes }}>
+  <div class="ai-triple-banner__top-row-{{ ai_gen_id }}">
+    <div class="ai-triple-banner__banner-{{ ai_gen_id }} ai-triple-banner__banner-small-{{ ai_gen_id }}">
+      {% assign desktop_image_1 = block.settings.top_image_1 %}
+      {% assign mobile_image_1 = block.settings.top_image_1_mobile %}
+      
+      {% if desktop_image_1 or mobile_image_1 %}
+        <picture>
+          {% if mobile_image_1 %}
+            <source media="(max-width: 749px)" srcset="{{ mobile_image_1 | image_url: width: 800 }}">
+          {% endif %}
+          {% if desktop_image_1 %}
+            <img
+              src="{{ desktop_image_1 | image_url: width: 1000 }}"
+              alt="{{ desktop_image_1.alt | escape }}"
+              class="ai-triple-banner__image-{{ ai_gen_id }}"
+              loading="lazy"
+              width="{{ desktop_image_1.width }}"
+              height="{{ desktop_image_1.height }}"
+            >
+          {% else %}
+            <img
+              src="{{ mobile_image_1 | image_url: width: 1000 }}"
+              alt="{{ mobile_image_1.alt | escape }}"
+              class="ai-triple-banner__image-{{ ai_gen_id }}"
+              loading="lazy"
+              width="{{ mobile_image_1.width }}"
+              height="{{ mobile_image_1.height }}"
+            >
+          {% endif %}
+        </picture>
+      {% else %}
+        <div class="ai-triple-banner__placeholder-{{ ai_gen_id }}">
+          {{ 'image' | placeholder_svg_tag }}
+          <div class="ai-triple-banner__empty-state-{{ ai_gen_id }}">
+            Add your first banner image
+          </div>
+        </div>
+      {% endif %}
+
+      {% if block.settings.show_overlay_1 %}
+        <div class="ai-triple-banner__overlay-{{ ai_gen_id }}"></div>
+      {% endif %}<div class="ai-triple-banner__content-{{ ai_gen_id }}">
+        {% if block.settings.title_1 != blank %}
+          <h3 class="ai-triple-banner__title-{{ ai_gen_id }}">{{ block.settings.title_1 }}</h3>
+        {% endif %}
+        {% if block.settings.subtitle_1 != blank %}
+          <p class="ai-triple-banner__subtitle-{{ ai_gen_id }}">{{ block.settings.subtitle_1 }}</p>
+        {% endif %}
+        {% if block.settings.button_text_1 != blank and block.settings.link_1 != blank %}
+          <a href="{{ block.settings.link_1 }}" class="ai-triple-banner__button-{{ ai_gen_id }}">
+            {{ block.settings.button_text_1 }}
+          </a>
+        {% endif %}
+      </div>
+
+      {% if block.settings.link_1 != blank and block.settings.button_text_1 == blank %}
+        <a href="{{ block.settings.link_1 }}" class="ai-triple-banner__link-{{ ai_gen_id }}" aria-label="{{ block.settings.title_1 | default: 'Banner link' }}"></a>
+      {% endif %}
+    </div><div class="ai-triple-banner__banner-{{ ai_gen_id }} ai-triple-banner__banner-small-{{ ai_gen_id }}">
+      {% assign desktop_image_2 = block.settings.top_image_2 %}
+      {% assign mobile_image_2 = block.settings.top_image_2_mobile %}
+      
+      {% if desktop_image_2 or mobile_image_2 %}
+        <picture>
+          {% if mobile_image_2 %}
+            <source media="(max-width: 749px)" srcset="{{ mobile_image_2 | image_url: width: 800 }}">
+          {% endif %}
+          {% if desktop_image_2 %}
+            <img
+              src="{{ desktop_image_2 | image_url: width: 1000 }}"
+              alt="{{ desktop_image_2.alt | escape }}"
+              class="ai-triple-banner__image-{{ ai_gen_id }}"
+              loading="lazy"
+              width="{{ desktop_image_2.width }}"
+              height="{{ desktop_image_2.height }}"
+            >
+          {% else %}
+            <img
+              src="{{ mobile_image_2 | image_url: width: 1000 }}"
+              alt="{{ mobile_image_2.alt | escape }}"
+              class="ai-triple-banner__image-{{ ai_gen_id }}"
+              loading="lazy"
+              width="{{ mobile_image_2.width }}"
+              height="{{ mobile_image_2.height }}"
+            >
+          {% endif %}
+        </picture>
+      {% else %}
+        <div class="ai-triple-banner__placeholder-{{ ai_gen_id }}">
+          {{ 'image' | placeholder_svg_tag }}
+          <div class="ai-triple-banner__empty-state-{{ ai_gen_id }}">
+            Add your second banner image
+          </div>
+        </div>
+      {% endif %}
+
+      {% if block.settings.show_overlay_2 %}
+        <div class="ai-triple-banner__overlay-{{ ai_gen_id }}"></div>
+      {% endif %}
+
+      <div class="ai-triple-banner__content-{{ ai_gen_id }}">
+        {% if block.settings.title_2 != blank %}
+          <h3 class="ai-triple-banner__title-{{ ai_gen_id }}">{{ block.settings.title_2 }}</h3>
+        {% endif %}
+        {% if block.settings.subtitle_2 != blank %}
+          <p class="ai-triple-banner__subtitle-{{ ai_gen_id }}">{{ block.settings.subtitle_2 }}</p>
+        {% endif %}
+        {% if block.settings.button_text_2 != blank and block.settings.link_2 != blank %}
+          <a href="{{ block.settings.link_2 }}" class="ai-triple-banner__button-{{ ai_gen_id }}">
+            {{ block.settings.button_text_2 }}
+          </a>
+        {% endif %}
+      </div>
+
+      {% if block.settings.link_2 != blank and block.settings.button_text_2 == blank %}
+        <a href="{{ block.settings.link_2 }}" class="ai-triple-banner__link-{{ ai_gen_id }}" aria-label="{{ block.settings.title_2 | default: 'Banner link' }}"></a>
+      {% endif %}
+    </div>
+  </div>
+
+  <div class="ai-triple-banner__banner-{{ ai_gen_id }} ai-triple-banner__banner-large-{{ ai_gen_id }}">
+    {% assign desktop_image_3 = block.settings.bottom_image %}
+    {% assign mobile_image_3 = block.settings.bottom_image_mobile %}
+    
+    {% if desktop_image_3 or mobile_image_3 %}
+      <picture>
+        {% if mobile_image_3 %}
+          <source media="(max-width: 749px)" srcset="{{ mobile_image_3 | image_url: width: 1200 }}">
+        {% endif %}
+        {% if desktop_image_3 %}
+          <img
+            src="{{ desktop_image_3 | image_url: width: 2000 }}"
+            alt="{{ desktop_image_3.alt | escape }}"
+            class="ai-triple-banner__image-{{ ai_gen_id }}"
+            loading="lazy"
+            width="{{ desktop_image_3.width }}"
+            height="{{ desktop_image_3.height }}"
+          >
+        {% else %}
+          <img
+            src="{{ mobile_image_3 | image_url: width: 2000 }}"
+            alt="{{ mobile_image_3.alt | escape }}"
+            class="ai-triple-banner__image-{{ ai_gen_id }}"
+            loading="lazy"
+            width="{{ mobile_image_3.width }}"
+            height="{{ mobile_image_3.height }}"
+          >
+        {% endif %}
+      </picture>
+    {% else %}
+      <div class="ai-triple-banner__placeholder-{{ ai_gen_id }}">
+        {{ 'hero-apparel-1' | placeholder_svg_tag }}
+        <div class="ai-triple-banner__empty-state-{{ ai_gen_id }}">
+          Add your large banner image
+        </div>
+      </div>
+    {% endif %}
+
+    {% if block.settings.show_overlay_3 %}
+      <div class="ai-triple-banner__overlay-{{ ai_gen_id }}"></div>
+    {% endif %}
+
+    <div class="ai-triple-banner__content-{{ ai_gen_id }}">
+      {% if block.settings.title_3 != blank %}
+        <h2 class="ai-triple-banner__title-{{ ai_gen_id }}">{{ block.settings.title_3 }}</h2>
+      {% endif %}
+      {% if block.settings.subtitle_3 != blank %}
+        <p class="ai-triple-banner__subtitle-{{ ai_gen_id }}">{{ block.settings.subtitle_3 }}</p>
+      {% endif %}
+      {% if block.settings.button_text_3 != blank and block.settings.link_3 != blank %}
+        <a href="{{ block.settings.link_3 }}" class="ai-triple-banner__button-{{ ai_gen_id }}">
+          {{ block.settings.button_text_3 }}
+        </a>
+      {% endif %}
+    </div>
+
+    {% if block.settings.link_3 != blank and block.settings.button_text_3 == blank %}
+      <a href="{{ block.settings.link_3 }}" class="ai-triple-banner__link-{{ ai_gen_id }}" aria-label="{{ block.settings.title_3 | default: 'Banner link' }}"></a>
+    {% endif %}
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Triple banner",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "range",
+      "id": "spacing",
+      "min": 0,
+      "max": 40,
+      "step": 4,
+      "unit": "px",
+      "label": "Spacing between banners",
+      "default": 16
+    },
+    {
+      "type": "range",
+      "id": "border_radius",
+      "min": 0,
+      "max": 40,
+      "step": 2,
+      "unit": "px",
+      "label": "Border radius",
+      "default": 8
+    },
+    {
+      "type": "select",
+      "id": "columns_mobile",
+      "label": "Columns on mobile",
+      "options": [
+        {
+          "value": "1",
+          "label": "1"
+        },
+        {
+          "value": "2",
+          "label": "2"
+        }
+      ],
+      "default": "1"
+    },
+    {
+      "type": "select",
+      "id": "top_aspect_ratio",
+      "label": "Top banners aspect ratio",
+      "options": [
+        {
+          "value": "1/1",
+          "label": "Square (1:1)"
+        },
+        {
+          "value": "4/3",
+          "label": "Landscape (4:3)"
+        },
+        {
+          "value": "3/2",
+          "label": "Classic (3:2)"
+        },
+        {
+          "value": "16/9",
+          "label": "Wide (16:9)"
+        }
+      ],
+      "default": "4/3"
+    },
+    {
+      "type": "select",
+      "id": "bottom_aspect_ratio",
+      "label": "Bottom banner aspect ratio",
+      "options": [
+        {
+          "value": "21/9",
+          "label": "Ultra wide (21:9)"
+        },
+        {
+          "value": "16/9",
+          "label": "Wide (16:9)"
+        },
+        {
+          "value": "3/1",
+          "label": "Banner (3:1)"
+        },
+        {
+          "value": "5/2",
+          "label": "Panoramic (5:2)"
+        }
+      ],
+      "default": "21/9"
+    },
+    {
+      "type": "header",
+      "content": "First banner"
+    },
+    {
+      "type": "image_picker",
+      "id": "top_image_1",
+      "label": "Desktop image"
+    },
+    {
+      "type": "image_picker",
+      "id": "top_image_1_mobile",
+      "label": "Mobile image"
+    },
+    {
+      "type": "text",
+      "id": "title_1",
+      "label": "Title",
+      "default": "Banner Title"
+    },
+    {
+      "type": "text",
+      "id": "subtitle_1",
+      "label": "Subtitle",
+      "default": "Discover our latest collection"
+    },
+    {
+      "type": "text",
+      "id": "button_text_1",
+      "label": "Button text",
+      "default": "Shop Now"
+    },
+    {
+      "type": "url",
+      "id": "link_1",
+      "label": "Link"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_overlay_1",
+      "label": "Show overlay",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "Second banner"
+    },
+    {
+      "type": "image_picker",
+      "id": "top_image_2",
+      "label": "Desktop image"
+    },
+    {
+      "type": "image_picker",
+      "id": "top_image_2_mobile",
+      "label": "Mobile image"
+    },
+    {
+      "type": "text",
+      "id": "title_2",
+      "label": "Title",
+      "default": "Banner Title"
+    },
+    {
+      "type": "text",
+      "id": "subtitle_2",
+      "label": "Subtitle",
+      "default": "Discover our latest collection"
+    },
+    {
+      "type": "text",
+      "id": "button_text_2",
+      "label": "Button text",
+      "default": "Shop Now"
+    },
+    {
+      "type": "url",
+      "id": "link_2",
+      "label": "Link"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_overlay_2",
+      "label": "Show overlay",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "Third banner"
+    },
+    {
+      "type": "image_picker",
+      "id": "bottom_image",
+      "label": "Desktop image"
+    },
+    {
+      "type": "image_picker",
+      "id": "bottom_image_mobile",
+      "label": "Mobile image"
+    },
+    {
+      "type": "text",
+      "id": "title_3",
+      "label": "Title",
+      "default": "Featured Collection"
+    },
+    {
+      "type": "text",
+      "id": "subtitle_3",
+      "label": "Subtitle",
+      "default": "Explore our most popular items"
+    },
+    {
+      "type": "text",
+      "id": "button_text_3",
+      "label": "Button text",
+      "default": "Explore"
+    },
+    {
+      "type": "url",
+      "id": "link_3",
+      "label": "Link"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_overlay_3",
+      "label": "Show overlay",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "Style"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "overlay_color",
+      "label": "Overlay color",
+      "default": "#000000"
+    },
+    {
+      "type": "range",
+      "id": "overlay_opacity",
+      "min": 0,
+      "max": 80,
+      "step": 5,
+      "unit": "%",
+      "label": "Overlay opacity",
+      "default": 30
+    },
+    {
+      "type": "color",
+      "id": "fallback_bg_color",
+      "label": "Background color",
+      "default": "#f4f4f4"
+    },
+    {
+      "type": "range",
+      "id": "title_size",
+      "min": 16,
+      "max": 48,
+      "step": 2,
+      "unit": "px",
+      "label": "Title size",
+      "default": 24
+    },
+    {
+      "type": "range",
+      "id": "subtitle_size",
+      "min": 12,
+      "max": 24,
+      "step": 1,
+      "unit": "px",
+      "label": "Subtitle size",
+      "default": 16
+    },
+    {
+      "type": "header",
+      "content": "Button style"
+    },
+    {
+      "type": "color",
+      "id": "button_bg_color",
+      "label": "Background color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "button_text_color",
+      "label": "Text color",
+      "default": "#000000"
+    },
+    {
+      "type": "color",
+      "id": "button_hover_bg_color",
+      "label": "Hover background color",
+      "default": "#f0f0f0"
+    },
+    {
+      "type": "range",
+      "id": "button_border_radius",
+      "min": 0,
+      "max": 40,
+      "step": 2,
+      "unit": "px",
+      "label": "Button border radius",
+      "default": 4
+    }
+  ],
+  "presets": [
+    {
+      "name": "Triple banner"
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,163 @@
+{% schema %}
+{
+  "name": "Category Selection",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "OUR CURRENT SELECTION"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "category",
+      "name": "Category Item",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Category Image"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Category Title",
+          "default": "Category"
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Category Link"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Category Selection",
+      "category": "Custom"
+    }
+  ]
+}
+{% endschema %}
+
+{% stylesheet %}
+
+
+.cover-heading {
+   text-align: center;
+   font-size: 2rem;
+   letter-spacing: 10px;;
+   margin: 20px 0 10px;
+   font-weight: normal;
+}
+
+.categories {
+   display: flex;
+   justify-content: space-around;
+   align-items: center;
+   flex-wrap: wrap;
+   padding: 20px;
+   background-color: #F3F3F3;
+   position: relative;
+}
+
+.category {
+   text-align: center;
+   flex: 1 1 15%;
+   padding: 10px;
+   min-width: 150px;
+}
+
+.category img {
+   width: 100%;
+   max-width: 150px;
+   object-fit: cover;
+}
+
+.category p {
+   font-size: 16px;
+   color: #333;
+   margin-top: 5px;
+}
+
+@media (max-width: 700px) {
+   /* .cover-heading {
+      display: none;
+   } */
+
+   #hide-category {
+      display: none;
+   }
+
+   .categories {
+      flex-wrap: nowrap;
+      overflow-x: auto;
+      overflow-y: hidden;
+      scroll-behavior: smooth;
+      padding: 10px 0;
+   }
+
+   .category {
+      flex: 0 0 auto;
+      min-width: 33.33%;
+      padding: 5px;
+   }
+
+   .category img {
+      height: 105px;
+   }
+
+   .slider-button {
+      display: none;
+   }
+
+   .categories::-webkit-scrollbar {
+      height: 8px;
+   }
+
+   .categories::-webkit-scrollbar-thumb {
+      background-color: #ccc;
+      border-radius: 4px;
+   }
+
+   .categories::-webkit-scrollbar-track {
+      background-color: #fff;
+   }
+}
+
+.slider-button {
+   display: none;
+}
+
+.categories a {
+   text-decoration: none;
+}
+{% endstylesheet %}
+
+<section>
+  {% if section.settings.heading != blank %}
+    <div class="cover-heading">{{ section.settings.heading }}</div>
+  {% endif %}
+
+  <div class="categories">
+    {% for block in section.blocks %}
+      {% if block.settings.link != blank %}
+        <a href="{{ block.settings.link }}" class="category">
+          {% if block.settings.image %}
+            <img src="{{ block.settings.image | image_url: width: 300 }}" alt="{{ block.settings.title }}">
+          {% endif %}
+          <p>{{ block.settings.title }}</p>
+        </a>
+      {% else %}
+        <div class="category">
+          {% if block.settings.image %}
+            <img src="{{ block.settings.image | image_url: width: 300 }}" alt="{{ block.settings.title }}">
+          {% endif %}
+          <p>{{ block.settings.title }}</p>
+        </div>
+      {% endif %}
+    {% endfor %}
+  </div>
+</section>

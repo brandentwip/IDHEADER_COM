@@ -1,0 +1,197 @@
+{% comment %}
+Custom Collection Template with Faceted Filter Drawer, Sort Dropdown, and Non-AJAX Pagination
+{% endcomment %}
+
+<section class="collection-banner">
+  {% if collection.image %}
+    <img src="{{ collection.image | image_url: width: 1600 }}" alt="{{ collection.title }}">
+  {% endif %}
+  <h1>{{ collection.title }}</h1>
+  {% if collection.description != blank %}
+    <div class="collection-description">{{ collection.description }}</div>
+  {% endif %}
+</section>
+
+<section class="collection-controls">
+  <div class="left-controls">
+    {% if collection.filters.size > 0 %}
+      <button class="filter-toggle" onclick="openFilterDrawer()">Filter</button>
+    {% endif %}
+  </div>
+  <div class="right-controls">
+    <form id="SortByForm" method="get" action="{{ collection.url }}">
+      <select name="sort_by" id="SortBySelect" onchange="this.form.submit()">
+        {% for option in collection.sort_options %}
+          <option value="{{ option.value }}" {% if option.value == collection.sort_by %}selected{% endif %}>
+            {{ option.name }}
+          </option>
+        {% endfor %}
+      </select>
+      <noscript>
+        <button type="submit">Sort</button>
+      </noscript>
+    </form>
+  </div>
+</section>
+
+<!-- FILTER DRAWER -->
+<div id="FilterDrawer" class="filter-drawer">
+  <div class="filter-drawer-header">
+    <h2>Filters</h2>
+    <button class="filter-close" onclick="closeFilterDrawer()">&times;</button>
+  </div>
+
+  {% if collection.filters.size > 0 %}
+    <form id="CollectionFilters" class="filter-form" method="get" action="{{ collection.url }}">
+      {% for filter in collection.filters %}
+        <div class="filter-group">
+          <details>
+            <summary>{{ filter.label }}</summary>
+            <div class="filter-values">
+              {% for value in filter.values %}
+                <label>
+                  <input type="checkbox" 
+                         name="{{ value.param_name }}" 
+                         value="{{ value.value }}" 
+                         {% if value.active %}checked{% endif %}
+                         onchange="this.form.submit()">
+                  {{ value.label }} ({{ value.count }})
+                </label>
+              {% endfor %}
+            </div>
+          </details>
+        </div>
+      {% endfor %}
+      <div class="filter-actions">
+        <button type="submit" class="apply-btn">Apply</button>
+        <a href="{{ collection.url }}" class="clear-btn">Clear All</a>
+      </div>
+      <noscript>
+        <button type="submit" class="apply-btn">Update Results</button>
+      </noscript>
+    </form>
+  {% endif %}
+</div>
+
+<!-- PRODUCT GRID + PAGINATION -->
+<section id="CollectionProductWrapper">
+  {% paginate collection.products by section.settings.products_per_page %}
+    <div class="product-grid">
+      {% for product in collection.products %}
+        <div class="product-card">
+          <a href="{{ product.url }}">
+            <div class="product-image">
+              <img src="{{ product.featured_image | image_url: width: 600 }}" alt="{{ product.title }}" loading="lazy">
+            </div>
+            <p class="product-title">{{ product.title }}</p>
+            <p class="product-price">
+              {{ product.price | money }}
+              {% if product.compare_at_price_max > product.price %}
+                <span class="compare-price">{{ product.compare_at_price_max | money }}</span>
+              {% endif %}
+            </p>
+          </a>
+        </div>
+      {% endfor %}
+    </div>
+
+    <!-- Non-AJAX Pagination -->
+    <div class="pagination-wrapper">
+      {% if paginate.pages > 1 %}
+        <nav class="pagination">
+          {% if paginate.previous %}
+            <a href="{{ paginate.previous.url }}" class="page-link">&larr; Previous</a>
+          {% endif %}
+
+          {% for part in paginate.parts %}
+            {% if part.is_link %}
+              <a href="{{ part.url }}" class="page-link">{{ part.title }}</a>
+            {% else %}
+              <span class="active">{{ part.title }}</span>
+            {% endif %}
+          {% endfor %}
+
+          {% if paginate.next %}
+            <a href="{{ paginate.next.url }}" class="page-link">Next &rarr;</a>
+          {% endif %}
+        </nav>
+      {% endif %}
+    </div>
+  {% endpaginate %}
+</section>
+
+<!-- CSS -->
+<link rel="stylesheet" href="{{ 'collection.css' | asset_url }}">
+
+<script>
+  function openFilterDrawer(){ document.getElementById('FilterDrawer').classList.add('open'); }
+  function closeFilterDrawer(){ document.getElementById('FilterDrawer').classList.remove('open'); }
+</script>
+
+<style>
+.collection-banner {
+  text-align:center;  background:#f9f9f9;
+}
+.collection-banner img {
+  max-width:100%; height:auto; margin-bottom:20px;
+}
+.collection-banner h1 {
+  font-family:'Montserrat',sans-serif; font-weight:700; display font-size:2rem; margin:10px 0;
+}
+.collection-description {
+  max-width:800px; margin:0 auto; font-size:1rem; color:#555;
+}
+.collection-controls {
+  max-width:100%; margin:30px auto; padding:0 20px;
+  display:flex; justify-content:space-between; align-items:center;
+}
+.filter-toggle {
+  padding:10px 20px; font-family:'Montserrat',sans-serif; font-weight:600;
+  cursor:pointer; background:#fff; color:#000; border:1px solid black;
+}
+#SortBySelect {
+  padding:10px; font-family:'Montserrat',sans-serif; font-weight:600;
+  border:1px solid black; background:#fff; cursor:pointer;
+}
+.product-grid {
+  display:grid; 
+  padding:1%;
+  grid-template-columns:repeat(auto-fill, minmax(250px, 1fr)); gap:5px;
+}
+.product-card {
+  text-align: center; padding: 8%; background: #f2f2f2; font-family: 'Montserrat',sans-serif;
+}
+.product-card a { text-decoration:none; color:inherit; }
+.product-image img { width:100%; height:auto; }
+.product-title { font-weight:500; font-size:0.7rem; margin:5px 0; }
+.product-price { font-size:1rem; margin:5px 0; }
+.compare-price { text-decoration:line-through; color:#777; font-size:0.9rem; margin-left:5px; }
+.filter-drawer {
+  position:fixed; top:0; left:-100%; height:100%; width:80%; max-width:320px;
+  background:#fff; overflow-y:auto; transition:left 0.3s ease; z-index:9999;
+  padding:20px; box-shadow:2px 0 10px rgba(0,0,0,0.2);
+}
+.filter-drawer.open { left:0; }
+.filter-drawer-header { display:flex; justify-content:space-between; align-items:center; margin-bottom:20px; font-family:'Montserrat',sans-serif; }
+.filter-drawer-header h2 { font-size:1.5rem; font-weight:700; }
+.filter-close { background:none; border:none; font-size:2rem; cursor:pointer; }
+.filter-group { margin-bottom:15px; font-family:'Montserrat',sans-serif; }
+.filter-group summary { font-weight:600; cursor:pointer; padding:10px 0; border-bottom:1px solid #ddd; }
+.filter-values { padding:10px 0; }
+.filter-values label { display:block; margin-bottom:5px; font-size:0.95rem; }
+.filter-values input { margin-right:8px; }
+.filter-actions {
+  position:sticky; bottom:0; background:#fff; padding:10px 0; display:flex; justify-content:space-between; border-top:1px solid #ddd; margin-top:20px;
+}
+.apply-btn, .clear-btn {
+  padding:10px 15px; font-family:'Montserrat',sans-serif; font-weight:600; text-decoration:none;
+}
+.apply-btn { background:#000; color:#fff; border:none; cursor:pointer; }
+.clear-btn { background:none; color:#000; border:none; }
+.pagination { text-align:center; margin:20px 0; font-family:'Montserrat',sans-serif; }
+.pagination a.page-link { margin:0 5px; text-decoration:none; color:#000; border:1px solid #000; padding:5px 10px; font-size:0.9rem; }
+.pagination .active { margin:0 5px; padding:5px 10px; font-weight:700; }
+@media (max-width:768px){
+  .product-grid { grid-template-columns:repeat(2,1fr); }
+}
+</style>

@@ -1,0 +1,1634 @@
+{% comment %}
+  Axel Arigato Replica Collection Template
+  - Top text loaded from collection metafield: custom.top_text or custom.header_text
+  - Interspersed row images loaded from collection metafield: custom.row_images
+  - Axel Arigato typography, 4-column / 2-column grid, hover secondary image, vertical hover size overlay
+  - AJAX filtering, price dropdown, size swatches, gender filters, infinite scroll
+{% endcomment %}
+
+{% assign price_filter = nil %}
+{% assign size_filter = nil %}
+{% assign price_min_param = 'filter.v.price.gte' %}
+{% assign price_max_param = 'filter.v.price.lte' %}
+
+{% for filter in collection.filters %}
+  {% assign filter_label_downcase = filter.label | downcase %}
+  {% if filter.type == 'price_range' %}
+    {% assign price_filter = filter %}
+    {% assign price_min_param = filter.min_value.param_name %}
+    {% assign price_max_param = filter.max_value.param_name %}
+  {% endif %}
+  {% if size_filter == nil and filter_label_downcase contains 'size' %}
+    {% assign size_filter = filter %}
+  {% endif %}
+{% endfor %}
+
+{% comment %} ---------- TOP TEXT (from collection metafield) ---------- {% endcomment %}
+{% assign top_text = collection.metafields.custom.top_text.value | default: collection.metafields.custom.header_text.value | default: collection.description %}
+
+{% comment %} ---------- ROW IMAGES (Supports File, URL list, Text list, or Comma-separated URLs) ---------- {% endcomment %}
+{% assign raw_row_images = collection.metafields.custom.row_images.value | default: collection.metafields.custom.row_image_urls.value | default: collection.metafields.custom.image_urls.value | default: collection.metafields.custom.row_images %}
+
+{% assign row_images = nil %}
+
+{% if raw_row_images.first == nil and raw_row_images != blank %}
+  {% assign raw_str = raw_row_images | strip %}
+  {% if raw_str contains ',' %}
+    {% assign row_images = raw_str | split: ',' %}
+  {% elsif raw_str contains 'http' or raw_str contains '//' %}
+    {% assign row_images = raw_str | newline_to_br | split: '<br />' %}
+  {% else %}
+    {% assign row_images = raw_str | split: ' ' %}
+  {% endif %}
+{% else %}
+  {% assign row_images = raw_row_images %}
+{% endif %}
+
+{% assign row_image_count = 0 %}
+{% if row_images %}
+  {% assign row_image_count = row_images.size %}
+{% endif %}
+
+{% assign product_count = collection.products.size %}
+{% assign base_row_interval = 4 %}
+{% if row_image_count > 0 and product_count > 0 %}
+  {% assign calculated_interval = product_count | divided_by: row_image_count %}
+  {% if calculated_interval > 4 %}
+    {% assign base_row_interval = calculated_interval %}
+  {% endif %}
+{% endif %}
+{% assign next_row_image_index = 0 %}
+
+<!-- HERO / COLLECTION HEADER (AXEL ARIGATO STYLE) -->
+<section class="arigato-header">
+  <div class="arigato-header-inner">
+    <div class="arigato-header-col arigato-header-title-col">
+      <h1 class="arigato-collection-title">{{ collection.title | upcase }}</h1>
+    </div>
+    
+    <div class="arigato-header-col arigato-header-nav-col">
+      {% if collection.all_types.size > 0 %}
+        <ul class="arigato-subcat-links">
+          {% for type in collection.all_types %}
+            {% if type != blank %}
+              <li>
+                <a href="{{ collection.url }}?filter.p.product_type={{ type | url_encode }}" class="arigato-subcat-link">
+                  {{ type | upcase }}
+                </a>
+              </li>
+            {% endif %}
+          {% endfor %}
+        </ul>
+      {% endif %}
+    </div>
+
+    <div class="arigato-header-col arigato-header-desc-col">
+      {% if top_text != blank %}
+        <div class="arigato-collection-desc">
+          {{ top_text }}
+        </div>
+      {% endif %}
+    </div>
+  </div>
+</section>
+
+<!-- TOOLBAR / BREADCRUMB & ACTIONS -->
+<section class="collection-toolbar">
+  <div class="collection-breadcrumb">
+    {% if collection.title contains 'Men' or collection.title contains 'MEN' %}
+      MEN /
+    {% elsif collection.title contains 'Women' or collection.title contains 'WOMEN' %}
+      WOMEN /
+    {% else %}
+      MEN /
+    {% endif %}
+    SHOES / {{ collection.title | upcase }}
+  </div>
+
+  <div class="collection-toolbar-actions">
+    <button
+      type="button"
+      class="toolbar-link"
+      id="ChangeViewToggle"
+      onclick="toggleGridView()"
+    >
+      <span class="toolbar-icon" aria-hidden="true">▦</span>
+      CHANGE VIEW
+    </button>
+
+    <button
+      type="button"
+      class="toolbar-link"
+      onclick="openFilterDrawer()"
+    >
+      <span class="toolbar-icon" aria-hidden="true">▼</span>
+      FILTER &amp; SORTING
+    </button>
+  </div>
+</section>
+
+<!-- FILTER DRAWER -->
+<div id="FilterDrawer" class="filter-drawer">
+  <div class="filter-drawer-header">
+    <h2>FILTER &amp; SORTING</h2>
+    <button
+      class="filter-close"
+      onclick="closeFilterDrawer()"
+      aria-label="Close filters"
+    >
+      &times;
+    </button>
+  </div>
+
+  <div class="gender-filters">
+    <a
+      href="{{ collection.url }}"
+      class="gender-btn"
+      data-gender="all"
+    >
+      ALL
+    </a>
+    <a
+      href="{{ collection.url }}?filter.p.m.custom.gender=men"
+      class="gender-btn"
+      data-gender="men"
+    >
+      MEN
+    </a>
+    <a
+      href="{{ collection.url }}?filter.p.m.custom.gender=women"
+      class="gender-btn"
+      data-gender="women"
+    >
+      WOMEN
+    </a>
+  </div>
+
+  <form
+    id="SortByForm"
+    class="sort-filter-wrapper"
+    method="get"
+    action="{{ collection.url }}"
+  >
+    <label
+      class="sort-filter-label"
+      for="SortBySelect"
+    >
+      SORT BY
+    </label>
+
+    <select
+      name="sort_by"
+      id="SortBySelect"
+    >
+      {% for option in collection.sort_options %}
+        <option
+          value="{{ option.value }}"
+          {% if option.value == collection.sort_by %}
+            selected
+          {% endif %}
+        >
+          {{ option.name }}
+        </option>
+      {% endfor %}
+    </select>
+  </form>
+
+  <!-- PRICE DROPDOWN -->
+  <div class="price-filter-wrapper">
+    <label
+      class="price-filter-label"
+      for="PriceRangeDropdown"
+    >
+      SHOP BY BUDGET
+    </label>
+
+    <select id="PriceRangeDropdown">
+      <option value="">
+        ALL PRICES
+      </option>
+
+      {% assign exact_price_filters = '799,899,999,1099' | split: ',' %}
+      {% for exact_price in exact_price_filters %}
+        <option value="{{ exact_price }}-{{ exact_price }}">
+          &#8377;{{ exact_price }}
+        </option>
+      {% endfor %}
+    </select>
+  </div>
+
+  {% if size_filter and size_filter.values.size > 0 %}
+    <!-- SIZE SWATCH FILTERS -->
+    <form
+      id="SizeSwatchFilters"
+      class="size-swatch-filters"
+      method="get"
+      action="{{ collection.url }}"
+      aria-label="Filter by size"
+    >
+      <span class="size-swatch-title">
+        PICK YOUR SIZE
+      </span>
+
+      <div class="size-swatch-slider">
+        <button
+          type="button"
+          class="size-swatch-arrow size-swatch-prev"
+          aria-label="Previous sizes"
+        >
+          ‹
+        </button>
+
+        <div class="size-swatch-list">
+          {% for value in size_filter.values %}
+            <label
+              class="size-swatch{% if value.active %} active{% endif %}{% if value.count == 0 and value.active == false %} unavailable{% endif %}"
+            >
+              <input
+                type="checkbox"
+                name="{{ value.param_name }}"
+                value="{{ value.value }}"
+                data-size-label="{{ value.label | escape }}"
+                {% if value.active %}
+                  checked
+                {% endif %}
+                {% if value.count == 0 and value.active == false %}
+                  disabled
+                {% endif %}
+              >
+              <span>
+                {{ value.label }}
+              </span>
+            </label>
+          {% endfor %}
+        </div>
+
+        <button
+          type="button"
+          class="size-swatch-arrow size-swatch-next"
+          aria-label="Next sizes"
+        >
+          ›
+        </button>
+      </div>
+    </form>
+  {% endif %}
+
+  {% if collection.filters.size > 0 %}
+    <form
+      id="CollectionFilters"
+      class="filter-form"
+      method="get"
+      action="{{ collection.url }}"
+    >
+      {% for filter in collection.filters %}
+        {% assign filter_label_downcase = filter.label | downcase %}
+
+        {% unless filter.type == 'price_range' or filter_label_downcase contains 'size' %}
+          <div class="filter-group">
+            <details>
+              <summary>
+                {{ filter.label | upcase }}
+              </summary>
+              <div class="filter-values">
+                {% for value in filter.values %}
+                  <label>
+                    <input
+                      type="checkbox"
+                      name="{{ value.param_name }}"
+                      value="{{ value.value }}"
+                      {% if value.active %}
+                        checked
+                      {% endif %}
+                    >
+                    {{ value.label }} ({{ value.count }})
+                  </label>
+                {% endfor %}
+              </div>
+            </details>
+          </div>
+        {% endunless %}
+      {% endfor %}
+
+      <div class="filter-actions">
+        <button
+          type="submit"
+          class="apply-btn"
+        >
+          APPLY
+        </button>
+
+        <a
+          href="{{ collection.url }}"
+          class="clear-btn"
+        >
+          CLEAR ALL
+        </a>
+      </div>
+    </form>
+  {% endif %}
+</div>
+
+<!-- PRODUCT GRID (AXEL ARIGATO DESIGN) -->
+<section id="CollectionProductWrapper">
+  {% paginate collection.products by 24 %}
+    <div class="product-grid">
+      {% assign items_since_last_image = 0 %}
+      {% for product in collection.products %}
+
+        {% assign available_size_values = '' %}
+        {% assign available_size_tokens = '||' %}
+        {% assign size_list = '' %}
+
+        {% for option in product.options_with_values %}
+          {% assign option_name_downcase = option.name | downcase %}
+
+          {% if option_name_downcase contains 'size' %}
+            {% assign option_key = 'option' | append: option.position %}
+
+            {% for variant in product.variants %}
+              {% if variant.available %}
+                {% assign variant_size_value = variant[option_key] | strip %}
+                {% assign variant_size_token = '||' | append: variant_size_value | append: '||' %}
+
+                {% unless available_size_tokens contains variant_size_token %}
+                  {% assign available_size_values = available_size_values | append: variant_size_value | append: '||' %}
+                  {% assign available_size_tokens = available_size_tokens | append: variant_size_value | append: '||' %}
+                  {% assign size_list = size_list | append: variant_size_value | append: ',' %}
+                {% endunless %}
+              {% endif %}
+            {% endfor %}
+
+            {% break %}
+          {% endif %}
+        {% endfor %}
+
+        {% comment %} Corner / Status Badge (Axel Arigato style) {% endcomment %}
+        {% assign product_label = '' %}
+        {% unless product.available %}
+          {% assign product_label = 'OUT OF STOCK' %}
+        {% else %}
+          {% if product.tags contains 'bestseller2025' or product.tags contains 'bestseller' %}
+            {% assign product_label = 'TOP SELLER' %}
+          {% elsif product.tags contains 'New Arrivals' or product.tags contains 'new2025' %}
+            {% assign product_label = 'NEW ARRIVAL' %}
+          {% elsif product.tags contains 'limited' or product.tags contains 'Limited Edition' %}
+            {% assign product_label = 'LIMITED EDITION' %}
+          {% endif %}
+        {% endunless %}
+
+        {% comment %} Hover Image {% endcomment %}
+        {% assign secondary_image = product.images[1] | default: product.featured_image %}
+
+        <div
+          class="product-card"
+          data-price="{{ product.price | divided_by: 100.0 }}"
+          data-price-min="{{ product.price_min | divided_by: 100.0 }}"
+          data-price-max="{{ product.price_max | divided_by: 100.0 }}"
+          data-available-sizes="{{ available_size_values | escape }}"
+        >
+          <a href="{{ product.url }}" class="product-card-link">
+
+            <div class="product-image-box">
+              {% if product_label != blank %}
+                <span class="product-label-top">
+                  {{ product_label }}
+                </span>
+              {% endif %}
+
+              <!-- Primary Image -->
+              <img
+                src="{{ product.featured_image | image_url: width: 600 }}"
+                alt="{{ product.title | escape }}"
+                loading="lazy"
+                class="product-img primary-img"
+              >
+
+              <!-- Secondary Hover Image -->
+              {% if secondary_image %}
+                <img
+                  src="{{ secondary_image | image_url: width: 600 }}"
+                  alt="{{ product.title | escape }}"
+                  loading="lazy"
+                  class="product-img secondary-img"
+                >
+              {% endif %}
+
+              <!-- Material Badge (Leather / Vegan) -->
+              {% if product.metafields.custom.genuineleather == true %}
+                <div class="material-badge genuine-leather-badge">
+                  <img
+                    src="https://cdn.shopify.com/s/files/1/0636/5128/3192/files/image-removebg-preview.png?v=1758192680"
+                    alt="Leather Badge"
+                  >
+                </div>
+              {% elsif product.metafields.custom.vegan == true %}
+                <div class="material-badge vegan-badge">
+                  <img
+                    src="https://cdn.shopify.com/s/files/1/0636/5128/3192/files/vegan-removebg-preview.png?v=1772695454"
+                    alt="Vegan Badge"
+                  >
+                </div>
+              {% endif %}
+
+              <!-- Vertical Hover Size Overlay (Axel Arigato style) -->
+              
+            </div>
+
+            <div class="product-info">
+              <div class="product-title-price-row">
+                <h3 class="product-title">{{ product.title | upcase }}</h3>
+                <div class="product-price">
+                  <span class="current-price">{{ product.price | money }}</span>
+                  {% if product.compare_at_price_max > product.price %}
+                    <span class="compare-price">{{ product.compare_at_price_max | money }}</span>
+                  {% endif %}
+                </div>
+              </div>
+
+              {% if product_label != blank %}
+                <div class="product-bottom-tag">
+                  {{ product_label }}
+                </div>
+              {% endif %}
+            </div>
+
+          </a>
+        </div>
+
+        {% comment %} ---------- ROW IMAGE INSERTION (Row 1 slot 4, then every 3 rows = 12 products) ---------- {% endcomment %}
+        {% if row_image_count > 0 and next_row_image_index < row_image_count %}
+          {% assign items_since_last_image = items_since_last_image | plus: 1 %}
+          {% assign target_interval = 5 %}
+          {% if next_row_image_index == 0 %}
+            {% assign target_interval = 3 %}
+          {% endif %}
+
+          {% assign should_insert_image = false %}
+          {% if items_since_last_image >= target_interval %}
+            {% assign should_insert_image = true %}
+          {% elsif forloop.last and next_row_image_index < row_image_count %}
+            {% assign should_insert_image = true %}
+          {% endif %}
+
+          {% if should_insert_image %}
+            {% assign items_since_last_image = 0 %}
+            {% assign row_item = row_images[next_row_image_index] %}
+            {% assign next_row_image_index = next_row_image_index | plus: 1 %}
+            {% assign row_item_str = row_item | strip %}
+            {% assign row_img_src = '' %}
+
+            {% comment %} Case 1: Direct URL string (e.g. https://... or //...) {% endcomment %}
+            {% if row_item_str contains 'http://' or row_item_str contains 'https://' or row_item_str contains '//cdn.shopify.com' %}
+              {% assign row_img_src = row_item_str %}
+            {% else %}
+              {% comment %} Case 2: File/Media Drop {% endcomment %}
+              {% assign test_url = row_item | image_url: width: 800 %}
+              {% unless test_url contains '/files/?' or test_url contains 'no-image' or test_url == blank %}
+                {% assign row_img_src = test_url %}
+              {% endunless %}
+
+              {% if row_img_src == blank %}
+                {% assign test_url = row_item.preview_image | image_url: width: 800 %}
+                {% unless test_url contains '/files/?' or test_url contains 'no-image' or test_url == blank %}
+                  {% assign row_img_src = test_url %}
+                {% endunless %}
+              {% endif %}
+
+              {% if row_img_src == blank %}
+                {% assign test_url = row_item | img_url: '800x' %}
+                {% unless test_url contains '/files/?' or test_url contains 'no-image' or test_url == blank %}
+                  {% assign row_img_src = test_url %}
+                {% endunless %}
+              {% endif %}
+
+              {% if row_img_src == blank %}
+                {% assign test_url = row_item | file_img_url: '800x' %}
+                {% unless test_url contains '/files/?' or test_url contains 'no-image' or test_url == blank %}
+                  {% assign row_img_src = test_url %}
+                {% endunless %}
+              {% endif %}
+
+              {% if row_img_src == blank %}
+                {% if row_item.url != blank and row_item.url != '/' %}
+                  {% assign row_img_src = row_item.url %}
+                {% endif %}
+              {% endif %}
+
+              {% if row_img_src == blank %}
+                {% assign row_img_src = row_item | file_url %}
+              {% endif %}
+            {% endif %}
+
+            <div class="collection-row-image-card">
+              <div class="row-image-container">
+                {% if row_img_src != blank %}
+                  <img
+                    src="{{ row_img_src }}"
+                    alt="{{ row_item.alt | default: collection.title | escape }}"
+                    loading="lazy"
+                    class="product-img primary-img"
+                  >
+                {% endif %}
+                <span class="row-image-caption">
+                  {% if row_item.alt != blank %}
+                    {{ row_item.alt | upcase }}
+                  {% else %}
+                    {{ collection.title | upcase }}
+                  {% endif %}
+                </span>
+              </div>
+            </div>
+          {% endif %}
+        {% endif %}
+
+      {% endfor %}
+    </div>
+
+    <div
+      id="CollectionEmptyState"
+      class="collection-empty-state"
+      hidden
+    >
+      NO PRODUCTS FOUND
+    </div>
+
+    <!-- PAGINATION -->
+    <div class="pagination-wrapper">
+      {% render 'collection-pagination', paginate: paginate %}
+    </div>
+  {% endpaginate %}
+</section>
+
+<!-- LOADER -->
+<div
+  id="collection-loading"
+  class="loading-spinner"
+  style="display:none;"
+>
+  LOADING...
+</div>
+
+<script>
+const PRICE_FILTER_MIN_PARAM = {{ price_min_param | json }};
+const PRICE_FILTER_MAX_PARAM = {{ price_max_param | json }};
+const SIZE_FILTER_PARAM_NAMES = [
+  {% if size_filter %}
+    {% for value in size_filter.values %}
+      {{ value.param_name | json }}{% unless forloop.last %},{% endunless %}
+    {% endfor %}
+  {% endif %}
+];
+
+/* ---------- GRID VIEW TOGGLE ---------- */
+function toggleGridView() {
+  const grid = document.querySelector('.product-grid');
+  if (!grid) return;
+  if (grid.classList.contains('grid-2-col')) {
+    grid.classList.remove('grid-2-col');
+    grid.classList.add('grid-1-col');
+  } else if (grid.classList.contains('grid-1-col')) {
+    grid.classList.remove('grid-1-col');
+  } else {
+    grid.classList.add('grid-2-col');
+  }
+}
+
+/* ---------- DRAWER ---------- */
+function openFilterDrawer() {
+  document.getElementById('FilterDrawer').classList.add('open');
+}
+
+function closeFilterDrawer() {
+  document.getElementById('FilterDrawer').classList.remove('open');
+}
+
+/* ---------- LOADER ---------- */
+function showLoading() {
+  document.getElementById('collection-loading').style.display = 'block';
+}
+
+function hideLoading() {
+  document.getElementById('collection-loading').style.display = 'none';
+}
+
+function hidePagination() {
+  document.querySelectorAll('.pagination-wrapper').forEach(wrapper => {
+    wrapper.style.display = 'none';
+  });
+}
+
+function hideOutOfRangeProducts() {
+  const params = new URLSearchParams(window.location.search);
+  const min = parseFloat(params.get(PRICE_FILTER_MIN_PARAM));
+  const max = parseFloat(params.get(PRICE_FILTER_MAX_PARAM));
+
+  if (Number.isNaN(min) && Number.isNaN(max)) return;
+
+  document.querySelectorAll('.product-card').forEach(card => {
+    const productMin = parseFloat(card.dataset.priceMin);
+    const productMax = parseFloat(card.dataset.priceMax);
+    const productPrice = parseFloat(card.dataset.price);
+
+    const exactPrice = !Number.isNaN(min) && !Number.isNaN(max) && min === max;
+
+    if (exactPrice) {
+      card.hidden = productPrice !== min;
+      return;
+    }
+
+    const belowMin = !Number.isNaN(min) && productMax < min;
+    const aboveMax = !Number.isNaN(max) && productMin > max;
+
+    card.hidden = belowMin || aboveMax;
+  });
+}
+
+function getSelectedSizes() {
+  const form = document.getElementById('SizeSwatchFilters');
+  if (!form) return [];
+  return Array.from(form.querySelectorAll('input:checked'))
+    .map(input => (input.dataset.sizeLabel || input.value).trim().toLowerCase())
+    .filter(Boolean);
+}
+
+function hideProductsWithoutSelectedAvailableSizes() {
+  const selectedSizes = getSelectedSizes();
+  if (selectedSizes.length === 0) return;
+
+  document.querySelectorAll('.product-card').forEach(card => {
+    const availableSizes = (card.dataset.availableSizes || '')
+      .split('||')
+      .map(size => size.trim().toLowerCase())
+      .filter(Boolean);
+
+    const hasSelectedAvailableSize = selectedSizes.some(size => availableSizes.includes(size));
+    if (!hasSelectedAvailableSize) {
+      card.hidden = true;
+    }
+  });
+}
+
+function updateEmptyState() {
+  const emptyState = document.getElementById('CollectionEmptyState');
+  if (!emptyState) return;
+
+  const productCards = Array.from(document.querySelectorAll('.product-card'));
+  const hasVisibleProducts = productCards.some(card => !card.hidden);
+
+  emptyState.hidden = productCards.length > 0 && hasVisibleProducts;
+}
+
+function applyClientSideProductGuards() {
+  hideOutOfRangeProducts();
+  hideProductsWithoutSelectedAvailableSizes();
+  updateEmptyState();
+}
+
+/* ---------- URL HELPERS ---------- */
+function getCurrentPageFromUrl(url) {
+  try {
+    const params = new URL(url, window.location.origin).searchParams;
+    return parseInt(params.get('page')) || 1;
+  } catch(e) {
+    return 1;
+  }
+}
+
+function buildNextPageUrl(url) {
+  const u = new URL(url, window.location.origin);
+  const params = u.searchParams;
+  const current = parseInt(params.get('page')) || 1;
+  params.set('page', current + 1);
+  u.search = params.toString();
+  return u.toString();
+}
+
+function getNextPageUrl() {
+  const paginationWrapper = document.querySelector('.pagination-wrapper');
+  if (!paginationWrapper) {
+    return buildNextPageUrl(window.location.href);
+  }
+
+  let nextLink = paginationWrapper.querySelector('a[rel="next"]');
+  if (!nextLink) {
+    const paginationItems = paginationWrapper.querySelectorAll('.pagination__item');
+    const lastPaginationItem = paginationItems[paginationItems.length - 1];
+    nextLink = lastPaginationItem?.querySelector('a[href]');
+  }
+
+  if (nextLink) {
+    return new URL(nextLink.getAttribute('href'), window.location.origin).toString();
+  }
+
+  return buildNextPageUrl(window.location.href);
+}
+
+/* ---------- INFINITE SCROLL ---------- */
+let isLoading = false;
+let reachedEnd = false;
+let lastFetchTime = 0;
+const MIN_FETCH_INTERVAL = 600;
+
+async function loadNextPage() {
+  if (isLoading || reachedEnd) return;
+  const now = Date.now();
+  if (now - lastFetchTime < MIN_FETCH_INTERVAL) return;
+  lastFetchTime = now;
+
+  const nextUrl = getNextPageUrl();
+  isLoading = true;
+  showLoading();
+
+  try {
+    const resText = await fetch(nextUrl, { credentials: 'same-origin' }).then(r => r.text());
+    const parser = new DOMParser();
+    const html = parser.parseFromString(resText, 'text/html');
+
+    const incomingGrid = html.querySelector('.product-grid');
+    const incomingPaginationWrapper = html.querySelector('.pagination-wrapper');
+    const currentPaginationWrapper = document.querySelector('.pagination-wrapper');
+
+    if (!incomingGrid) {
+      reachedEnd = true;
+      return;
+    }
+
+    const newItemsHTML = incomingGrid.innerHTML.trim();
+    if (!newItemsHTML) {
+      reachedEnd = true;
+      return;
+    }
+
+    const productGrid = document.querySelector('.product-grid');
+    const temp = document.createElement('div');
+    temp.innerHTML = newItemsHTML;
+
+    const incomingCards = Array.from(temp.children);
+    const existingHrefs = new Set(
+      Array.from(productGrid.querySelectorAll('.product-card a'))
+        .map(a => a.getAttribute('href'))
+        .filter(Boolean)
+    );
+
+    let appendedCount = 0;
+    incomingCards.forEach(card => {
+      if (card.classList && card.classList.contains('collection-row-image-card')) return;
+
+      const a = card.querySelector('a[href]');
+      const href = a ? a.getAttribute('href') : null;
+
+      if (href && existingHrefs.has(href)) return;
+
+      productGrid.insertAdjacentElement('beforeend', card);
+      appendedCount++;
+    });
+
+    if (currentPaginationWrapper) {
+      currentPaginationWrapper.innerHTML = incomingPaginationWrapper ? incomingPaginationWrapper.innerHTML : '';
+    }
+
+    applyClientSideProductGuards();
+    hidePagination();
+
+    if (appendedCount === 0) {
+      reachedEnd = true;
+    } else {
+      const newPage = getCurrentPageFromUrl(nextUrl);
+      const newUrl = new URL(window.location.href);
+      newUrl.searchParams.set('page', newPage);
+      window.history.replaceState({}, '', newUrl.toString());
+    }
+  } catch(err) {
+    console.error(err);
+  } finally {
+    isLoading = false;
+    hideLoading();
+  }
+}
+
+/* ---------- THROTTLE ---------- */
+function throttle(fn, wait) {
+  let last = 0;
+  let timeout = null;
+
+  return function(...args) {
+    const now = Date.now();
+    const remaining = wait - (now - last);
+
+    if (remaining <= 0) {
+      if (timeout) {
+        clearTimeout(timeout);
+        timeout = null;
+      }
+      last = now;
+      fn.apply(this, args);
+    } else if (!timeout) {
+      timeout = setTimeout(() => {
+        last = Date.now();
+        timeout = null;
+        fn.apply(this, args);
+      }, remaining);
+    }
+  };
+}
+
+/* ---------- SCROLL TRIGGER ---------- */
+function onScrollTrigger() {
+  if (reachedEnd) return;
+  const scrollPos = window.scrollY + window.innerHeight;
+  const triggerPoint = document.body.offsetHeight - 800;
+
+  if (scrollPos >= triggerPoint) {
+    loadNextPage();
+  }
+}
+
+const throttledScroll = throttle(onScrollTrigger, 200);
+window.addEventListener('scroll', throttledScroll);
+
+/* ---------- AJAX UPDATE ---------- */
+function updateCollection(url) {
+  showLoading();
+
+  fetch(url)
+    .then(res => res.text())
+    .then(data => {
+      const parser = new DOMParser();
+      const htmlDoc = parser.parseFromString(data, 'text/html');
+      const newContent = htmlDoc.querySelector('#CollectionProductWrapper')?.innerHTML;
+
+      if (newContent) {
+        document.querySelector('#CollectionProductWrapper').innerHTML = newContent;
+        reachedEnd = false;
+        isLoading = false;
+        lastFetchTime = 0;
+
+        window.history.pushState({}, '', url);
+        setActiveGenderButton();
+        applyClientSideProductGuards();
+        hidePagination();
+      }
+
+      hideLoading();
+    })
+    .catch(err => {
+      console.error(err);
+      hideLoading();
+    });
+}
+
+/* ---------- FILTER FORM ---------- */
+function appendCheckedInputsToParams(form, params) {
+  if (!form) return;
+  const formData = new FormData(form);
+  formData.forEach((value, key) => {
+    params.append(key, value);
+  });
+}
+
+function isSizeFilterParam(key) {
+  return SIZE_FILTER_PARAM_NAMES.includes(key);
+}
+
+document.getElementById('CollectionFilters')?.addEventListener('submit', function(e) {
+  e.preventDefault();
+  const params = new URLSearchParams(window.location.search);
+
+  Array.from(params.keys()).forEach(key => {
+    if (
+      key.startsWith('filter.') &&
+      key !== PRICE_FILTER_MIN_PARAM &&
+      key !== PRICE_FILTER_MAX_PARAM &&
+      !isSizeFilterParam(key)
+    ) {
+      params.delete(key);
+    }
+  });
+
+  appendCheckedInputsToParams(this, params);
+  params.delete('page');
+
+  updateCollection(`${window.location.pathname}?${params.toString()}`);
+});
+
+/* ---------- SIZE SWATCHES ---------- */
+function initSizeSwatchFilters() {
+  const form = document.getElementById('SizeSwatchFilters');
+  if (!form) return;
+
+  const list = form.querySelector('.size-swatch-list');
+  const prevButton = form.querySelector('.size-swatch-prev');
+  const nextButton = form.querySelector('.size-swatch-next');
+
+  const syncActiveSwatches = () => {
+    form.querySelectorAll('.size-swatch').forEach(label => {
+      const input = label.querySelector('input');
+      label.classList.toggle('active', Boolean(input?.checked));
+    });
+  };
+
+  const updateSliderButtons = () => {
+    if (!list) return;
+    if (prevButton) {
+      prevButton.hidden = list.scrollLeft <= 0;
+    }
+    if (nextButton) {
+      nextButton.hidden = list.scrollLeft + list.clientWidth >= list.scrollWidth - 1;
+    }
+  };
+
+  const scrollByAmount = () => {
+    if (!list) return 0;
+    return Math.round(list.clientWidth * 0.8);
+  };
+
+  if (prevButton) {
+    prevButton.addEventListener('click', () => {
+      if (!list) return;
+      list.scrollBy({ left: -scrollByAmount(), behavior: 'smooth' });
+    });
+  }
+
+  if (nextButton) {
+    nextButton.addEventListener('click', () => {
+      if (!list) return;
+      list.scrollBy({ left: scrollByAmount(), behavior: 'smooth' });
+    });
+  }
+
+  if (list) {
+    list.addEventListener('scroll', updateSliderButtons);
+    window.addEventListener('resize', updateSliderButtons);
+  }
+
+  syncActiveSwatches();
+  updateSliderButtons();
+
+  form.addEventListener('change', function() {
+    syncActiveSwatches();
+    const params = new URLSearchParams(window.location.search);
+
+    Array.from(params.keys()).forEach(key => {
+      if (isSizeFilterParam(key)) {
+        params.delete(key);
+      }
+    });
+
+    appendCheckedInputsToParams(form, params);
+    params.delete('page');
+
+    updateCollection(`${window.location.pathname}?${params.toString()}`);
+  });
+}
+
+/* ---------- SORT ---------- */
+document.getElementById('SortBySelect')?.addEventListener('change', function() {
+  const params = new URLSearchParams(window.location.search);
+  params.set('sort_by', this.value);
+  params.delete('page');
+  updateCollection(`${window.location.pathname}?${params.toString()}`);
+});
+
+/* ---------- PRICE DROPDOWN ---------- */
+function initPriceDropdownFilter() {
+  const dropdown = document.getElementById('PriceRangeDropdown');
+  if (!dropdown) return;
+
+  const params = new URLSearchParams(window.location.search);
+  const currentMin = params.get(PRICE_FILTER_MIN_PARAM);
+  const currentMax = params.get(PRICE_FILTER_MAX_PARAM);
+
+  if (currentMin && currentMax) {
+    dropdown.value = `${currentMin}-${currentMax}`;
+  }
+
+  dropdown.addEventListener('change', function() {
+    const params = new URLSearchParams(window.location.search);
+    params.delete('page');
+
+    if (this.value) {
+      const values = this.value.split('-');
+      params.set(PRICE_FILTER_MIN_PARAM, values[0]);
+      params.set(PRICE_FILTER_MAX_PARAM, values[1]);
+    } else {
+      params.delete(PRICE_FILTER_MIN_PARAM);
+      params.delete(PRICE_FILTER_MAX_PARAM);
+    }
+
+    const newUrl = `${window.location.pathname}?${params.toString()}`;
+    updateCollection(newUrl);
+  });
+}
+
+/* ---------- ACTIVE GENDER ---------- */
+function initGenderFilters() {
+  document.querySelectorAll('.gender-btn').forEach(btn => {
+    btn.addEventListener('click', function(e) {
+      e.preventDefault();
+      const params = new URLSearchParams(window.location.search);
+      const gender = this.dataset.gender;
+
+      params.delete('page');
+
+      if (gender === 'men' || gender === 'women') {
+        params.set('filter.p.m.custom.gender', gender);
+      } else {
+        params.delete('filter.p.m.custom.gender');
+      }
+
+      const queryString = params.toString();
+      const newUrl = queryString ? `${window.location.pathname}?${queryString}` : window.location.pathname;
+
+      updateCollection(newUrl);
+    });
+  });
+}
+
+function setActiveGenderButton() {
+  const urlParams = new URLSearchParams(window.location.search);
+  const gender = urlParams.get('filter.p.m.custom.gender');
+
+  document.querySelectorAll('.gender-btn').forEach(btn => btn.classList.remove('active'));
+
+  if (gender === 'men') {
+    document.querySelector('[data-gender="men"]')?.classList.add('active');
+  } else if (gender === 'women') {
+    document.querySelector('[data-gender="women"]')?.classList.add('active');
+  } else {
+    document.querySelector('[data-gender="all"]')?.classList.add('active');
+  }
+}
+
+/* ---------- INIT ---------- */
+document.addEventListener('DOMContentLoaded', function() {
+  hidePagination();
+  hideLoading();
+  setActiveGenderButton();
+  initGenderFilters();
+  initPriceDropdownFilter();
+  initSizeSwatchFilters();
+  applyClientSideProductGuards();
+});
+</script>
+
+<style>
+/* ---------- AXEL ARIGATO DESIGN SYSTEM & STYLES ---------- */
+
+/* Global Reset for Collection Area */
+#CollectionProductWrapper,
+.arigato-header,
+.collection-toolbar {
+  font-family: 'Montserrat', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  color: #111;
+  box-sizing: border-box;
+}
+
+/* HERO HEADER (AXEL ARIGATO MINIMALIST STYLE) */
+.arigato-header {
+  background: #ebebe8;
+  padding: 36px 32px 32px;
+  border-bottom: 1px solid #dededc;
+}
+
+.arigato-header-inner {
+  display: grid;
+  grid-template-columns: 240px 220px 1fr;
+  gap: 32px;
+  align-items: start;
+}
+
+.arigato-collection-title {
+  margin: 0;
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: #111;
+  line-height: 1.2;
+}
+
+.arigato-subcat-links {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.arigato-subcat-link {
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  color: #111;
+  text-decoration: none;
+  text-transform: uppercase;
+  transition: opacity 0.2s ease;
+}
+
+.arigato-subcat-link:hover {
+  opacity: 0.6;
+}
+
+.arigato-collection-desc {
+  font-size: 13px;
+  line-height: 1.5;
+  color: #222;
+  max-width: 480px;
+  letter-spacing: 0.01em;
+}
+
+/* TOOLBAR */
+.collection-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 32px;
+  background: #ebebe8;
+  border-bottom: 1px solid #dededc;
+}
+
+.collection-breadcrumb {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #111;
+}
+
+.collection-toolbar-actions {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+}
+
+.toolbar-link {
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #111;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: inherit;
+  transition: opacity 0.2s ease;
+}
+
+.toolbar-link:hover {
+  opacity: 0.6;
+}
+
+.toolbar-icon {
+  font-size: 11px;
+}
+
+/* PRODUCT GRID */
+.product-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1px;
+  background: #dededc;
+}
+
+.product-grid.grid-2-col {
+  grid-template-columns: repeat(2, 1fr);
+}
+
+.product-grid.grid-1-col {
+  grid-template-columns: 1fr;
+}
+
+/* PRODUCT CARD */
+.product-card {
+  background: #ebebe8;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+
+.product-card-link {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  text-decoration: none;
+  color: inherit;
+}
+
+/* IMAGE BOX & HOVER STATES */
+.product-image-box {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 4 / 5;
+  background: #ebebe8;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.product-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: opacity 0.35s ease-in-out, transform 0.35s ease-in-out;
+}
+
+.secondary-img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  opacity: 0;
+}
+
+.product-card:hover .primary-img {
+  opacity: 0;
+}
+
+.product-card:hover .secondary-img {
+  opacity: 1;
+}
+
+/* TOP STATUS BADGE */
+.product-label-top {
+  position: absolute;
+  top: 14px;
+  left: 14px;
+  z-index: 3;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #111;
+}
+
+/* MATERIAL BADGES */
+.material-badge {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  z-index: 3;
+}
+
+.material-badge.genuine-leather-badge img {
+  width: 40px;
+}
+
+.material-badge.vegan-badge img {
+  width: 26px;
+}
+
+/* VERTICAL HOVER SIZE OVERLAY (AXEL ARIGATO SIGNATURE) */
+.hover-size-column {
+  position: absolute;
+  right: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 4;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 5px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.25s ease;
+}
+
+.product-card:hover .hover-size-column {
+  opacity: 1;
+}
+
+.hover-size-item {
+  font-size: 10px;
+  font-weight: 600;
+  color: #111;
+  letter-spacing: 0.02em;
+  line-height: 1.2;
+}
+
+/* PRODUCT INFO AREA */
+.product-info {
+  padding: 14px 14px 18px;
+  background: #ebebe8;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.product-title-price-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 12px;
+}
+
+.product-title {
+  margin: 0;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: #111;
+  line-height: 1.3;
+}
+
+.product-price {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  color: #111;
+  white-space: nowrap;
+  display: flex;
+  gap: 6px;
+}
+
+.compare-price {
+  text-decoration: line-through;
+  color: #888;
+  font-weight: 400;
+}
+
+.product-bottom-tag {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #111;
+  margin-top: 2px;
+}
+
+/* INTERSPERSED METAFIELD ROW IMAGE CARD (FULL HEIGHT GRID CARD) */
+.collection-row-image-card {
+  background: #ebebe8;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+  align-self: stretch;
+}
+
+.row-image-container {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  flex: 1;
+  overflow: hidden;
+  background: #ebebe8;
+}
+
+.row-image-container img,
+.collection-row-image-card .product-img {
+  width: 100%;
+  height: 100%;
+  min-height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.row-image-caption {
+  position: absolute;
+  top: 14px;
+  left: 14px;
+  z-index: 3;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: #111;
+}
+
+/* FILTER DRAWER */
+.filter-drawer {
+  position: fixed;
+  top: 0;
+  left: -100%;
+  width: 85%;
+  max-width: 360px;
+  height: 100%;
+  background: #ffffff;
+  z-index: 99999;
+  padding: 24px;
+  overflow-y: auto;
+  transition: left 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 4px 0 20px rgba(0,0,0,0.1);
+}
+
+.filter-drawer.open {
+  left: 0;
+}
+
+.filter-drawer-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: 16px;
+  border-bottom: 1px solid #eee;
+  margin-bottom: 20px;
+}
+
+.filter-drawer-header h2 {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  margin: 0;
+}
+
+.filter-close {
+  background: none;
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
+  line-height: 1;
+  padding: 0;
+}
+
+.gender-filters {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 20px;
+}
+
+.gender-btn {
+  flex: 1;
+  padding: 10px;
+  text-align: center;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-decoration: none;
+  color: #111;
+  background: #f4f4f2;
+  border: 1px solid #dededc;
+  border-radius: 4px;
+  transition: all 0.2s ease;
+}
+
+.gender-btn.active,
+.gender-btn:hover {
+  background: #111;
+  color: #fff;
+  border-color: #111;
+}
+
+.sort-filter-wrapper,
+.price-filter-wrapper,
+.size-swatch-filters {
+  margin-bottom: 20px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid #eee;
+}
+
+.sort-filter-label,
+.price-filter-label,
+.size-swatch-title {
+  display: block;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #666;
+  margin-bottom: 8px;
+}
+
+#SortBySelect,
+.price-filter-wrapper select {
+  width: 100%;
+  padding: 10px 12px;
+  font-size: 12px;
+  font-weight: 600;
+  font-family: inherit;
+  border: 1px solid #dededc;
+  border-radius: 4px;
+  background: #f4f4f2;
+  cursor: pointer;
+  outline: none;
+}
+
+/* SIZE SWATCH SLIDER */
+.size-swatch-slider {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.size-swatch-arrow {
+  border: 1px solid #ccc;
+  background: #fff;
+  border-radius: 50%;
+  width: 26px;
+  height: 26px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.size-swatch-list {
+  display: flex;
+  gap: 6px;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.size-swatch-list::-webkit-scrollbar {
+  display: none;
+}
+
+.size-swatch {
+  flex: 0 0 auto;
+  min-width: 44px;
+  height: 32px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid #dededc;
+  background: #f4f4f2;
+  font-size: 11px;
+  font-weight: 700;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.size-swatch.active {
+  background: #111;
+  color: #fff;
+  border-color: #111;
+}
+
+.apply-btn {
+  background: #111;
+  color: #fff;
+  border: none;
+  padding: 12px 20px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  cursor: pointer;
+}
+
+.clear-btn {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  color: #111;
+  text-decoration: underline;
+}
+
+/* LOADER & EMPTY STATE */
+.collection-empty-state {
+  padding: 60px 20px;
+  text-align: center;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  color: #666;
+}
+
+#collection-loading {
+  text-align: center;
+  padding: 24px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+}
+
+/* RESPONSIVE DESIGN */
+@media (max-width: 1024px) {
+  .arigato-header-inner {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+}
+
+@media (max-width: 768px) {
+  .product-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .arigato-header {
+    padding: 24px 16px 20px;
+  }
+
+  .collection-toolbar {
+    padding: 12px 16px;
+  }
+
+  .product-info {
+    padding: 10px 10px 14px;
+  }
+
+  .product-title,
+  .product-price {
+    font-size: 10px;
+  }
+}
+</style>

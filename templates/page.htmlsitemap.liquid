@@ -1,0 +1,39 @@
+<h1 style="text-align: center; margin-bottom: 30px;">Sitemap</h1>
+
+<div style="display: flex; justify-content: space-between; padding: 0 20px; flex-wrap: wrap;">
+  <div style="flex: 1; margin-right: 20px; padding: 10px; min-width: 300px;">
+    <h2 style="font-size: 22px;">Collections</h2>
+    <ul style="list-style-type: none; padding: 0; margin: initial;">
+      {% for collection in collections %}
+        <li style="margin-bottom: 10px;"><a href="{{ collection.url }}">{{ collection.title }}</a></li>
+      {% else %}
+        <li>No collections found</li>
+      {% endfor %}
+    </ul>
+  </div>
+
+  <div style="flex: 1;  padding: 10px; min-width: 300px; margin: initial;">
+    <h2 style="font-size: 22px;">Products</h2>
+    <ul style="list-style-type: none; padding: 0; margin: initial;">
+      {% paginate collections.all.products by 1000 %}
+      {% for product in collections.all.products %}
+        <li style="margin-bottom: 10px;"><a href="{{ product.url }}">{{ product.title }}</a></li>
+      {% else %}
+        <li>No products found</li>
+      {% endfor %}
+      {% endpaginate %}
+    </ul>
+  </div>
+
+ <div style="flex: 1; padding: 10px; min-width: 300px; margin: initial;">
+  <h2 style="font-size: 22px;">Blog</h2>
+  <ul style="list-style-type: none; padding: 0; margin: initial;">
+    <li style="margin-bottom: 10px;">
+      <a href="https://idcult.com/a/blog" target="_blank">View All Blogs</a>
+      <p>{{ blog.articles_count  }}</p>
+    </li>
+  </ul>
+</div>
+
+
+</div>

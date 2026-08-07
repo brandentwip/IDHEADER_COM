@@ -1,0 +1,37 @@
+<div class="lucky-draw-form-container" style="max-width:500px;margin:auto;padding:20px;border:2px solid #b5dfce;border-radius:10px;background:#fff;">
+  <h2 style="text-align:center;color:#000;">Join Our Lucky Draw!</h2>
+  <p style="text-align:center;color:#333;">Fill in your details and your invoice number to participate.</p>
+  
+  <form method="post" action="/contact#contact_form" accept-charset="UTF-8" id="lucky-draw-form">
+    <input type="hidden" name="form_type" value="contact" />
+    <input type="hidden" name="utf8" value="✓" />
+
+    <label for="LuckyName" style="display:block;margin-top:15px;">Name</label>
+    <input type="text" name="contact[name]" id="LuckyName" required style="width:100%;padding:10px;border:1px solid #b5dfce;border-radius:5px;" />
+
+    <label for="LuckyEmail" style="display:block;margin-top:15px;">Email</label>
+    <input type="email" name="contact[email]" id="LuckyEmail" required style="width:100%;padding:10px;border:1px solid #b5dfce;border-radius:5px;" />
+
+    <label for="LuckyInvoice" style="display:block;margin-top:15px;">Order Invoice Number</label>
+    <input type="text" name="contact[body]" id="LuckyInvoice" placeholder="Enter your invoice number" required style="width:100%;padding:10px;border:1px solid #b5dfce;border-radius:5px;" />
+
+    <button type="submit" style="margin-top:20px;width:100%;padding:12px;background:#b5dfce;border:none;color:#000;font-weight:bold;border-radius:5px;cursor:pointer;">Submit</button>
+  </form>
+</div>
+
+<script>
+  document.getElementById('lucky-draw-form').addEventListener('submit', function(e){
+    e.preventDefault();
+    var form = e.target;
+
+    fetch('/contact', {
+      method: 'POST',
+      body: new FormData(form)
+    }).then(function(){
+      // Redirect to thank you page
+      window.location.href = '/pages/lucky-draw-thank-you';
+    }).catch(function(err){
+      alert('Something went wrong. Please try again.');
+    });
+  });
+</script>

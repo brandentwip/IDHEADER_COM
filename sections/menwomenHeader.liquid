@@ -1,0 +1,183 @@
+{% comment %}
+Custom Header Section with Mobile Drawer Menu
+{% endcomment %}
+<header class="custom-header">
+  <div class="custom-header__top">
+    <div class="custom-header__logo">
+      {% if section.settings.logo != blank %}
+        <a href="{{ routes.root_url }}">
+          <img src="{{ section.settings.logo | image_url: width: 300 }}" alt="{{ shop.name }}">
+        </a>
+      {% else %}
+        <h1 class="shop-name">{{ shop.name }}</h1>
+      {% endif %}
+    </div>
+  </div>
+  
+  <div class="custom-header__nav">
+    <!-- Hamburger (mobile) -->
+    <button class="hamburger mobile-only" aria-label="Open menu">
+      <span></span><span></span><span></span>
+    </button>
+
+    <!-- Desktop: Search and Menu -->
+    <div class="nav-left desktop-only">
+      <a href="{{ section.settings.search_url | default: '/search' }}" class="icon-link">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="11" cy="11" r="8"></circle>
+          <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+        </svg>
+      </a>
+    </div>
+
+    <nav class="nav-menu desktop-only">
+      {% for link in section.blocks %}
+        <a href="{{ link.settings.link }}" class="nav-item">{{ link.settings.label }}</a>
+      {% endfor %}
+    </nav>
+
+    <!-- Account & Wishlist (always visible) -->
+    <div class="nav-right">
+      <a href="{{ section.settings.account_url | default: '/account' }}" class="icon-link">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M20 21v-2a4 4 0 0 0-3-3.87"></path>
+          <path d="M4 21v-2a4 4 0 0 1 3-3.87"></path>
+          <circle cx="12" cy="7" r="4"></circle>
+        </svg>
+      </a>
+      <a href="{{ section.settings.wishlist_url | default: '/pages/wishlist' }}" class="icon-link">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M20.8 4.6c-1.9-1.9-5-1.9-6.9 0L12 6.5l-1.9-1.9c-1.9-1.9-5-1.9-6.9 0-1.9 1.9-1.9 5 0 6.9l1.9 1.9L12 21l6.9-6.9 1.9-1.9c1.9-1.9 1.9-5 0-6.9z"></path>
+        </svg>
+      </a>
+    </div>
+  </div>
+</header>
+
+<!-- Mobile Drawer -->
+<div class="mobile-drawer">
+  <button class="drawer-close" aria-label="Close menu">×</button>
+  <nav class="drawer-menu">
+    <a href="{{ section.settings.search_url | default: '/search' }}" class="drawer-item">Search</a>
+    {% for link in section.blocks %}
+      <a href="{{ link.settings.link }}" class="drawer-item">{{ link.settings.label }}</a>
+    {% endfor %}
+  </nav>
+</div>
+
+<style>
+.custom-header { width: 100%; background: #fff; text-align: center; }
+.custom-header__top { padding: 15px 0; }
+.custom-header__logo img { max-height: 50px; }
+.custom-header__nav {
+  display: flex; justify-content: space-between; align-items: center;
+  background: #000; padding: 10px 20px;
+}
+.nav-menu { display: flex; gap: 40px; }
+.nav-item { color: #fff; text-transform: uppercase; font-weight: bold; font-size: 14px; text-decoration: none; }
+.nav-item:hover { opacity: 0.8; }
+.icon-link svg { display: block; }
+.nav-left, .nav-right { display: flex; gap: 20px; }
+.desktop-only { display: flex; }
+.mobile-only { display: none; }
+.hamburger {
+  background: none; border: none; cursor: pointer;
+  flex-direction: column; justify-content: space-around;
+  height: 20px; width: 25px;
+}
+.hamburger span { display: block; height: 3px; background: #fff; border-radius: 2px; }
+
+/* Hide main header only on landing page */
+.template-page-landing .site-header { display: none !important; }
+
+/* Mobile Drawer */
+.mobile-drawer {
+  position: fixed; top: 0; left: -100%;
+  width: 80%; height: 100%;
+  background: #000; color: #fff;
+  padding: 20px; transition: left 0.3s ease-in-out;
+  z-index: 9999;
+}
+.mobile-drawer.open { left: 0; }
+.drawer-close {
+  background: none; border: none; color: #fff;
+  font-size: 30px; cursor: pointer; margin-bottom: 20px;
+}
+.drawer-menu { display: flex; flex-direction: column; gap: 20px; }
+.drawer-item { color: #fff; text-decoration: none; text-transform: uppercase; font-weight: bold; }
+
+@media (max-width: 768px) {
+  .desktop-only { display: none !important; }
+  .mobile-only { display: flex !important; }
+}
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function(){
+  var hamburger = document.querySelector('.hamburger');
+  var drawer = document.querySelector('.mobile-drawer');
+  var closeBtn = document.querySelector('.drawer-close');
+  if(hamburger && drawer && closeBtn){
+    hamburger.addEventListener('click', function(){ drawer.classList.add('open'); });
+    closeBtn.addEventListener('click', function(){ drawer.classList.remove('open'); });
+  }
+});
+</script>
+
+{% schema %}
+{
+  "name": "Custom Header",
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "logo",
+      "label": "Logo"
+    },
+    {
+      "type": "url",
+      "id": "search_url",
+      "label": "Search URL",
+      
+    },
+    {
+      "type": "url",
+      "id": "account_url",
+      "label": "Account URL",
+      
+    },
+    {
+      "type": "url",
+      "id": "wishlist_url",
+      "label": "Wishlist URL",
+     
+    }
+  ],
+  "blocks": [
+    {
+      "type": "menu_link",
+      "name": "Menu Item",
+      "settings": [
+        {
+          "type": "text",
+          "id": "label",
+          "label": "Label",
+          "default": "Menu"
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Link",
+          "default": "/"
+        }
+      ]
+    }
+  ],
+  "max_blocks": 6,
+  "presets": [
+    {
+      "name": "Custom Header",
+      "category": "Header"
+    }
+  ]
+}
+{% endschema %}

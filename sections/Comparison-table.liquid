@@ -1,0 +1,433 @@
+{%- comment -%}
+  Section: Comparison Table
+  Usage: Add via {% section 'comparison-table' %} inside product.liquid,
+  or add as a section block if your theme supports {% sections %} rendering.
+  Fully editable via theme customizer (blocks = rows).
+{%- endcomment -%}
+
+<div class="comparison-table-section" style="background:{{ section.settings.bg_color }};">
+  <div class="comparison-table-wrapper">
+    <div class="comparison-table">
+
+      <!-- Header Row -->
+      <div class="ct-row ct-header-row">
+        <div class="ct-cell ct-feature-col"></div>
+        <div class="ct-cell ct-highlight-col ct-highlight-header">
+          {%- if section.settings.brand_logo != blank -%}
+            <img src="{{ section.settings.brand_logo | image_url: width: 120 }}" alt="{{ section.settings.brand_name }}" loading="lazy">
+          {%- else -%}
+            <span class="ct-brand-name">{{ section.settings.brand_name }}</span>
+          {%- endif -%}
+        </div>
+        <div class="ct-cell ct-normal-col">
+          <span class="ct-col-title">{{ section.settings.competitor1_title }}</span>
+        </div>
+        <div class="ct-cell ct-normal-col">
+          <span class="ct-col-title">{{ section.settings.competitor2_title }}</span>
+        </div>
+      </div>
+
+      <!-- Data Rows -->
+      {%- if section.blocks.size > 0 -%}
+        {%- for block in section.blocks -%}
+          <div class="ct-row" {{ block.shopify_attributes }}>
+            <div class="ct-cell ct-feature-col">
+              <strong>{{ block.settings.feature_label }}</strong>
+            </div>
+            <div class="ct-cell ct-highlight-col">
+              <span class="ct-mini-logo">
+                {%- if section.settings.brand_logo != blank -%}
+                  <img src="{{ section.settings.brand_logo | image_url: width: 60 }}" alt="{{ section.settings.brand_name }}" loading="lazy">
+                {%- else -%}
+                  {{ section.settings.brand_name | default: 'Your Brand' }}
+                {%- endif -%}
+              </span>
+              {%- if block.settings.highlight_text != blank -%}
+                <span class="ct-highlight-text">{{ block.settings.highlight_text }}</span>
+              {%- else -%}
+                <span class="ct-check">
+                  <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M5 13l4 4L19 7" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                </span>
+              {%- endif -%}
+            </div>
+            <div class="ct-cell ct-normal-col" data-label="{{ section.settings.competitor1_title }}">
+              <span class="ct-muted-text">{{ block.settings.competitor1_text }}</span>
+            </div>
+            <div class="ct-cell ct-normal-col" data-label="{{ section.settings.competitor2_title }}">
+              <span class="ct-muted-text">{{ block.settings.competitor2_text }}</span>
+            </div>
+          </div>
+        {%- endfor -%}
+      {%- else -%}
+        {%- comment -%} Fallback default rows — used when this section is hardcoded via {% section %} tag, since presets/blocks only auto-populate when added through the theme customizer's "Add section" button {%- endcomment -%}
+        {%- assign default_rows = "Return / exchange support|30-day|7-day rigid policies|Fixed email support,High-quality Materials||Basic synthetics|Standardized materials,Handcrafted Detailing||Simpler detailing|Standardized detailing,Cushioned PU-poured footbeds||Basic foam insoles|Standard comfort systems,Original Indian design language||Trend-led designs|Global silhouettes" | split: "," -%}
+        {%- for row in default_rows -%}
+          {%- assign parts = row | split: "|" -%}
+          <div class="ct-row">
+            <div class="ct-cell ct-feature-col">
+              <strong>{{ parts[0] }}</strong>
+            </div>
+            <div class="ct-cell ct-highlight-col">
+              <span class="ct-mini-logo">
+                {%- if section.settings.brand_logo != blank -%}
+                  <img src="{{ section.settings.brand_logo | image_url: width: 60 }}" alt="{{ section.settings.brand_name }}" loading="lazy">
+                {%- else -%}
+                  {{ section.settings.brand_name | default: 'Your Brand' }}
+                {%- endif -%}
+              </span>
+              {%- if parts[1] != blank -%}
+                <span class="ct-highlight-text">{{ parts[1] }}</span>
+              {%- else -%}
+                <span class="ct-check">
+                  <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M5 13l4 4L19 7" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                </span>
+              {%- endif -%}
+            </div>
+            <div class="ct-cell ct-normal-col" data-label="{{ section.settings.competitor1_title }}">
+              <span class="ct-muted-text">{{ parts[2] }}</span>
+            </div>
+            <div class="ct-cell ct-normal-col" data-label="{{ section.settings.competitor2_title }}">
+              <span class="ct-muted-text">{{ parts[3] }}</span>
+            </div>
+          </div>
+        {%- endfor -%}
+      {%- endif -%}
+
+    </div>
+  </div>
+</div>
+
+<style>
+  .comparison-table-section {
+    padding: 48px 16px;
+  }
+
+  .comparison-table-wrapper {
+    max-width: 900px;
+    margin: 0 auto;
+    overflow-x: auto;
+  }
+
+  .comparison-table {
+    display: grid;
+    grid-template-columns: 1.3fr 1fr 1fr 1fr;
+    border: 1px solid #ececec;
+    border-radius: 16px;
+    overflow: hidden;
+    background: #fff;
+    min-width: 640px;
+    position: relative;
+  }
+
+  .ct-row {
+    display: contents;
+  }
+
+  .ct-cell {
+    padding: 20px 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    border-bottom: 1px solid #f0f0f0;
+    font-size: 14px;
+  }
+
+  .ct-feature-col {
+    justify-content: flex-start;
+    text-align: left;
+    color: #1a1a1a;
+    font-size: 15px;
+  }
+
+  .ct-header-row .ct-cell {
+    border-bottom: none;
+    padding-top: 28px;
+    padding-bottom: 20px;
+  }
+
+  .ct-highlight-header img {
+    max-width: 110px;
+    height: auto;
+  }
+
+  .ct-brand-name {
+    font-weight: 800;
+    font-size: 18px;
+  }
+
+  .ct-col-title {
+    font-weight: 700;
+    color: #1a1a1a;
+    font-size: 14px;
+  }
+
+  /* Highlighted middle column with gradient */
+  .ct-highlight-col {
+    position: relative;
+    color: #fff;
+    font-weight: 600;
+  }
+
+  .ct-highlight-col::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, #eaf0ff 0%, #3b5bfd 100%);
+    z-index: 0;
+  }
+
+  /* Give the highlight column rounded top/bottom only on first/last row */
+  .ct-header-row .ct-highlight-col::after {
+    border-radius: 16px 16px 0 0;
+  }
+
+  .comparison-table > .ct-row:last-child .ct-highlight-col::after {
+    border-radius: 0 0 16px 16px;
+  }
+
+  .ct-highlight-col > * {
+    position: relative;
+    z-index: 1;
+  }
+
+  .ct-highlight-text {
+    font-weight: 700;
+  }
+
+  .ct-mini-logo {
+    display: none;
+  }
+
+  .ct-check {
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    background: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #3b5bfd;
+  }
+
+  .ct-check svg {
+    width: 15px;
+    height: 15px;
+  }
+
+  .ct-muted-text {
+    color: #9a9a9a;
+    line-height: 1.4;
+  }
+
+  /* Mobile: stacked card layout, no horizontal scroll */
+  @media (max-width: 749px) {
+    .comparison-table-wrapper {
+      overflow-x: visible;
+    }
+
+    .comparison-table {
+      display: block;
+      min-width: 0;
+    }
+
+    /* Hide the desktop header row entirely — labels move inline per cell instead */
+    .ct-row.ct-header-row {
+      display: none !important;
+    }
+
+    .ct-row {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 6px;
+      padding: 16px 14px;
+      border-bottom: 1px solid #f0f0f0;
+    }
+
+    .comparison-table > .ct-row:last-child {
+      border-bottom: none;
+    }
+
+    .ct-feature-col {
+      grid-column: 1 / -1;
+      padding: 0 0 10px 0;
+      border-bottom: none;
+      font-size: 14px;
+    }
+
+    .ct-highlight-col,
+    .ct-normal-col {
+      flex-direction: column;
+      padding: 10px 6px;
+      border-bottom: none;
+      border-radius: 10px;
+      font-size: 12px;
+    }
+
+    .ct-normal-col {
+      background: #fafafa;
+    }
+
+    .ct-highlight-col::after {
+      border-radius: 10px;
+    }
+
+    /* Each row is its own rounded card now */
+    .comparison-table > .ct-row:last-child .ct-highlight-col::after {
+      border-radius: 10px;
+    }
+
+    .ct-highlight-col,
+    .ct-normal-col {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+    }
+
+    /* Inline column label shown above the value — normal columns only (highlight column shows a real logo instead) */
+    .ct-normal-col::before {
+      content: attr(data-label);
+      position: absolute;
+      top: 8px;
+      left: 4px;
+      right: 4px;
+      text-align: center;
+      font-size: 8px;
+      line-height: 1.2;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.02em;
+      opacity: 0.75;
+      z-index: 1;
+      word-break: break-word;
+      color: #9a9a9a;
+    }
+
+    .ct-normal-col {
+      position: relative;
+      padding-top: 34px;
+    }
+
+    .ct-highlight-col {
+      position: relative;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .ct-mini-logo {
+      display: block;
+      font-size: 9px;
+      font-weight: 700;
+      letter-spacing: 0.02em;
+      opacity: 0.9;
+    }
+
+    .ct-mini-logo img {
+      max-width: 34px;
+      height: auto;
+      display: block;
+      margin: 0 auto;
+    }
+
+    .ct-normal-col .ct-muted-text,
+    .ct-highlight-col .ct-highlight-text {
+      font-size: 11px;
+      line-height: 1.3;
+    }
+
+    .ct-check {
+      width: 22px;
+      height: 22px;
+    }
+
+    .ct-check svg {
+      width: 12px;
+      height: 12px;
+    }
+  }
+</style>
+
+{% schema %}
+{
+  "name": "Comparison Table",
+  "settings": [
+    {
+      "type": "text",
+      "id": "brand_name",
+      "label": "Your brand name",
+      "default": "Your Brand"
+    },
+    {
+      "type": "image_picker",
+      "id": "brand_logo",
+      "label": "Your brand logo (optional, replaces brand name text)"
+    },
+    {
+      "type": "text",
+      "id": "competitor1_title",
+      "label": "Competitor 1 column title",
+      "default": "Local Brand"
+    },
+    {
+      "type": "text",
+      "id": "competitor2_title",
+      "label": "Competitor 2 column title",
+      "default": "International Brand"
+    },
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Section background color",
+      "default": "#ffffff"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "row",
+      "name": "Comparison Row",
+      "settings": [
+        {
+          "type": "text",
+          "id": "feature_label",
+          "label": "Feature label",
+          "default": "Feature name"
+        },
+        {
+          "type": "text",
+          "id": "highlight_text",
+          "label": "Your brand cell text (leave blank to show a checkmark instead)"
+        },
+        {
+          "type": "text",
+          "id": "competitor1_text",
+          "label": "Competitor 1 cell text",
+          "default": "—"
+        },
+        {
+          "type": "text",
+          "id": "competitor2_text",
+          "label": "Competitor 2 cell text",
+          "default": "—"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Comparison Table",
+      "blocks": [
+        { "type": "row", "settings": { "feature_label": "Return / exchange support", "highlight_text": "30-day" } },
+        { "type": "row", "settings": { "feature_label": "High-quality Materials" } },
+        { "type": "row", "settings": { "feature_label": "Handcrafted Detailing" } },
+        { "type": "row", "settings": { "feature_label": "Cushioned PU-poured footbeds" } },
+        { "type": "row", "settings": { "feature_label": "Original Indian design language" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

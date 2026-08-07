@@ -1,0 +1,553 @@
+{% comment %}
+Custom Collection Template with Faceted Filter Drawer, AJAX Filters, Sort Dropdown, and Pagination (with fallback)
+{% endcomment %}
+
+<section class="collection-banner">
+  {% if collection.image %}
+    <img src="{{ collection.image | image_url: width: 1600 }}" alt="{{ collection.title }}">
+  {% endif %}
+  {% if collection.description != blank %}
+    <div class="collection-description">{{ collection.description }}</div>
+  {% endif %}
+</section>
+
+<section class="collection-controls">
+  <div class="left-controls">
+    {% if collection.filters.size > 0 %}
+      <button class="filter-toggle" onclick="openFilterDrawer()">Filter</button>
+    {% endif %}
+  </div>
+  <div class="right-controls">
+    <form id="SortByForm" method="get" action="{{ collection.url }}">
+      <select name="sort_by" id="SortBySelect">
+        {% for option in collection.sort_options %}
+          <option value="{{ option.value }}" {% if option.value == collection.sort_by %}selected{% endif %}>
+            {{ option.name }}
+          </option>
+        {% endfor %}
+      </select>
+      <noscript>
+        <button type="submit">Sort</button>
+      </noscript>
+    </form>
+  </div>
+</section>
+
+<!-- FILTER DRAWER -->
+<div id="FilterDrawer" class="filter-drawer">
+  <div class="filter-drawer-header">
+    <h2>Filters</h2>
+    <button class="filter-close" onclick="closeFilterDrawer()">&times;</button>
+  </div>
+
+  {% if collection.filters.size > 0 %}
+    <form id="CollectionFilters" class="filter-form" method="get" action="{{ collection.url }}">
+      {% for filter in collection.filters %}
+        <div class="filter-group">
+          <details>
+            <summary>{{ filter.label }}</summary>
+            <div class="filter-values">
+              {% for value in filter.values %}
+                <label>
+                  <input type="checkbox" 
+                         name="{{ value.param_name }}" 
+                         value="{{ value.value }}" 
+                         {% if value.active %}checked{% endif %}>
+                  {{ value.label }} ({{ value.count }})
+                </label>
+              {% endfor %}
+            </div>
+          </details>
+        </div>
+      {% endfor %}
+      <div class="filter-actions">
+        <button type="submit" class="apply-btn">Apply</button>
+        <a href="{{ collection.url }}" class="clear-btn">Clear All</a>
+      </div>
+      <noscript>
+        <button type="submit" class="apply-btn">Update Results</button>
+      </noscript>
+    </form>
+  {% endif %}
+</div>
+
+<!-- PRODUCT GRID + PAGINATION WRAPPER -->
+<section id="CollectionProductWrapper">
+  {% paginate collection.products by section.settings.products_per_page %}
+    <div class="product-grid">
+      {% for product in collection.products %}
+        <div class="product-card">
+          <a href="{{ product.url }}">
+            <div class="product-image" style="position: relative;">
+              <img src="{{ product.featured_image | image_url: width: 600 }}" alt="{{ product.title }}" loading="lazy">
+
+            {%- comment -%} ✅ Show badge only if metafield is true {%- endcomment -%}
+                  {% if product.metafields.custom.genuineleather == true %}
+                          <div class="genuine-leather-badge">
+                            <img src="https://cdn.shopify.com/s/files/1/0636/5128/3192/files/image-removebg-preview.png?v=1758192680" alt="Genuine Leather Badge">
+                          </div>
+                        {% else %}
+                          <div class="vegan-badge">
+                            <img src="https://cdn.shopify.com/s/files/1/0636/5128/3192/files/vegan-removebg-preview.png?v=1772695454" alt="Vegan Badge">
+                          </div>
+                        {% endif %}
+
+
+            {%- comment -%} ✅ Best Seller Text Badge {%- endcomment -%}
+              {% if product.tags contains "bestseller2025" or product.tags contains "bestseller" %}
+                <span class="best-seller-badge">Best Seller</span>
+              {% endif %}
+
+            {%- comment -%} ✅ New Arrival Text Badge {%- endcomment -%}
+              {% if product.tags contains "New Arrivals" or product.tags contains "new2025" %}
+                <span class="new-arrival-badge">New Arrival</span>
+              {% endif %}
+
+
+            </div>
+            <p class="product-title">{{ product.title }}</p>
+            <p class="product-price-badge">
+  <span class="current-price">
+    {{ product.price | money }}
+  </span>
+
+  {% if product.compare_at_price_max > product.price %}
+    <span class="compare-price">
+      {{ product.compare_at_price_max | money }}
+    </span>
+
+    {% assign discount = product.compare_at_price_max 
+      | minus: product.price 
+      | times: 100 
+      | divided_by: product.compare_at_price_max %}
+
+    <span class="price-discount-badge">
+      {{ discount | round }}% OFF
+    </span>
+  {% endif %}
+</p>
+            <p class="product-price">
+              {{ product.price | money }}
+              {% if product.compare_at_price_max > product.price %}
+                <span class="compare-price">{{ product.compare_at_price_max | money }}</span>
+              {% endif %}
+            </p>
+          </a>
+        </div>
+      {% endfor %}
+    </div>
+
+    <!-- PAGINATION USING SNIPPET -->
+    <div class="pagination-wrapper">
+      {% render 'collection-pagination', paginate: paginate %}
+    </div>
+  {% endpaginate %}
+</section>
+
+
+<!-- CSS -->
+<link rel="stylesheet" href="{{ 'collection.css' | asset_url }}">
+
+<!-- LOADING SPINNER -->
+<div id="collection-loading" class="loading-spinner" style="display:none;">
+  Loading...
+</div>
+
+<script>
+/* ---------- Helpers ---------- */
+function openFilterDrawer(){ document.getElementById('FilterDrawer').classList.add('open'); }
+function closeFilterDrawer(){ document.getElementById('FilterDrawer').classList.remove('open'); }
+function showLoading(){ document.getElementById('collection-loading').style.display='block'; }
+function hideLoading(){ document.getElementById('collection-loading').style.display='none'; }
+
+function getCurrentPageFromUrl(url) {
+  try {
+    const params = new URL(url, window.location.origin).searchParams;
+    const p = parseInt(params.get('page')) || 1;
+    return p;
+  } catch (e) {
+    return 1;
+  }
+}
+function buildNextPageUrl(url) {
+  // preserve pathname + all existing query params, but increment "page"
+  const u = new URL(url, window.location.origin);
+  const params = u.searchParams;
+  const current = parseInt(params.get('page')) || 1;
+  params.set('page', current + 1);
+  u.search = params.toString();
+  return u.toString();
+}
+
+/* ---------- Infinite-scroll state ---------- */
+let isLoading = false;
+let reachedEnd = false;
+let lastFetchTime = 0;
+const MIN_FETCH_INTERVAL = 600; // ms throttle
+
+/* ---------- Load next page and append products ---------- */
+async function loadNextPage() {
+  if (isLoading || reachedEnd) return;
+  // throttle
+  const now = Date.now();
+  if (now - lastFetchTime < MIN_FETCH_INTERVAL) return;
+  lastFetchTime = now;
+
+  // Build URL for next page based on current window location
+  const nextUrl = buildNextPageUrl(window.location.href);
+  isLoading = true;
+  showLoading();
+
+  try {
+    const resText = await fetch(nextUrl, { credentials: 'same-origin' }).then(r => r.text());
+    const parser = new DOMParser();
+    const html = parser.parseFromString(resText, 'text/html');
+
+    // Find product grid in returned HTML
+    const incomingGrid = html.querySelector('.product-grid');
+    if (!incomingGrid) {
+      // No grid -> assume no more pages
+      reachedEnd = true;
+      isLoading = false;
+      hideLoading();
+      return;
+    }
+
+    // Extract product nodes
+    const newItemsHTML = incomingGrid.innerHTML.trim();
+    // If server returned same content or empty, treat as end
+    if (!newItemsHTML) {
+      reachedEnd = true;
+      isLoading = false;
+      hideLoading();
+      return;
+    }
+
+    // Append items
+    const productGrid = document.querySelector('.product-grid');
+    if (!productGrid) {
+      console.error('Infinite scroll: .product-grid not found on page.');
+      reachedEnd = true;
+      isLoading = false;
+      hideLoading();
+      return;
+    }
+
+    // We must ensure we only append items that aren't duplicates.
+    // Simple approach: append all nodes, then remove duplicates by checking existing product links.
+    // Create temporary container to parse nodes
+    const temp = document.createElement('div');
+    temp.innerHTML = newItemsHTML;
+    const incomingCards = Array.from(temp.children);
+
+    // Build a set of existing product hrefs to avoid dupes
+    const existingHrefs = new Set(
+      Array.from(productGrid.querySelectorAll('.product-card a'))
+        .map(a => a.getAttribute('href'))
+        .filter(Boolean)
+    );
+
+    let appendedCount = 0;
+    incomingCards.forEach(card => {
+      const a = card.querySelector('a[href]');
+      const href = a ? a.getAttribute('href') : null;
+      if (href && existingHrefs.has(href)) {
+        // duplicate — skip
+        return;
+      }
+      // append
+      productGrid.insertAdjacentElement('beforeend', card);
+      appendedCount++;
+    });
+
+    // If nothing appended, probably we've reached the last page
+    if (appendedCount === 0) {
+      reachedEnd = true;
+    } else {
+      // update browser history: set page param to new page (so sharing works)
+      const newPage = getCurrentPageFromUrl(window.location.href) + 1;
+      const newUrl = new URL(window.location.href, window.location.origin);
+      newUrl.searchParams.set('page', newPage);
+      window.history.replaceState({}, '', newUrl.toString());
+    }
+
+    // If pagination exists in returned HTML, we can check if there's another page.
+    const incomingPagination = html.querySelector('.pagination-wrapper');
+    if (incomingPagination) {
+      // Try to detect presence of a next page link in pagination HTML by looking for page links
+      const nextLink = incomingPagination.querySelector('a.page-link[rel="next"], a.next, a[aria-label="Next"], a:contains("Next")');
+      // The above :contains won't work in querySelector; fallback: examine anchors and check page param > current
+      if (!nextLink) {
+        // Try to infer: if incoming pagination has any anchor with page param > current page, we keep going
+        const anchors = Array.from(incomingPagination.querySelectorAll('a[href]'));
+        const currentPage = getCurrentPageFromUrl(window.location.href);
+        const hasHigherPage = anchors.some(a=>{
+          try {
+            const hrefPage = new URL(a.href, window.location.origin).searchParams.get('page');
+            return hrefPage && parseInt(hrefPage) > currentPage;
+          } catch (e) { return false; }
+        });
+        if (!hasHigherPage) reachedEnd = true;
+      }
+    }
+
+  } catch (err) {
+    console.error('Infinite scroll fetch error:', err);
+    // On error, allow retry later but do not mark reachedEnd
+  } finally {
+    isLoading = false;
+    hideLoading();
+  }
+}
+
+/* ---------- Scroll trigger (threshold) ---------- */
+function onScrollTrigger() {
+  if (reachedEnd) return;
+  
+  const scrollPos = window.scrollY + window.innerHeight;
+  
+  // 🔸 Make trigger earlier on smaller screens
+  const triggerOffset = window.innerWidth <= 768 ? 1200   // phones
+                        : window.innerWidth <= 1024 ? 900  // tablets
+                        : 700;                             // desktops
+
+  const triggerPoint = document.body.offsetHeight - triggerOffset;
+  
+  if (scrollPos >= triggerPoint) {
+    loadNextPage();
+  }
+}
+const throttledScroll = throttle(onScrollTrigger, 200);
+window.addEventListener('scroll', throttledScroll);
+window.addEventListener('resize', throttledScroll);
+
+/* ---------- Throttle helper ---------- */
+function throttle(fn, wait) {
+  let last = 0;
+  let timeout = null;
+  return function(...args) {
+    const now = Date.now();
+    const remaining = wait - (now - last);
+    if (remaining <= 0) {
+      if (timeout) { clearTimeout(timeout); timeout = null; }
+      last = now;
+      fn.apply(this, args);
+    } else if (!timeout) {
+      timeout = setTimeout(() => {
+        last = Date.now();
+        timeout = null;
+        fn.apply(this, args);
+      }, remaining);
+    }
+  };
+}
+
+/* ---------- AJAX filter / sort handlers (reset scroll state) ---------- */
+function updateCollection(url){
+  showLoading();
+  fetch(url)
+    .then(res => res.text())
+    .then(data => {
+      const parser = new DOMParser();
+      const htmlDoc = parser.parseFromString(data, 'text/html');
+      const newContent = htmlDoc.querySelector('#CollectionProductWrapper')?.innerHTML;
+      if (newContent) {
+        document.querySelector('#CollectionProductWrapper').innerHTML = newContent;
+        // Reset infinite scroll state so new results can load from page=2 onward
+        reachedEnd = false;
+        isLoading = false;
+        lastFetchTime = 0;
+        // Clear page param in URL (we want to start back at page 1)
+        const cleaned = new URL(window.location.href, window.location.origin);
+        cleaned.searchParams.delete('page');
+        window.history.pushState({}, '', url);
+      }
+      hideLoading();
+    })
+    .catch((err)=>{
+      console.error('updateCollection error', err);
+      hideLoading();
+    });
+}
+
+// Intercept filter submit
+document.getElementById('CollectionFilters')?.addEventListener('submit', function(e){
+  if (window.fetch) {
+    e.preventDefault();
+    const params = new URLSearchParams(new FormData(this)).toString();
+    updateCollection(`${window.location.pathname}?${params}`);
+  }
+});
+
+// Intercept sort change
+document.getElementById('SortBySelect')?.addEventListener('change', function(){
+  if (window.fetch) {
+    const params = new URLSearchParams(window.location.search);
+    params.set('sort_by', this.value);
+    // remove page param when changing sort so infinite scroll restarts properly
+    params.delete('page');
+    updateCollection(`${window.location.pathname}?${params.toString()}`);
+  } else {
+    this.form.submit();
+  }
+});
+
+/* ---------- Hide pagination visually but keep for no-JS users ---------- */
+document.addEventListener('DOMContentLoaded', function(){
+  const wrap = document.querySelector('.pagination-wrapper');
+  if (wrap) wrap.style.display = 'none';
+  // ensure spinner is hidden initially
+  hideLoading();
+});
+</script>
+
+
+<link rel="stylesheet" href="{{ 'collection.css' | asset_url }}">
+
+<style>
+.collection-banner { text-align:center; padding:0px; background:#f9f9f9; }
+.collection-banner img { max-width:100%; height:auto; margin-bottom:20px; }
+.collection-banner h1 { font-family:'Montserrat',sans-serif; font-weight:700; font-size:2rem; margin:10px 0; }
+.collection-description { max-width:800px; margin:0 auto; font-size:1rem; color:#555; }
+
+.collection-controls { max-width:100%; margin:30px auto; padding:0 20px;
+  display:flex; justify-content:space-between; align-items:center; }
+.filter-toggle { padding:10px 20px; font-family:'Montserrat',sans-serif; font-weight:600;
+  cursor:pointer; background:#fff; color:#000; border:1px solid black; }
+#SortBySelect { padding:10px; font-family:'Montserrat',sans-serif; font-weight:600;
+  border:1px solid black; background:#fff; cursor:pointer; }
+
+/* Grid styles */
+.product-grid { display:grid; padding:1%;
+  grid-template-columns:repeat(auto-fill, minmax(250px, 1fr)); gap:5px; }
+.product-card { text-align:center; padding:8%; background:#f2f2f2; font-family:'Montserrat',sans-serif; }
+.product-card a { text-decoration:none; color:inherit; }
+.product-image img { width:100%; height:auto; }
+.product-title { font-weight:500; font-size:0.7rem; margin:5px 0; }
+.product-price { font-size:1rem; margin:5px 0; display:none}
+.compare-price { text-decoration:line-through; color:#777; font-size:0.9rem; margin-left:5px; }
+
+
+.genuine-leather-badge {
+    position: absolute;
+    top: -7px;
+    left: -15px;
+    z-index: 2;
+}
+.genuine-leather-badge img {
+  width: 60px;   /* adjust size */
+  height: auto;
+}
+
+.vegan-badge{
+  position: absolute;
+    top: -7px;
+    left: -15px;
+    z-index: 2;
+}
+
+.vegan-badge img{
+  width: 35px;   /* adjust size */
+  height: auto;
+  
+}
+
+
+#collection-loading {
+  text-align: center;
+  padding: 20px;
+  font-weight: bold;
+  display: none;
+}
+/* Best Seller text badge */
+  .best-seller-badge {
+    position: absolute;
+    top: -15px;
+    right: -15px;
+    background: #e63946;
+    color: #fff;
+    font-size: 8px;
+    font-weight: bold;
+    padding: 4px 10px;
+    border-radius: 0px;
+    text-transform: uppercase;
+    z-index: 2;
+}
+ /* New Arrival text badge */
+  .new-arrival-badge {
+    position: absolute;
+    top: 10px; /* Placed below Best Seller if both exist */
+    right: -15px;
+    background: #FFD747; /* Green/teal */
+    color: 000;
+    font-size: 8px;
+    font-weight: bold;
+    padding: 4px 8px;
+    border-radius: 0px;
+    text-transform: uppercase;
+    z-index: 2;
+  }
+
+/* Drawer */
+.filter-drawer { position:fixed; top:0; left:-100%; height:100%; width:80%; max-width:320px;
+  background:#fff; overflow-y:auto; transition:left 0.3s ease; z-index:9999;
+  padding:20px; box-shadow:2px 0 10px rgba(0,0,0,0.2); }
+.filter-drawer.open { left:0; }
+.filter-drawer-header { display:flex; justify-content:space-between; align-items:center; margin-bottom:20px; font-family:'Montserrat',sans-serif; }
+.filter-drawer-header h2 { font-size:1.5rem; font-weight:700; }
+.filter-close { background:none; border:none; font-size:2rem; cursor:pointer; }
+.filter-group { margin-bottom:15px; font-family:'Montserrat',sans-serif; }
+.filter-group summary { font-weight:600; cursor:pointer; padding:10px 0; border-bottom:1px solid #ddd; }
+.filter-values { padding:10px 0; }
+.filter-values label { display:block; margin-bottom:5px; font-size:0.95rem; }
+.filter-values input { margin-right:8px; }
+.filter-actions { position:sticky; bottom:0; background:#fff; padding:10px 0; display:flex; justify-content:space-between; border-top:1px solid #ddd; margin-top:20px; }
+.apply-btn, .clear-btn { padding:10px 15px; font-family:'Montserrat',sans-serif; font-weight:600; text-decoration:none; }
+.apply-btn { background:#000; color:#fff; border:none; cursor:pointer; }
+.clear-btn { background:none; color:#000; border:none; }
+
+/* Pagination */
+.pagination { text-align:center; margin:0px 0; font-family:'Montserrat',sans-serif; }
+.pagination a.page-link { margin:0 5px; text-decoration:none; color:#000; border:1px solid #000; padding:5px 10px; font-size:0.9rem; }
+.pagination .active { margin:0 5px; padding:5px 10px; font-weight:700; }
+
+@media (max-width:768px){
+  .product-grid { grid-template-columns:repeat(2,1fr); }
+  .pagination a.page-link{
+  font-size:0.5rem;}
+
+  .pagination{
+    margin:0px 0;
+  }
+}
+
+.product-price-badge {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.current-price {
+  font-weight: 600;
+}
+
+.compare-price {
+  text-decoration: line-through;
+  color: #888;
+  font-size: 13px;
+}
+
+.price-discount-badge {
+  background-color: #d60000;
+  color: #ffffff;
+  font-size: 10px;     /* smaller */
+  font-weight: 600;
+  padding: 2px 5px;
+  border-radius: 3px;
+  line-height: 1;
+  white-space: nowrap;
+}
+
+</style>

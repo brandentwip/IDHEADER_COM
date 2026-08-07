@@ -1,0 +1,463 @@
+<style>
+
+/* =========================================
+   ID PRODUCT POLICIES
+   STRICT REFERENCE MATCH
+   ========================================= */
+
+.product-info-accordion {
+  width: 100%;
+  margin: 36px 0 0 !important;
+  padding: 0 !important;
+}
+
+/* Remove ALL borders */
+.product-accordion-item,
+.product-accordion-item:first-child,
+.product-accordion-item:last-child {
+  border: none !important;
+  border-top: none !important;
+  border-bottom: none !important;
+  box-shadow: none !important;
+}
+
+/* =========================================
+   ACCORDION HEADER
+   ========================================= */
+
+.product-accordion-header {
+  width: 100% !important;
+
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+
+  box-sizing: border-box !important;
+
+  padding: 0 !important;
+  margin: 0 !important;
+
+  height: 53px !important;
+  min-height: 53px !important;
+
+  background: transparent !important;
+
+  border: 0 !important;
+  border-top: 0 !important;
+  border-bottom: 0 !important;
+
+  outline: none !important;
+  box-shadow: none !important;
+
+  cursor: pointer;
+
+  font-family: inherit !important;
+
+  font-size: 16px !important;
+  line-height: 1.2 !important;
+  font-weight: 600 !important;
+
+  letter-spacing: 0 !important;
+  text-align: left !important;
+
+  color: #111 !important;
+}
+
+/* Remove theme pseudo-elements */
+.product-accordion-header::before,
+.product-accordion-header::after {
+  display: none !important;
+  content: none !important;
+}
+
+/* =========================================
+   TITLE
+   ========================================= */
+
+.product-accordion-header span:first-child {
+  font-size: 16px !important;
+  line-height: 1.2 !important;
+  font-weight: 600 !important;
+
+  color: #111 !important;
+}
+
+
+/* =========================================
+   PLUS ICON
+   ========================================= */
+
+.product-accordion-header .icon {
+  display: flex !important;
+
+  align-items: center !important;
+  justify-content: center !important;
+
+  width: 20px !important;
+  height: 20px !important;
+
+  margin: 0 !important;
+  padding: 0 !important;
+
+  flex: 0 0 20px !important;
+
+  font-size: 22px !important;
+  line-height: 20px !important;
+
+  font-weight: 400 !important;
+
+  color: #111 !important;
+
+  transform: none;
+  transition: transform 0.2s ease;
+}
+
+/* Turn + into × when opened */
+.product-accordion-item.active .icon {
+  transform: rotate(45deg);
+}
+
+
+/* =========================================
+   ACCORDION CONTENT
+   ========================================= */
+
+.product-accordion-content {
+  display: none;
+
+  width: 100% !important;
+
+  box-sizing: border-box !important;
+
+  padding: 0 0 14px !important;
+  margin: 0 !important;
+
+  border: none !important;
+
+  font-size: 13px !important;
+  line-height: 1.5 !important;
+
+  color: #555 !important;
+}
+
+.product-accordion-content p {
+  margin: 0 0 10px !important;
+}
+
+.product-accordion-content p:last-child {
+  margin-bottom: 0 !important;
+}
+
+.product-accordion-content ul {
+  margin: 8px 0 0 !important;
+  padding-left: 18px !important;
+}
+
+.product-accordion-content li {
+  margin-bottom: 5px !important;
+}
+
+.product-accordion-content a {
+  color: inherit !important;
+  text-decoration: underline;
+}
+
+
+/* =========================================
+   CLEARANCE MESSAGE
+   ========================================= */
+
+.idc-clearance-alert {
+  background: #fff5f5;
+
+  border-left: 3px solid #d60000 !important;
+
+  padding: 10px 12px !important;
+
+  margin: 0 0 14px !important;
+
+  font-size: 13px !important;
+  line-height: 1.5 !important;
+}
+
+
+/* =========================================
+   MOBILE
+   ========================================= */
+
+@media screen and (max-width: 749px) {
+
+  .product-info-accordion {
+    margin-top: 32px !important;
+  }
+
+  .product-accordion-header {
+    height: 53px !important;
+    min-height: 53px !important;
+
+    padding: 0 !important;
+  }
+
+  .product-accordion-header span:first-child {
+    font-size: 16px !important;
+    font-weight: 600 !important;
+  }
+
+  .product-accordion-header .icon {
+    width: 20px !important;
+    height: 20px !important;
+
+    flex-basis: 20px !important;
+
+    font-size: 22px !important;
+  }
+
+  .product-accordion-content {
+    padding-bottom: 14px !important;
+
+    font-size: 14px !important;
+    line-height: 1.5 !important;
+  }
+
+}
+
+</style>
+
+
+<!-- =====================================================
+     PRODUCT INFORMATION ACCORDIONS
+     ===================================================== -->
+
+<div class="product-info-accordion">
+
+
+  <!-- ================= FEATURES ================= -->
+
+  <div class="product-accordion-item">
+
+    <button
+      type="button"
+      class="product-accordion-header"
+      aria-expanded="false"
+    >
+
+      <span>Description</span>
+
+      <span class="icon">+</span>
+
+    </button>
+
+
+    <div class="product-accordion-content">
+
+      {{ product.description }}
+
+    </div>
+
+  </div>
+
+
+  <!-- ================= SHIPPING ================= -->
+
+  <div class="product-accordion-item">
+
+    <button
+      type="button"
+      class="product-accordion-header"
+      aria-expanded="false"
+    >
+
+      <span>Delivery and Returns</span>
+
+      <span class="icon">+</span>
+
+    </button>
+
+
+    <div class="product-accordion-content">
+
+
+      {% if product.collections contains collections['clearancesale'] %}
+
+        <p class="idc-clearance-alert">
+
+          <strong>Note:</strong>
+          This item is part of our
+          <strong>Clearance Sale</strong>.
+
+          Therefore, it is
+          <strong>not eligible for return or exchange</strong>.
+
+          Please confirm your selection before completing your purchase.
+
+          Clearance Sale items are also
+          <strong>not eligible for any other schemes / promotions.</strong>
+
+        </p>
+
+      {% endif %}
+
+
+      <p>
+        Return and Exchange Policy offer you the option to return or exchange
+        items purchased on <strong>IDCult.com</strong> within 7 days of receipt.
+      </p>
+
+
+      <p>
+        Products must be returned with tags and original packaging intact,
+        unused and undamaged.
+      </p>
+
+
+      <p>
+        Gifts or combo items must be returned in their entirety.
+      </p>
+
+
+      <p>
+
+        For returns or exchanges, contact
+        <a href="mailto:care@idcult.com">care@idcult.com</a>
+
+        <br>
+
+        Phone:
+        <a href="tel:+919910433300">
+          +91 9910433300
+        </a>
+
+      </p>
+
+    </div>
+
+  </div>
+
+
+  <!-- ================= ORIGIN ================= -->
+
+  <div class="product-accordion-item">
+
+    <button
+      type="button"
+      class="product-accordion-header"
+      aria-expanded="false"
+    >
+
+      <span>Origin</span>
+
+      <span class="icon">+</span>
+
+    </button>
+
+
+    <div class="product-accordion-content">
+
+
+      <p>
+        <strong>Country of Origin:</strong>
+        INDIA
+      </p>
+
+
+      <p>
+
+        <strong>Manufacturer / Packer / Importer</strong>
+
+        <br>
+
+        M&B FOOTWEAR PRIVATE LIMITED,
+        <br>
+        C-33, Sector 58,
+        <br>
+        Noida, Gautam Buddha Nagar,
+        <br>
+        Uttar Pradesh - 201301
+
+      </p>
+
+
+      <p>
+
+        <strong>Marketed By</strong>
+
+        <br>
+
+        M&B FOOTWEAR PRIVATE LIMITED
+
+      </p>
+
+
+      <p>
+
+        <strong>Customer Care</strong>
+
+        <br>
+
+        Phone:
+        <a href="tel:+919910433300">
+          +91 9910433300
+        </a>
+
+        <br>
+
+        Email:
+        <a href="mailto:care@idcult.com">
+          care@idcult.com
+        </a>
+
+      </p>
+
+
+    </div>
+
+  </div>
+
+
+</div>
+
+
+<script>
+
+document.addEventListener('DOMContentLoaded', function () {
+
+  document.querySelectorAll('.product-accordion-header').forEach(function (button) {
+
+    button.addEventListener('click', function () {
+
+      var item = button.closest('.product-accordion-item');
+
+      var content = item.querySelector('.product-accordion-content');
+
+      var isOpen = item.classList.contains('active');
+
+
+      /* Close this accordion */
+      if (isOpen) {
+
+        item.classList.remove('active');
+
+        button.setAttribute('aria-expanded', 'false');
+
+        content.style.display = 'none';
+
+      }
+
+      /* Open this accordion */
+      else {
+
+        item.classList.add('active');
+
+        button.setAttribute('aria-expanded', 'true');
+
+        content.style.display = 'block';
+
+      }
+
+    });
+
+  });
+
+});
+
+</script>

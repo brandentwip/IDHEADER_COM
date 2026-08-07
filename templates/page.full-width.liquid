@@ -1,0 +1,113 @@
+<div class="page-content page-full">
+
+  {%- render 'breadcrumbs' -%}
+
+  <div class="page-width">
+    <header class="section-header">
+      <h1 class="section-header__title">{{ page.title }}</h1>
+    </header>
+  </div>
+
+  <div class="rte rte--nomargin">
+    {{ page.content }}
+  </div>
+
+</div>
+{% comment %}
+  
+
+{% if page.url == '/pages/main-faqs' %}
+<script type="application/ld+json"> 
+{ 
+  "@context": "https://schema.org", 
+  "@type": "FAQPage", 
+  "mainEntity": [{ 
+    "@type": "Question", 
+    "name": "Having Problem Accessing Websites?", 
+    "acceptedAnswer": { 
+      "@type": "Answer", 
+      "text": "We suggest that you have the latest version of your operating system provider 
+e.g. Windows, OSX etc. If you're still having problems, contact our Customer Care Team and 
+include: 
+As much detail as you can about the issue Screen shots of any error message you get 
+Which web browser you are using (e.g. Internet Explorer, Firefox, Chrome, Safari etc.) 
+What you have done so far to try to resolve it" 
+    } 
+  },{ 
+    "@type": "Question", 
+    "name": "If My Article Is Out Of Stock Will That Article Be Replenished Again?", 
+    "acceptedAnswer": { 
+      "@type": "Answer", 
+      "text": "We don't currently have the facility to let you know if or when an item is due back 
+in stock. As we like to offer you new and exciting products regularly we don't tend to restock 
+a lot of our items again.We are always looking at improving your shopping experience so if 
+this changes, we'll let you know. You could also look for something similar – all you need to 
+do is type a product description into the search box on our website. You can narrow down 
+the selection by using our 'Search' section on the right-hand side of the screen. Our New 
+Arrivals section includes all our latest items, so it's always worth a look!" 
+    } 
+  },{ 
+    "@type": "Question", 
+    "name": "What Is Your Shipping Policy?", 
+    "acceptedAnswer": { 
+      "@type": "Answer", 
+      "text": "We cater to customers located within India only. At present we do not accept 
+orders for international shipping. We undertake to ship your orders anywhere in India. We 
+are committed to delivering your order accurately, in good condition, and on time.  We do not 
+charge you for Shipping. However, we charge a flat fee of Rs. 49 on COD orders. We ship 
+on all week days (Monday to Saturday), excluding public holidays. We generally ship out 
+orders from our warehouse within 48 hours of orders receipt and the orders should reach 
+you within 5 - 7 days. We have tied up with several logistics partners for smooth deliveries 
+across India. All your shipment related queries would be addressed directly by our customer 
+support team" 
+    } 
+  },{ 
+    "@type": "Question", 
+ 
+    "name": "What Is Your Exchange Policy?", 
+    "acceptedAnswer": { 
+      "@type": "Answer", 
+      "text": "You can exchange the product bought from our website within 7 days from order 
+delivery date, for any reason including SIZE Change, no questions asked, as long as it is 
+returned to us in its original packaging, in unused condition with all Tags and Labels intact, 
+and is accompanied with its Original bill. We provide reverse pick up facility for most of the 
+locations in India however, for locations where the reverse pick up facility is still not available 
+for return/exchange, the customer needs to send the package to our warehouse address. 
+Kindly get in touch with the Customer Care team for any assistance. If you want to exchange 
+your bought product with a different product, having a different selling price, then you should 
+cancel your original order by booking a return on our website and place a new order" 
+    } 
+  },{ 
+    "@type": "Question", 
+    "name": "What Is Your Claim Policy?", 
+    "acceptedAnswer": { 
+      "@type": "Answer", 
+      "text": "100% claim is allowed if there is any manufacturing defect in the product within 1 
+month of purchase with the copy of the bill. Product older than 1 month & under 3 months 
+has to be sent to us with Original bill, please ensure that the defect claimed is genuine i.e. no 
+external defect has been caused intentionally or un-intentionally especially by Rough usage, 
+Dog bites, Silencer burns, Usage of Razor / Blunt object etc. An approval will be provided by 
+us based on the genuineness, usage & repair-ability. If unrepairable the claim value may 
+vary from 50 to 100% of the product's price. No Claims will be entertained under any 
+circumstances of product more than 3 months old." 
+    } 
+  },{ 
+    "@type": "Question", 
+    "name": "What Is Your Refund Policy?", 
+    "acceptedAnswer": { 
+      "@type": "Answer", 
+      "text": "In case of Order cancellations and Returns related to Prepaid orders, we will 
+refund the money the same way as the payment was made. If the payment was made by 
+Credit Card/Debit Card or Net-Banking, we will refund the amount within 7 to 12 working 
+days only after receipt of product in its original condition (for Returns only) In case of Returns 
+related to COD Orders, we will refund the money, in form of Credit Points only in your 
+account, only after receipt of product in its original condition. These credit points can be used 
+for purchases on our website. In case of Claims, we will provide Credit Points in your 
+account, as per our Claims policy. These credit points can be used for purchases on our 
+website." 
+    } 
+  }] 
+} 
+</script> 
+{% endif %}
+{% endcomment %}

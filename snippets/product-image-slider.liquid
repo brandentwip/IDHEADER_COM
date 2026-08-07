@@ -1,0 +1,344 @@
+
+<script type="text/javascript">
+jQuery(document).ready(function(){
+  
+ 	
+    $( ".custom_product_thumb" ).each(function( index ) {
+
+        if(index == 0){
+            $(this).removeClass("defaultBorder");
+
+            $(this).addClass("blackBorder");
+        }
+    });
+    $(".close").click(function(){
+        location.reload(); 
+    });
+    $(".custom_product_thumb").addClass("defaultBorder");
+		
+      	$( ".custom_product_thumb" ).click(function() {
+        var image_path = $(this).attr("data-path");
+
+        $(".custom_product_thumb").removeClass("hasBorder");        
+        $(".custom_product_thumb").removeClass("blackBorder");      
+      
+        $(".custom_product_thumb").addClass("defaultBorder");
+
+        $("img.pswp__img").attr("src", image_path);
+        $(this).addClass("blackBorder");
+        $(this).removeClass("defaultBorder");
+
+    });
+     
+      
+    $(".right").on("click",function() {       
+        findNextIndex();
+    });
+  
+  	$(".left").on("click",function() {       
+//         findPreviousIndex();
+    });
+});
+  	
+$("body").bind("DOMNodeInserted", function() {
+  
+//    var img_length = $("#current_image .pswp__zoom-wrap").length;
+  var current_image_count = $('#current_image .pswp__zoom-wrap').find('img').length;
+  var next_image_count = $('#next_image .pswp__zoom-wrap').find('img').length;
+  var previous_image_count = $('#previous_image .pswp__zoom-wrap').find('img').length;
+ 
+  if(current_image_count == 2){
+   $("#current_image .pswp__zoom-wrap").children().first().addClass('enable-item');
+   $("#current_image .pswp__zoom-wrap").children().last().addClass('disabled-item');
+  }
+  if(next_image_count == 2){
+   $("#next_image .pswp__zoom-wrap").children().first().addClass('enable-item');
+   $("#next_image .pswp__zoom-wrap").children().last().addClass('disabled-item');
+  }
+  if(previous_image_count == 2){
+   $("#previous_image .pswp__zoom-wrap").children().first().addClass('enable-item');
+   $("#previous_image .pswp__zoom-wrap").children().last().addClass('disabled-item');
+  }
+});
+  
+ 	
+  $('img.pswp__img').on({ 'click touchend' : function(){ console.log(true); } });
+  
+  
+function findNextIndex(){
+  
+  	
+     
+    $( ".custom_product_thumb" ).each(function( index ) {
+      
+      	var numItems = $('.custom_product_thumb').length;
+      
+        if($(this).hasClass("blackBorder")){
+
+          var index = $(this).data("index"); 
+          var next_index = parseInt(index)+1;
+          	
+          
+          if(numItems - next_index >= 1 ){       
+            			            
+            $('.custom_product_thumb').removeClass('hasBorder');        
+            $('.custom_product_thumb').removeClass('blackBorder');             
+            $('.custom_product_thumb[data-index="'+next_index+'"]').removeClass('defaultBorder');            
+            $('.custom_product_thumb[data-index="'+next_index+'"]').addClass('blackBorder');
+            
+          }else{
+            $('.custom_product_thumb').removeClass('hasBorder');        
+            $('.custom_product_thumb').removeClass('blackBorder');  
+            $('.custom_product_thumb[data-index="0"]').removeClass('defaultBorder');            
+            $('.custom_product_thumb[data-index="0"]').addClass('blackBorder');
+			
+          }
+          var image_path = $('.custom_product_thumb[data-index="'+next_index+'"]').attr("data-path");
+          $("img.pswp__img").attr("src", image_path);
+            return false;
+            
+        }
+      
+    });    
+    
+}
+  
+function findPreviousIndex(){
+     
+    $( ".custom_product_thumb" ).each(function( index ) {
+      
+      	var numItems = $('.custom_product_thumb').length;
+      	var last_div = numItems - 1;
+      
+        if($(this).hasClass("blackBorder")){
+
+            var index = $(this).data("index"); 
+            var previous_index = parseInt(index)-1;
+//           	console.log(last_div);          	
+		  console.log(numItems);
+          console.log(previous_index);
+          if(numItems - previous_index >= 0 ){            
+            
+            $('.custom_product_thumb').removeClass('hasBorder');        
+            $('.custom_product_thumb').removeClass('blackBorder');             
+            $('.custom_product_thumb[data-index="'+previous_index+'"]').removeClass('defaultBorder');            
+            $('.custom_product_thumb[data-index="'+previous_index+'"]').addClass('blackBorder');
+            
+          }else{
+            
+            $('.custom_product_thumb').removeClass('hasBorder');        
+            $('.custom_product_thumb').removeClass('blackBorder');  
+            $('.custom_product_thumb[data-index="'+last_div+'"]').removeClass('defaultBorder');            
+            $('.custom_product_thumb[data-index="'+last_div+'"]').addClass('blackBorder');            
+			
+          }
+            return false;
+            
+        }
+      
+    });    
+    
+}
+  
+var alterClass = function() {
+       
+    var ww = document.body.clientWidth;
+
+    if (ww < 600) {
+      
+      	$(".pswp__img:first-child").css("display", "block");
+        
+      	$(".pswp__img:last-child").css("display", "none");
+        $('.product-slideshow').addClass('js-photoswipe__zoom');
+    } else{
+        $('.product-slideshow').removeClass('js-photoswipe__zoom');
+    };
+};
+$(window).resize(function(){
+    alterClass();
+});
+alterClass();
+  
+</script>
+<style>	
+  
+  .pswp__item {	
+    position: absolute;	
+    left: 0;	
+    right: 0;	
+    top: 0;	
+    bottom: 0;	
+    overflow: hidden;	
+/*     max-height: calc(100% - 118px - 80px); */	
+    height: 100%; 	
+    max-height: calc(100% - 180px); 	
+/*     max-height:100%; */	
+    width: auto;	
+/*     transform: none!important; */
+    	
+/*     height: 100%;	
+    width: 100%; */	
+	}	
+  .pswp--zoom-allowed  .pswp__img {	
+    cursor: zoom-in;	
+    transform: translateX(-50%);	
+    left: 50%;	
+    max-height: 100%;//800px !important;	
+    width: auto !important;	
+}	
+  .images_slider{	
+    width:100%;	
+      display: block;	
+	bottom: 23px !important;	
+	position: absolute;	
+   }	
+  .pswp_img{	
+    object-fit:contain;	
+   	
+  }	
+  	
+  .primary-images {	
+    	
+	display: flex;	
+  justify-content: center;	
+  align-items: center;	
+  }	
+ .images {	
+    display: inline-block;	
+	max-width: 5%;	
+	margin: 0 0.5%;	
+   	
+    	
+ }	
+  .btn_class_slider{	
+    justify-content:space-around;	
+    top:40%;	
+    transform:translateY(-50%);	
+  }	
+  .pswp__ui { position:relative; }	
+  .left, .right { margin: 0!important; }	
+  .close{	
+    	
+    right: 0 !important;	
+    top: 0 !important;	
+    position: absolute;	
+    margin: 0;	
+    margin-top: 0px;	
+    margin-right: 0px;	
+    margin-top: 2%!important;	
+    margin-right: 4%!important;	
+  }	
+  .hasBorder{	
+      border: 2px solid #000!important; 	
+    }	
+   .blackBorder{
+     border: 2px solid #000!important; 	
+   }
+  .defaultBorder{	
+     border: 2px solid #cdcdcd; 	
+  }	
+   
+  @media only screen and (min-width:768px) {	
+    	
+    .pswp__item {	
+      position: absolute;	
+      left: 0;	
+      right: 0;	
+      top: 0;	
+      bottom: 0;	
+      overflow: hidden;	
+      height: 100%; 	
+      max-height: calc(100% - 180px); 	
+      width: auto;	
+    	
+	}
+    
+    .pswp--zoom-allowed .pswp__img {
+        cursor: default !important
+    }
+    	
+    .pswp--animated-in  .pswp__zoom-wrap {	
+    	transform: scale(1) !important;	
+	}	
+    .pswp--zoom-allowed .pswp__img {	
+        cursor: zoom-in;	
+        transform: translateX(-50%);	
+        left: 50%;	
+        max-height: 100% !important;	
+        width: auto !important;	
+        height: 85% !important;	
+    }	
+  }	
+  	
+  @media only screen and (max-width:480px) {	
+    
+    
+    #current_image .disabled-item{
+    	display:none!important;
+    }
+    
+    #current_image .enable-item{
+    	display:block!important;
+    }
+    
+   
+    .pswp--zoom-allowed .pswp__img {
+        cursor: default !important
+    }
+
+    	
+    .pswp__item {	
+      position: absolute;	
+      left: 0;	
+      right: 0;	
+      top: 0;	
+      bottom: 0;	
+      overflow: hidden;	
+      height: 100%; 	
+      max-height: calc(100% - 0px); 	
+      width: auto;	
+    	
+	}	
+    	
+    .btn_class_slider {	
+        justify-content: space-between!important;	
+        top: 28%!important;	
+        transform: translateY(-50%)!important;	
+    }	
+   .pswp--animated-in  .pswp__zoom-wrap {	
+    	transform: scale(1) !important;	
+	}	
+     .pswp--zoom-allowed .pswp__img {	
+        cursor: zoom-in;	
+        transform: translateX(-50%);	
+        left: 50%;	
+        max-height: calc(100% - 50px); //100% !important;	
+        width: auto !important;	
+        height: 85% !important;	
+    }	
+/*     .left, .right{	
+      display:none;	
+    } */	
+/*     .close{	
+      top:15%!important;	
+      margin-top:9%!important	
+    	
+    } */	
+    .images{	
+      display:block!important;	
+      height:auto!important;	
+      width:20%!important;	
+      margin: 0 0.5%;	
+      max-width: 100%!important;	
+  	}	
+  }   	
+</style>
+    {% for image in product.images %}
+
+		<div class="images custom_product_thumb" data-index="{{forloop.index0}}" onclick="return false;" href="" data-path="{{ image | img_url: 'master' }}">
+          <a  class=""  data-id="{{product.id}}">
+        	<img class="mySlides" src="{{ image | img_url: 'master' }}" style="width:100%">
+          
+          </a>
+      </div>
+	{% endfor %}

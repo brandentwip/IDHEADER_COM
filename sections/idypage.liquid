@@ -1,0 +1,245 @@
+{% comment %}
+Custom ID&Y Home Page Template
+Pixel-perfect responsive design
+{% endcomment %}
+
+<section class="idy-home">
+
+  <!-- Hero Section -->
+  <div class="hero-banner">
+    <div class="hero-image">
+      <img src="{{ 'hero-banner.jpg' | asset_url }}" alt="Hero Banner" />
+      <div class="hero-overlay">
+        <a href="/collections/women" class="btn">SHOP WOMEN</a>
+        <a href="/collections/men" class="btn">SHOP MEN</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Category Slider -->
+  <div class="category-slider">
+    <h3 class="vertical-text">WOMEN</h3>
+    <div class="category-items">
+      {% for cat in collections %}
+        <a href="{{ cat.url }}" class="category-card">
+          <img src="{{ cat.image | img_url: '200x' }}" alt="{{ cat.title }}" />
+          <span>{{ cat.title }}</span>
+        </a>
+      {% endfor %}
+    </div>
+  </div>
+
+  <!-- Gender Tiles -->
+  <div class="gender-tiles">
+    <div class="tile men">
+      <a href="/collections/men">
+        <img src="{{ 'men-tile.jpg' | asset_url }}" alt="Men Collection" />
+        <div class="overlay"><span>MEN</span></div>
+      </a>
+    </div>
+    <div class="tile women">
+      <a href="/collections/women">
+        <img src="{{ 'women-tile.jpg' | asset_url }}" alt="Women Collection" />
+        <div class="overlay"><span>WOMEN</span></div>
+      </a>
+    </div>
+  </div>
+
+  <!-- New Launch -->
+  <div class="new-launch">
+    <h2>NEW LAUNCH</h2>
+    <div class="products-grid">
+      {% for product in collections['new-arrivals'].products limit:4 %}
+        <div class="product-card">
+          <a href="{{ product.url }}">
+            <img src="{{ product.featured_image | img_url: '600x' }}" alt="{{ product.title }}" />
+            <h4>{{ product.title }}</h4>
+            <p>{{ product.price | money }}</p>
+          </a>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+
+  <!-- Patented Technology -->
+  <div class="tech-section">
+    <h2>PATENTED TECHNOLOGIES BY ID</h2>
+    <div class="tech-grid">
+      <div class="tech-card">
+        <img src="{{ 'tech1.jpg' | asset_url }}" alt="56 Air Pockets" />
+        <p>Patented 56 Air Pockets for all-day comfort</p>
+      </div>
+      <div class="tech-card">
+        <img src="{{ 'tech2.jpg' | asset_url }}" alt="NODR" />
+        <p>Protective NODR Spray prevents bacteria and odor</p>
+      </div>
+      <div class="tech-card">
+        <img src="{{ 'tech3.jpg' | asset_url }}" alt="Air Technology" />
+        <p>Lightweight cushioning with air pocket intelligence</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Testimonials -->
+  <div class="testimonials">
+    <h2>TESTIMONIALS</h2>
+    <div class="testimonial-slider">
+      {% for block in section.blocks %}
+        <div class="testimonial-card">
+          <img src="{{ block.settings.image | img_url: '400x' }}" alt="Customer" />
+          <p>{{ block.settings.text }}</p>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+
+  <!-- Bottom Features -->
+  <div class="bottom-features">
+    <div class="feature-item">
+      <img src="{{ 'easy-return-icon.png' | asset_url }}" alt="Easy Return" />
+      <p>EASY RETURN</p>
+    </div>
+    <div class="feature-item">
+      <img src="{{ 'vegan-leather-icon.png' | asset_url }}" alt="Vegan Leather" />
+      <p>100% VEGAN LEATHER</p>
+    </div>
+    <div class="feature-item">
+      <img src="{{ 'vocal-local-icon.png' | asset_url }}" alt="Vocal for Local" />
+      <p>VOCAL FOR LOCAL</p>
+    </div>
+    <div class="feature-item">
+      <img src="{{ 'free-shipping-icon.png' | asset_url }}" alt="Free Shipping" />
+      <p>FREE SHIPPING</p>
+    </div>
+    <div class="feature-item">
+      <img src="{{ 'cod-icon.png' | asset_url }}" alt="Cash on Delivery" />
+      <p>CASH ON DELIVERY</p>
+    </div>
+  </div>
+
+</section>
+
+{% schema %}
+{
+  "name": "ID&Y Home Page",
+  "settings": [],
+  "blocks": [
+    {
+      "type": "testimonial",
+      "name": "Testimonial",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Customer Image"
+        },
+        {
+          "type": "textarea",
+          "id": "text",
+          "label": "Customer Review"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "ID&Y Home Page"
+    }
+  ]
+}
+{% endschema %}
+
+{% stylesheet %}
+.idy-home {
+  font-family: sans-serif;
+}
+.hero-banner img {
+  width: 100%;
+  display: block;
+}
+.hero-overlay {
+  position: absolute;
+  bottom: 20%;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  gap: 30px;
+}
+.hero-overlay .btn {
+  background: #000;
+  color: #fff;
+  padding: 12px 25px;
+  text-transform: uppercase;
+  font-weight: bold;
+}
+.category-slider {
+  padding: 40px 20px;
+  display: flex;
+  align-items: center;
+}
+.vertical-text {
+  writing-mode: vertical-rl;
+  transform: rotate(180deg);
+  font-weight: bold;
+}
+.category-items {
+  display: flex;
+  gap: 20px;
+  overflow-x: auto;
+}
+.gender-tiles {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+.gender-tiles img {
+  width: 100%;
+  height: auto;
+}
+.gender-tiles .overlay {
+  position: absolute;
+  bottom: 10%;
+  left: 10%;
+  color: #fff;
+  font-size: 24px;
+  font-weight: bold;
+}
+.new-launch {
+  text-align: center;
+  padding: 40px 20px;
+}
+.products-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit,minmax(220px,1fr));
+  gap: 20px;
+}
+.tech-section {
+  padding: 40px 20px;
+}
+.tech-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit,minmax(250px,1fr));
+  gap: 20px;
+}
+.testimonials {
+  padding: 40px 20px;
+  text-align: center;
+}
+.testimonial-slider {
+  display: flex;
+  gap: 20px;
+  overflow-x: auto;
+}
+.bottom-features {
+  background: #f9f9f9;
+  display: grid;
+  grid-template-columns: repeat(auto-fit,minmax(120px,1fr));
+  gap: 20px;
+  padding: 20px;
+  text-align: center;
+}
+.bottom-features img {
+  height: 40px;
+  margin-bottom: 10px;
+}
+{% endstylesheet %}

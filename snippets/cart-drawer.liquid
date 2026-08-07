@@ -1,0 +1,110 @@
+{%- if settings.cart_type == 'drawer' -%}
+  <div id="CartDrawer" class="drawer drawer--right">
+    <form id="CartDrawerForm" action="" method="post" novalidate class="drawer__contents">
+      <div class="drawer__fixed-header">
+        <div class="drawer__header appear-animation appear-delay-1">
+          <div class="h2 drawer__title">{{ 'cart.general.title' | t }}</div>
+          <div class="drawer__close">
+            <button type="button" class="drawer__close-button js-drawer-close">
+              <svg aria-hidden="true" focusable="false" role="presentation" class="icon icon-close" viewBox="0 0 64 64">
+                <path d="M19 17.61l27.12 27.13m0-27.12L19 44.74"/>
+              </svg>
+              <span class="icon__fallback-text">{{ 'cart.general.close_cart' | t }}</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="drawer__inner">
+        <div class="drawer__scrollable">
+          <div data-products class="appear-animation appear-delay-2"></div>
+
+          {% if settings.cart_notes_enable %}
+            <div class="appear-animation appear-delay-3">
+              <label for="CartNoteDrawer">{{ 'cart.general.note' | t }}</label>
+              <textarea name="note" class="input-full cart-notes" id="CartNoteDrawer">{{ cart.note }}</textarea>
+            </div>
+          {% endif %}
+        </div>
+        <div class="cart-offer">
+          <ul>
+            <li>Extra <strong>5% off</strong> on Prepaid orders.</li>
+            <li>Use Code: <strong>GET5</strong> : Shop for Rs. 2499 - Get 5% off</li>
+            <li>Use Code: <strong>GET10</strong> : Shop for Rs. 3499 - Get 10% off</li>
+          </ul>
+          <div class="additional-cart-message">
+            <span
+              >* Dear Customer, If you place an COD order, please pay the money only when you receive the product
+              physically.</span
+            >
+          </div>
+        </div>
+        <div class="drawer__footer appear-animation appear-delay-4">
+          <div data-discounts>
+            {% if cart.cart_level_discount_applications != blank %}
+              <div class="cart__discounts cart__item-sub cart__item-row">
+                <div>{{ 'cart.general.discounts' | t }}</div>
+                <div class="text-right">
+                  {% for cart_discount in cart.cart_level_discount_applications %}
+                    <div class="cart__discount">
+                      {{ cart_discount.title }} (-{{ cart_discount.total_allocated_amount | money }})
+                    </div>
+                  {% endfor %}
+                </div>
+              </div>
+            {% endif %}
+          </div>
+
+          <div class="cart__item-sub cart__item-row">
+            <div class="ajaxcart__subtotal">{{ 'cart.general.subtotal' | t }}</div>
+            <div data-subtotal>
+              <span>{{ cart.total_price | money }}</span>
+            </div>
+          </div>
+
+          <div class="cart__item-row text-center">
+            <small>
+              {{ 'cart.general.shipping_at_checkout' | t -}}
+              <br>
+            </small>
+          </div>
+
+          {% if settings.cart_terms_conditions_enable %}
+            <div class="cart__item-row cart__terms">
+              <input type="checkbox" id="CartTermsDrawer" class="cart__terms-checkbox">
+              <label for="CartTermsDrawer">
+                {% if settings.cart_terms_conditions_link != blank %}
+                  {{ 'cart.general.terms_html' | t: url: settings.cart_terms_conditions_link }}
+                {% else %}
+                  {{ 'cart.general.terms' | t }}
+                {% endif %}
+              </label>
+            </div>
+          {% endif %}
+
+          <div class="cart__checkout-wrapper">
+            {% comment %} <div class="shiprocket-headless" data-type="mini-cart"><button type="button" class="sr-headless-checkout" onclick="shiprocketCheckoutEvents.buyCart(event)"><div class="sr-d-flex flex-center"><div class="sr-d-flex full-width flex-center"><span class="sr-checkout-visible2">BUY NOW</span> <img src="https://fastrr-boost-ui.pickrr.com/assets/images/boost_button/upi_options.svg" alt="Google Pay | Phone Pay | UPI" class="sr-pl-15 sr-checkout-visible"><div class="loader5"></div><img src="https://fastrr-boost-ui.pickrr.com/assets/images/boost_button/right_arrow.svg" class="sr-pl-15 sr-checkout-visible1" alt="right_arrow"></div><div><span class="sr-powered-by"><img src="https://fastrr-boost-ui.pickrr.com/assets/images/boost_button/powered_by.svg " alt=""></span></div></div></button></div> {% endcomment %}
+            {% render 'gokwik-checkout' %}
+            <!--
+              <button type="submit" name="checkout" data-terms-required="{{ settings.cart_terms_conditions_enable }}" class="btn btn--full add-to-cart btn--secondary sr_minicart">
+                BUY WITH CREDIT/DEBIT CARD
+              </button>
+            -->
+
+            {% if additional_checkout_buttons and settings.cart_additional_buttons %}
+              <div class="additional-checkout-buttons additional-checkout-buttons--vertical">
+                {{ content_for_additional_checkout_buttons }}
+              </div>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+
+      <div class="drawer__cart-empty appear-animation appear-delay-2">
+        <div class="drawer__scrollable">
+          {{ 'cart.general.empty' | t }}
+        </div>
+      </div>
+    </form>
+  </div>
+{%- endif -%}

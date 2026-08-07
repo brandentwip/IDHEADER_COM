@@ -1,0 +1,97 @@
+{% comment %}
+  Feature Icons Section (mgx)
+  Displays up to 4 icons with headings (like Easy Return, Vocal for Local, etc.)
+{% endcomment %}
+
+<section class="icon-row-section">
+  <div class="icon-row-wrapper">
+    {% for block in section.blocks %}
+      <div class="icon-item">
+        {% if block.settings.icon != blank %}
+          <img 
+            src="{{ block.settings.icon | image_url: width: 120 }}" 
+            alt="{{ block.settings.title | escape }}" 
+            class="icon-img"
+          >
+        {% endif %}
+        {% if block.settings.title != blank %}
+          <h3 class="icon-title">{{ block.settings.title }}</h3>
+        {% endif %}
+      </div>
+    {% endfor %}
+  </div>
+</section>
+
+<style>
+.icon-row-section {
+  background: #f4f4f4; /* same light grey background */
+  padding: 40px 20px;
+}
+.icon-row-wrapper {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 30px;
+  text-align: center;
+}
+.icon-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+.icon-img {
+  max-width: 60px;
+  height: auto;
+  margin-bottom: 12px;
+}
+.icon-title {
+  font-size: 15px;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin: 0;
+}
+@media (max-width: 768px) {
+  .icon-row-section {
+    padding: 30px 15px;
+  }
+  .icon-title {
+    font-size: 14px;
+  }
+}
+</style>
+
+{% schema %}
+{
+  "name": "Feature Icons Row",
+  "settings": [],
+  "blocks": [
+    {
+      "type": "icon",
+      "name": "Icon Item",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "icon",
+          "label": "Icon Image"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Heading",
+          "default": "Feature Title"
+        }
+      ]
+    }
+  ],
+  "max_blocks": 5,
+  "presets": [
+    {
+      "name": "Feature Icons Row",
+      "category": "Image"
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,272 @@
+{% comment %}
+  Collection Editorial Grid
+  ---------------------------------------------------------------------------
+  Upload to: Sections/collection-editorial-grid.liquid
+  Used by:   Templates/collection.editorial-grid.json
+
+  Editorial images between product cards are pulled from a COLLECTION
+  METAFIELD (list of "collection_editorial_tile" metaobjects), so every
+  collection can have its own set of images (loafers collection -> loafer
+  images, etc). See SETUP-INSTRUCTIONS.md for how to create that metaobject
+  and metafield in Shopify admin.
+
+  Because this is a separate template file, you can assign it to any
+  collection from Admin > Collection > Theme template, and each collection
+  gets its own independent settings for the fields below (breadcrumb text,
+  columns, products per page, etc).
+{% endcomment %}
+
+<link rel="stylesheet" href="{{ 'collection-editorial-grid.css' | asset_url }}">
+
+{% liquid
+  assign editorial_tiles = collection.metafields.custom.editorial_tiles.value
+  assign breadcrumb_text = section.settings.breadcrumb_override
+  if breadcrumb_text == blank
+    assign breadcrumb_text = collection.title
+  endif
+%}
+
+<div class="ceg-wrapper">
+
+  {% if section.settings.show_breadcrumb %}
+    <nav class="ceg-breadcrumb">
+      <a href="/">Home</a> / <a href="{{ collection.url }}">{{ breadcrumb_text }}</a>
+    </nav>
+  {% endif %}
+
+  <div class="ceg-controls">
+    <div class="ceg-view-toggle">
+      <button type="button" class="is-active" data-ceg-view="4">Grid</button>
+      <button type="button" data-ceg-view="2">Large</button>
+    </div>
+    <button type="button" class="ceg-filter-sort-toggle" id="cegDrawerOpen">Filter &amp; Sorting</button>
+  </div>
+
+  <div class="ceg-overlay" id="cegOverlay"></div>
+
+  <!-- FILTER + SORT DRAWER (combined) -->
+  <div class="ceg-drawer" id="cegDrawer">
+    <div class="ceg-drawer-header">
+      <h2>Filter &amp; Sorting</h2>
+      <button class="ceg-drawer-close" id="cegDrawerClose">&times;</button>
+    </div>
+
+    <div class="ceg-sort-group">
+      <label for="cegSortSelect">Sort by</label>
+      <select id="cegSortSelect" form="cegFilterForm" name="sort_by">
+        {% for option in collection.sort_options %}
+          <option value="{{ option.value }}" {% if option.value == collection.sort_by %}selected{% endif %}>
+            {{ option.name }}
+          </option>
+        {% endfor %}
+      </select>
+    </div>
+
+    {% if collection.filters.size > 0 %}
+      <form id="cegFilterForm" method="get" action="{{ collection.url }}">
+        {% for filter in collection.filters %}
+          <div class="ceg-filter-group">
+            <details>
+              <summary>{{ filter.label }}</summary>
+              <div class="ceg-filter-values">
+                {% for value in filter.values %}
+                  <label>
+                    <input type="checkbox"
+                           name="{{ value.param_name }}"
+                           value="{{ value.value }}"
+                           {% if value.active %}checked{% endif %}>
+                    {{ value.label }} ({{ value.count }})
+                  </label>
+                {% endfor %}
+              </div>
+            </details>
+          </div>
+        {% endfor %}
+        <div class="ceg-drawer-actions">
+          <button type="submit" class="ceg-apply-btn">Apply</button>
+          <a href="{{ collection.url }}" class="ceg-clear-btn">Clear all</a>
+        </div>
+      </form>
+    {% endif %}
+  </div>
+
+  <!-- GRID + PAGINATION -->
+  <section id="CegProductWrapper">
+    {% paginate collection.products by section.settings.products_per_page %}
+
+      <div class="ceg-grid ceg-view-4" id="cegGrid">
+        {% for product in collection.products %}
+
+          {%- comment -%} ---- Product card ---- {%- endcomment -%}
+          <div class="ceg-card {% if product.available == false %}is-sold-out{% endif %}">
+            <a href="{{ product.url }}">
+              <div class="ceg-card-media">
+                <img src="{{ product.featured_image | image_url: width: 600 }}"
+                     alt="{{ product.title | escape }}" loading="lazy">
+
+                {% if product.metafields.custom.genuineleather == true %}
+                  <div class="ceg-material-badge">
+                    <img src="https://cdn.shopify.com/s/files/1/0636/5128/3192/files/image-removebg-preview.png?v=1758192680" alt="Genuine leather">
+                  </div>
+                {% else %}
+                  <div class="ceg-material-badge">
+                    <img src="https://cdn.shopify.com/s/files/1/0636/5128/3192/files/vegan-removebg-preview.png?v=1772695454" alt="Vegan">
+                  </div>
+                {% endif %}
+
+                {%- comment -%} Single top-left label, priority: sold out > limited edition > top seller > new arrival {%- endcomment -%}
+                {% if product.available == false %}
+                  <span class="ceg-card-label is-sold-out">Out of Stock</span>
+                {% elsif product.tags contains "limited-edition" or product.tags contains "Limited Edition" %}
+                  <span class="ceg-card-label">Limited Edition</span>
+                {% elsif product.tags contains "bestseller2025" or product.tags contains "bestseller" or product.tags contains "topseller" %}
+                  <span class="ceg-card-label">Top Seller</span>
+                {% elsif product.tags contains "New Arrivals" or product.tags contains "new2025" %}
+                  <span class="ceg-card-label">New Arrival</span>
+                {% endif %}
+              </div>
+
+              <div class="ceg-card-info">
+                <p class="ceg-card-title">{{ product.title }}</p>
+                <p class="ceg-card-price">
+                  <span>{{ product.price | money }}</span>
+                  {% if product.compare_at_price_max > product.price %}
+                    <span class="ceg-compare-price">{{ product.compare_at_price_max | money }}</span>
+                    {% assign discount = product.compare_at_price_max | minus: product.price | times: 100 | divided_by: product.compare_at_price_max %}
+                    <span class="ceg-discount-badge">{{ discount | round }}% OFF</span>
+                  {% endif %}
+                </p>
+              </div>
+            </a>
+          </div>
+
+          {%- comment -%} ---- Editorial tile(s), inserted after this product's position ---- {%- endcomment -%}
+          {% if editorial_tiles %}
+            {% for tile in editorial_tiles %}
+              {% if tile.insert_after_position.value == forloop.parentloop.index %}
+                <div class="ceg-editorial-tile" style="grid-row: span {{ tile.row_span.value | default: 2 }};">
+                  {% if tile.link.value != blank %}
+                    <a href="{{ tile.link.value }}">
+                      <img src="{{ tile.image.value | image_url: width: 900 }}" alt="{{ tile.label.value | escape }}" loading="lazy">
+                      {% if tile.label.value != blank %}
+                        <span class="ceg-card-label">{{ tile.label.value }}</span>
+                      {% endif %}
+                    </a>
+                  {% else %}
+                    <div class="ceg-editorial-noclick">
+                      <img src="{{ tile.image.value | image_url: width: 900 }}" alt="{{ tile.label.value | escape }}" loading="lazy">
+                      {% if tile.label.value != blank %}
+                        <span class="ceg-card-label">{{ tile.label.value }}</span>
+                      {% endif %}
+                    </div>
+                  {% endif %}
+                </div>
+              {% endif %}
+            {% endfor %}
+          {% endif %}
+
+        {% endfor %}
+      </div>
+
+      <div class="ceg-pagination-wrapper">
+        {% render 'collection-pagination', paginate: paginate %}
+      </div>
+
+    {% endpaginate %}
+  </section>
+
+  <div id="cegLoading" class="ceg-loading">Loading…</div>
+</div>
+
+<script>
+(function(){
+  var drawer   = document.getElementById('cegDrawer');
+  var overlay  = document.getElementById('cegOverlay');
+  var openBtn  = document.getElementById('cegDrawerOpen');
+  var closeBtn = document.getElementById('cegDrawerClose');
+
+  function openDrawer(){ drawer.classList.add('is-open'); overlay.classList.add('is-open'); }
+  function closeDrawer(){ drawer.classList.remove('is-open'); overlay.classList.remove('is-open'); }
+
+  openBtn && openBtn.addEventListener('click', openDrawer);
+  closeBtn && closeBtn.addEventListener('click', closeDrawer);
+  overlay && overlay.addEventListener('click', closeDrawer);
+
+  /* View toggle (Grid = 4 cols, Large = 2 cols) */
+  var grid = document.getElementById('cegGrid');
+  document.querySelectorAll('[data-ceg-view]').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      document.querySelectorAll('[data-ceg-view]').forEach(function(b){ b.classList.remove('is-active'); });
+      btn.classList.add('is-active');
+      grid.classList.remove('ceg-view-2', 'ceg-view-4');
+      grid.classList.add('ceg-view-' + btn.dataset.cegView);
+    });
+  });
+
+  /* AJAX update on filter submit / sort change, reusing collection.url query string */
+  function showLoading(){ document.getElementById('cegLoading').style.display = 'block'; }
+  function hideLoading(){ document.getElementById('cegLoading').style.display = 'none'; }
+
+  function updateCollection(url){
+    showLoading();
+    fetch(url)
+      .then(function(res){ return res.text(); })
+      .then(function(html){
+        var doc = new DOMParser().parseFromString(html, 'text/html');
+        var newWrapper = doc.querySelector('#CegProductWrapper');
+        if (newWrapper) {
+          document.querySelector('#CegProductWrapper').innerHTML = newWrapper.innerHTML;
+          window.history.pushState({}, '', url);
+        }
+        hideLoading();
+      })
+      .catch(function(err){ console.error('Collection update failed:', err); hideLoading(); });
+  }
+
+  var filterForm = document.getElementById('cegFilterForm');
+  filterForm && filterForm.addEventListener('submit', function(e){
+    e.preventDefault();
+    var params = new URLSearchParams(new FormData(this));
+    var sortVal = document.getElementById('cegSortSelect').value;
+    params.set('sort_by', sortVal);
+    updateCollection(window.location.pathname + '?' + params.toString());
+    closeDrawer();
+  });
+
+  var sortSelect = document.getElementById('cegSortSelect');
+  sortSelect && sortSelect.addEventListener('change', function(){
+    var params = new URLSearchParams(window.location.search);
+    params.set('sort_by', this.value);
+    updateCollection(window.location.pathname + '?' + params.toString());
+  });
+})();
+</script>
+
+{% schema %}
+{
+  "name": "Editorial collection grid",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "show_breadcrumb",
+      "label": "Show breadcrumb",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "breadcrumb_override",
+      "label": "Breadcrumb text",
+      "info": "Leave blank to use the collection title (e.g. MEN / SHOES / DICE)"
+    },
+    {
+      "type": "range",
+      "id": "products_per_page",
+      "label": "Products per page",
+      "min": 6,
+      "max": 48,
+      "step": 2,
+      "default": 24
+    }
+  ]
+}
+{% endschema %}

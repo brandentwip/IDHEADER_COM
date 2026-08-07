@@ -1,0 +1,545 @@
+<section
+  class="dual-banner ratio-{{ section.settings.layout_ratio }} height-{{ section.settings.image_height }}"
+  style="
+    --gap: {{ section.settings.gap }}px;
+    --radius: {{ section.settings.radius }}px;
+  "
+>
+
+  {% for block in section.blocks %}
+
+    <a
+      href="{{ block.settings.link }}"
+      class="dual-banner__item {% if block.settings.black_white %}is-bw{% endif %}"
+      {{ block.shopify_attributes }}
+    >
+
+      <div
+        class="dual-banner__overlay"
+        style="
+          background: {{ block.settings.overlay }};
+          opacity: {{ block.settings.overlay_opacity | divided_by: 100.0 }};
+        "
+      ></div>
+
+      <picture>
+
+        {% if block.settings.mobile_image != blank %}
+          <source
+            media="(max-width:749px)"
+            srcset="{{ block.settings.mobile_image | image_url: width: 900 }}">
+        {% endif %}
+
+        {{
+          block.settings.image
+          | image_url: width: 2200
+          | image_tag:
+            loading: 'lazy',
+            widths: '600,900,1200,1800,2200',
+            class: 'dual-banner__image'
+        }}
+
+      </picture>
+
+      <div class="dual-banner__content {{ block.settings.content_position }}">
+
+        {% if block.settings.subheading != blank %}
+          <div class="dual-banner__eyebrow">
+            {{ block.settings.subheading }}
+          </div>
+        {% endif %}
+
+        {% if block.settings.heading != blank %}
+          <h2>{{ block.settings.heading }}</h2>
+        {% endif %}
+
+        {% if block.settings.button != blank %}
+          <span class="dual-banner__button">
+            {{ block.settings.button }}
+          </span>
+        {% endif %}
+
+      </div>
+
+    </a>
+
+  {% endfor %}
+
+</section>
+
+<style>
+
+/*==================================================
+  DUAL IMAGE BANNER
+==================================================*/
+
+.dual-banner{
+    width:100%;
+    display:grid;
+    gap:var(--gap);
+    margin:0 auto;
+}
+
+/* Full Width */
+
+.dual-banner{
+    width:100vw;
+    margin-left:calc(50% - 50vw);
+    margin-right:calc(50% - 50vw);
+}
+
+/*==================================================
+  COLUMN RATIOS
+==================================================*/
+
+.ratio-50-50{
+    grid-template-columns:1fr 1fr;
+}
+
+.ratio-40-60{
+    grid-template-columns:40% 60%;
+}
+
+.ratio-60-40{
+    grid-template-columns:60% 40%;
+}
+
+.ratio-30-70{
+    grid-template-columns:30% 70%;
+}
+
+.ratio-70-30{
+    grid-template-columns:70% 30%;
+}
+
+/*==================================================
+  BANNER
+==================================================*/
+
+.dual-banner__item{
+    position:relative;
+    display:block;
+    overflow:hidden;
+    border-radius:var(--radius);
+    text-decoration:none;
+    color:inherit;
+}
+
+.dual-banner__image{
+    width:100%;
+    display:block;
+    transition:transform .7s ease, filter .4s ease;
+}
+
+/* Hover */
+
+.dual-banner__item:hover .dual-banner__image{
+    transform:scale(1.05);
+}
+
+/* Black & White */
+
+.dual-banner__item.is-bw .dual-banner__image{
+    filter:grayscale(100%);
+}
+
+/*==================================================
+  HEIGHTS
+==================================================*/
+
+.height-adapt .dual-banner__item{
+    height:auto;
+}
+
+.height-adapt .dual-banner__image{
+    height:auto;
+    object-fit:unset;
+}
+
+.height-small .dual-banner__item{
+    height:420px;
+}
+
+.height-medium .dual-banner__item{
+    height:560px;
+}
+
+.height-large .dual-banner__item{
+    height:720px;
+}
+
+.height-fullscreen .dual-banner__item{
+    height:100vh;
+}
+
+.height-small .dual-banner__image,
+.height-medium .dual-banner__image,
+.height-large .dual-banner__image,
+.height-fullscreen .dual-banner__image{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+}
+
+/*==================================================
+  OVERLAY
+==================================================*/
+
+.dual-banner__overlay{
+    position:absolute;
+    inset:0;
+    z-index:1;
+    transition:.35s;
+}
+
+.dual-banner__item:hover .dual-banner__overlay{
+    opacity:calc(var(--overlay-opacity, .2) + .05);
+}
+
+/*==================================================
+  CONTENT
+==================================================*/
+
+.dual-banner__content{
+    position:absolute;
+    inset:0;
+    display:flex;
+    flex-direction:column;
+    padding:42px;
+    z-index:2;
+    color:#fff;
+}
+
+.dual-banner__eyebrow{
+    font-size:13px;
+    letter-spacing:.12em;
+    text-transform:uppercase;
+    margin-bottom:12px;
+    opacity:.9;
+}
+
+.dual-banner__content h2{
+    margin:0;
+    font-size:42px;
+    line-height:1.15;
+    font-weight:500;
+}
+
+.dual-banner__button{
+    display:inline-flex;
+    margin-top:24px;
+    border-bottom:1px solid currentColor;
+    padding-bottom:3px;
+    font-size:14px;
+    letter-spacing:.12em;
+    text-transform:uppercase;
+}
+
+/*==================================================
+  POSITIONING
+==================================================*/
+
+/* TOP */
+
+.top_left{
+    justify-content:flex-start;
+    align-items:flex-start;
+    text-align:left;
+}
+
+.top_center{
+    justify-content:flex-start;
+    align-items:center;
+    text-align:center;
+}
+
+.top_right{
+    justify-content:flex-start;
+    align-items:flex-end;
+    text-align:right;
+}
+
+/* MIDDLE */
+
+.middle_left{
+    justify-content:center;
+    align-items:flex-start;
+    text-align:left;
+}
+
+.middle_center{
+    justify-content:center;
+    align-items:center;
+    text-align:center;
+}
+
+.middle_right{
+    justify-content:center;
+    align-items:flex-end;
+    text-align:right;
+}
+
+/* BOTTOM */
+
+.bottom_left{
+    justify-content:flex-end;
+    align-items:flex-start;
+    text-align:left;
+}
+
+.bottom_center{
+    justify-content:flex-end;
+    align-items:center;
+    text-align:center;
+}
+
+.bottom_right{
+    justify-content:flex-end;
+    align-items:flex-end;
+    text-align:right;
+}
+
+/*==================================================
+  MOBILE
+==================================================*/
+
+@media screen and (max-width:990px){
+
+.dual-banner{
+    grid-template-columns:1fr 1fr;
+    gap:12px;
+}
+
+.dual-banner__item{
+    height:280px;
+}
+
+.height-adapt .dual-banner__item{
+    height:auto;
+}
+
+.height-adapt .dual-banner__image{
+    height:auto;
+}
+
+.height-small .dual-banner__item{
+    height:220px;
+}
+
+.height-medium .dual-banner__item{
+    height:280px;
+}
+
+.height-large .dual-banner__item{
+    height:360px;
+}
+
+.height-fullscreen .dual-banner__item{
+    height:70vh;
+}
+
+.height-small .dual-banner__image,
+.height-medium .dual-banner__image,
+.height-large .dual-banner__image,
+.height-fullscreen .dual-banner__image{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+}
+
+.dual-banner__content{
+    padding:16px;
+}
+
+.dual-banner__eyebrow{
+    font-size:10px;
+}
+
+.dual-banner__content h2{
+    font-size:20px;
+    line-height:1.2;
+}
+
+.dual-banner__button{
+    margin-top:12px;
+    font-size:11px;
+}
+
+}
+</style>
+
+
+
+
+
+
+
+
+
+{% schema %}
+{
+  "name": "Dual Image Banner",
+
+  "max_blocks": 2,
+
+  "settings": [
+
+    {
+      "type": "select",
+      "id": "layout_ratio",
+      "label": "Desktop Layout",
+      "default": "50-50",
+      "options": [
+        { "value": "50-50", "label": "50 / 50" },
+        { "value": "40-60", "label": "40 / 60" },
+        { "value": "60-40", "label": "60 / 40" },
+        { "value": "30-70", "label": "30 / 70" },
+        { "value": "70-30", "label": "70 / 30" }
+      ]
+    },
+
+    {
+      "type": "range",
+      "id": "gap",
+      "label": "Gap",
+      "min": 0,
+      "max": 60,
+      "step": 2,
+      "unit": "px",
+      "default": 12
+    },
+
+    {
+      "type": "range",
+      "id": "radius",
+      "label": "Corner Radius",
+      "min": 0,
+      "max": 30,
+      "step": 2,
+      "unit": "px",
+      "default": 0
+    },
+
+    {
+      "type": "select",
+      "id": "image_height",
+      "label": "Desktop Height",
+      "default": "medium",
+      "options": [
+        { "value": "adapt", "label": "Adapt to Image" },
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" },
+        { "value": "fullscreen", "label": "Full Screen" }
+      ]
+    }
+
+  ],
+
+  "blocks": [
+
+    {
+      "type": "banner",
+      "name": "Banner",
+
+      "settings": [
+
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Desktop Image"
+        },
+
+        {
+          "type": "image_picker",
+          "id": "mobile_image",
+          "label": "Mobile Image"
+        },
+
+        {
+          "type": "text",
+          "id": "subheading",
+          "label": "Sub Heading"
+        },
+
+        {
+          "type": "text",
+          "id": "heading",
+          "label": "Heading"
+        },
+
+        {
+          "type": "text",
+          "id": "button",
+          "label": "Button Label"
+        },
+
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Link"
+        },
+
+        {
+          "type": "select",
+          "id": "content_position",
+          "label": "Content Position",
+          "default": "bottom_left",
+          "options": [
+            { "value": "top_left", "label": "Top Left" },
+            { "value": "top_center", "label": "Top Center" },
+            { "value": "top_right", "label": "Top Right" },
+            { "value": "middle_left", "label": "Middle Left" },
+            { "value": "middle_center", "label": "Middle Center" },
+            { "value": "middle_right", "label": "Middle Right" },
+            { "value": "bottom_left", "label": "Bottom Left" },
+            { "value": "bottom_center", "label": "Bottom Center" },
+            { "value": "bottom_right", "label": "Bottom Right" }
+          ]
+        },
+
+        {
+          "type": "checkbox",
+          "id": "black_white",
+          "label": "Black & White",
+          "default": false
+        },
+
+        {
+          "type": "color",
+          "id": "overlay",
+          "label": "Overlay Color",
+          "default": "#000000"
+        },
+
+        {
+          "type": "range",
+          "id": "overlay_opacity",
+          "label": "Overlay Opacity",
+          "min": 0,
+          "max": 90,
+          "step": 5,
+          "unit": "%",
+          "default": 15
+        }
+
+      ]
+    }
+
+  ],
+
+  "presets": [
+    {
+      "name": "Dual Image Banner",
+      "blocks": [
+        {
+          "type": "banner"
+        },
+        {
+          "type": "banner"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,145 @@
+{% comment %}
+Custom Banner Section with Two CTA Buttons
+Desktop + Mobile Image Support (buttons side-by-side on mobile)
+{% endcomment %}
+
+<section class="custom-banner-section">
+  <div class="custom-banner-wrapper">
+    {% if section.settings.banner_image != blank %}
+      <img 
+        src="{{ section.settings.banner_image | image_url: width: 2000 }}" 
+        alt="Banner Image" 
+        class="custom-banner-image desktop-banner"
+      >
+    {% else %}
+      <div class="placeholder-background desktop-banner">Upload Desktop Banner</div>
+    {% endif %}
+
+    {% if section.settings.mobile_banner_image != blank %}
+      <img 
+        src="{{ section.settings.mobile_banner_image | image_url: width: 1000 }}" 
+        alt="Mobile Banner Image" 
+        class="custom-banner-image mobile-banner"
+      >
+    {% else %}
+      <div class="placeholder-background mobile-banner">Upload Mobile Banner</div>
+    {% endif %}
+    
+    <!-- Buttons -->
+    <div class="banner-buttons">
+      {% if section.settings.women_link != blank %}
+        <a href="{{ section.settings.women_link }}" class="banner-btn women-btn">SHOP WOMEN</a>
+      {% endif %}
+      {% if section.settings.men_link != blank %}
+        <a href="{{ section.settings.men_link }}" class="banner-btn men-btn">SHOP MEN</a>
+      {% endif %}
+    </div>
+  </div>
+</section>
+
+<style>
+.custom-banner-section {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+}
+
+.custom-banner-wrapper {
+  position: relative;
+}
+
+.custom-banner-image {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* Default: show desktop image, hide mobile */
+.desktop-banner { display: block; }
+.mobile-banner { display: none; }
+
+/* Button container */
+.banner-buttons {
+  position: absolute;
+  bottom: 20%;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 20px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.banner-btn {
+  background: white;
+  color: black;
+  font-weight: bold;
+  padding: 12px 20px;
+  text-decoration: none;
+  font-size: 16px;
+  text-transform: uppercase;
+  transition: all 0.3s ease;
+  min-width: 140px;
+  text-align: center;
+}
+
+.banner-btn:hover {
+  background: black;
+  color: white;
+}
+
+/* Switch to mobile image at 768px */
+@media(max-width: 768px) {
+  .desktop-banner { display: none; }
+  .mobile-banner { display: block; }
+
+  /* Keep buttons absolutely positioned over the image */
+  .banner-buttons {
+    bottom: 10%;
+    left: 50%;
+    transform: translateX(-50%);
+    flex-wrap: nowrap;       /* force side-by-side */
+    gap: 10px;
+    width: auto;
+  }
+
+  .banner-btn {
+    font-size: 14px;
+    padding: 10px 16px;
+    min-width: auto;
+  }
+}
+</style>
+
+{% schema %}
+{
+  "name": "Banner with Buttons",
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "banner_image",
+      "label": "Desktop Banner Image"
+    },
+    {
+      "type": "image_picker",
+      "id": "mobile_banner_image",
+      "label": "Mobile Banner Image"
+    },
+    {
+      "type": "url",
+      "id": "women_link",
+      "label": "Shop Women Link"
+    },
+    {
+      "type": "url",
+      "id": "men_link",
+      "label": "Shop Men Link"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Custom Banner with Buttons"
+    }
+  ]
+}
+{% endschema %}
