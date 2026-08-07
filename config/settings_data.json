@@ -185,11 +185,11 @@
           "show_currency_selector": true,
           "show_currency_flags": true,
           "comet_enable": true,
-          "comet_header_bg": "#FFFFFF",
+          "comet_header_bg": "#ffffff",
           "comet_header_text": "#000000",
           "comet_tab_bg": "#ffffff",
           "comet_tab_text": "#111111",
-          "comet_tab_active": "#F2D21D",
+          "comet_tab_active": "#f2d21d",
           "comet_tab1_title": "MEN",
           "comet_tab1_menu": "men-women-tab-head",
           "comet_tab2_title": "WOMEN",
@@ -197,7 +197,12 @@
           "comet_tab3_title": "ABOUT US",
           "comet_tab3_menu": "",
           "comet_tab4_title": "",
-          "comet_tab4_menu": ""
+          "comet_tab4_menu": "",
+          "category_icon_boots": "shopify://shop_images/boots_e4026d53-8c59-4f68-bb9d-0d2da291c5ba.png",
+          "category_icon_formals": "shopify://shop_images/formals.png",
+          "category_icon_loafers": "shopify://shop_images/loaf.png",
+          "category_icon_sandals": "shopify://shop_images/Sandals_3287b8fe-20aa-4232-939d-f8a7443c4e20.png",
+          "category_icon_sneakers": "shopify://shop_images/sneakers_cc8492ad-d99c-4c40-ae6b-fd1ce00893d7.png"
         }
       },
       "footer": {
