@@ -1,6 +1,6 @@
 # Comet Mobile Header & Drawer Menu - User & Configuration Guide
 
-Welcome to the **Comet Mobile Header & Drawer Menu** for your Shopify store! This feature replicates the mobile menu design of [WearComet](https://www.wearcomet.com/) with full-width drawer navigation, category tabs (e.g. `MEN`, `WOMEN`, `ABOUT US`), footwear category icons, customizable colors, and mobile responsiveness.
+Welcome to the **Comet Mobile Header & Drawer Menu** for your Shopify store! This feature replicates the mobile menu design of [WearComet](https://www.wearcomet.com/) with full-width drawer navigation, category tabs (e.g. `MEN`, `WOMEN`, `ABOUT US`), category icon matching, custom image uploads, customizable colors, and mobile responsiveness.
 
 ---
 
@@ -19,20 +19,20 @@ Welcome to the **Comet Mobile Header & Drawer Menu** for your Shopify store! Thi
    - Animated active tab indicator line.
    - Automatic fallback: automatically uses top-level Main Menu items if custom tabs are not configured.
 
-4. **Footwear Category Icons**:
-   - Dedicated SVG silhouettes for all primary footwear categories:
+4. **Footwear Category Custom Icons (Global Category Settings)**:
+   - Dedicated image upload settings for your key footwear categories:
      - 🥾 **BOOTS**
      - 👞 **CASUALS**
      - 👔 **FORMALS**
      - 👞 **LOAFERS**
      - 🩴 **SANDALS / SLIPPERS**
      - 👟 **SNEAKERS**
-     - ➡️ **SHOP ALL**
-   - Automatically displays footwear icons based on category link titles or customizable theme preset blocks.
+   - **Automatic Image Matching**: When you upload an icon image for a category in Theme Customizer settings, any menu item whose name matches that category (e.g. `BOOTS`, `CASUALS`) will automatically display your uploaded custom icon!
+   - Default vector SVGs built-in if no image is uploaded.
 
 5. **100% Theme Customizer Ready**:
    - Easily enable/disable the Comet Mobile Drawer.
-   - Customize header background color, tab text color, active indicator color, and custom menu blocks.
+   - Customize header background color, tab text color, active indicator color, category icons, and item-specific blocks.
 
 ---
 
@@ -60,41 +60,32 @@ Welcome to the **Comet Mobile Header & Drawer Menu** for your Shopify store! Thi
 
 ---
 
-### 3. Setup Custom Category Tabs (Men / Women / About Us)
+### 3. Upload Category Custom Icons (Automatic Matching)
 
-Under **Comet Navigation Tabs** in the Header settings:
+Under **Category Custom Icons** in Header section settings:
 
-- **Tab 1 Title**: Enter `MEN` & Select **Tab 1 Menu** (e.g. `Men Menu`).
-- **Tab 2 Title**: Enter `WOMEN` & Select **Tab 2 Menu** (e.g. `Women Menu`).
-- **Tab 3 Title**: Enter `ABOUT US` & Select **Tab 3 Menu** (e.g. `Main Menu` or `About Us`).
-- **Tab 4 Title** *(Optional)*: Enter additional tab name (e.g. `COLLECTIONS`).
+- **Boots Icon**: Upload your custom PNG/SVG for `BOOTS`.
+- **Casual Shoes Icon**: Upload your custom PNG/SVG for `CASUALS`.
+- **Formal Shoes Icon**: Upload your custom PNG/SVG for `FORMALS`.
+- **Loafers Icon**: Upload your custom PNG/SVG for `LOAFERS`.
+- **Sandals / Slippers Icon**: Upload your custom PNG/SVG for `SANDALS/SLIPPERS`.
+- **Sneakers Icon**: Upload your custom PNG/SVG for `SNEAKERS`.
+
+> [!TIP]
+> Once an image is uploaded in these category settings, any menu link containing that category name will **automatically show your custom icon image**!
 
 ---
 
-### 4. Footwear Icon Presets & Custom Icons
+### 4. Custom Icon Blocks for Individual Items
 
-The system **automatically** attaches footwear icons to menu links containing `BOOTS`, `CASUALS`, `FORMALS`, `LOAFERS`, `SANDALS`, `SLIPPERS`, `SNEAKERS`, or `SHOP ALL`.
+If you want to assign a custom image or badge to an item that is NOT a main category name (e.g. `X LOWS` or `SPECIAL OFFER`):
 
-If you wish to explicitly assign an icon or custom image to any menu item:
-
-1. In Theme Customizer under **Header**, click **Add Block**.
+1. Under **Header** in Theme Customizer, click **Add Block**.
 2. Select **Mobile Menu Icon**.
 3. Fill in the fields:
-   - **Menu Item Title**: Type the exact title of the menu item (e.g. `BOOTS`, `LOAFERS`, `FORMALS`).
-   - **Custom Icon Image** *(Optional)*: Upload your custom PNG/SVG icon.
-   - **Or Select Icon Preset**: Choose from presets:
-     - `Sneakers`
-     - `Boots`
-     - `Casual Shoes`
-     - `Formal Shoes`
-     - `Loafers`
-     - `Sandals / Slippers`
-     - `Shop All Arrow`
-     - `Star`
-     - `Fire / Hot`
-     - `Gift`
+   - **Menu Item Title**: Type the exact title of the menu item (e.g. `X LOWS`).
+   - **Custom Icon Image**: Upload your image.
    - **Badge Text** *(Optional)*: Add text like `NEW`, `HOT`, or `SALE`.
-
 4. Click **Save**.
 
 ---
@@ -103,7 +94,7 @@ If you wish to explicitly assign an icon or custom image to any menu item:
 
 | File Path | Description |
 | :--- | :--- |
-| `sections/header.liquid` | Header section file containing Comet schema settings & blocks. |
-| `snippets/drawer-menu.liquid` | Main Liquid template rendering full-width header bar, tab switcher, and mobile drawer. |
-| `snippets/comet-menu-item-render.liquid` | Sub-snippet handling footwear icon matching, SVG presets, badges, and dropdown links. |
+| `sections/header.liquid` | Contains Comet settings, category custom icon uploaders, and block definitions. |
+| `snippets/drawer-menu.liquid` | Template rendering full-width header bar, tab switcher, and mobile drawer. |
+| `snippets/comet-menu-item-render.liquid` | Sub-snippet handling category image matching, fallback SVGs, badges, and dropdown links. |
 | `assets/comet-mobile-header.css` | Stylesheet controlling 100% full-width drawer, tab indicator line, icons, and micro-animations. |

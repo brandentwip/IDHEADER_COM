@@ -1,5 +1,5 @@
 {%- comment -%}
-  Renders a single menu item with footwear icon support, badge support, and sub-lists for Comet mobile drawer
+  Renders a single menu item with footwear category icon settings, custom block icons, badges, and sub-lists for Comet mobile drawer
 {%- endcomment -%}
 
 {%- assign has_sub_dropdown = false -%}
@@ -23,6 +23,25 @@
     {%- endif -%}
   {%- endif -%}
 {%- endfor -%}
+
+{%- capture matched_category_image -%}
+  {%- if icon_block and icon_block.settings.icon_image != blank -%}
+    {{ icon_block.settings.icon_image | image_url: width: 60 }}
+  {%- elsif link_title_upper contains 'BOOT' and section.settings.category_icon_boots != blank -%}
+    {{ section.settings.category_icon_boots | image_url: width: 60 }}
+  {%- elsif link_title_upper contains 'CASUAL' and section.settings.category_icon_casuals != blank -%}
+    {{ section.settings.category_icon_casuals | image_url: width: 60 }}
+  {%- elsif link_title_upper contains 'FORMAL' and section.settings.category_icon_formals != blank -%}
+    {{ section.settings.category_icon_formals | image_url: width: 60 }}
+  {%- elsif link_title_upper contains 'LOAFER' and section.settings.category_icon_loafers != blank -%}
+    {{ section.settings.category_icon_loafers | image_url: width: 60 }}
+  {%- elsif link_title_upper contains 'SANDAL' or link_title_upper contains 'SLIPPER' and section.settings.category_icon_sandals != blank -%}
+    {{ section.settings.category_icon_sandals | image_url: width: 60 }}
+  {%- elsif link_title_upper contains 'SNEAKER' or link_title_upper contains 'LOW' or link_title_upper contains 'RUNNER' or link_title_upper contains 'APEX' or link_title_upper contains 'AEON' or link_title_upper contains 'AERES' and section.settings.category_icon_sneakers != blank -%}
+    {{ section.settings.category_icon_sneakers | image_url: width: 60 }}
+  {%- endif -%}
+{%- endcapture -%}
+{%- assign matched_category_image = matched_category_image | strip -%}
 
 {%- capture link_icon_svg -%}
   {%- if icon_preset == 'boots' or link_title_upper contains 'BOOT' -%}
@@ -52,9 +71,9 @@
   <div class="comet-menu-item__header">
     <a href="{{ link.url }}" class="comet-menu-link">
       <!-- ICON RENDERING -->
-      {%- if icon_block and icon_block.settings.icon_image != blank -%}
+      {%- if matched_category_image != blank -%}
         <span class="comet-menu-icon">
-          <img src="{{ icon_block.settings.icon_image | image_url: width: 60 }}" alt="{{ link.title }}" loading="lazy">
+          <img src="{{ matched_category_image }}" alt="{{ link.title }}" loading="lazy">
         </span>
       {%- elsif link_icon_svg != blank -%}
         <span class="comet-menu-icon">
@@ -97,6 +116,25 @@
             {%- endif -%}
           {%- endfor -%}
 
+          {%- capture child_matched_category_image -%}
+            {%- if child_icon_block and child_icon_block.settings.icon_image != blank -%}
+              {{ child_icon_block.settings.icon_image | image_url: width: 60 }}
+            {%- elsif child_title_upper contains 'BOOT' and section.settings.category_icon_boots != blank -%}
+              {{ section.settings.category_icon_boots | image_url: width: 60 }}
+            {%- elsif child_title_upper contains 'CASUAL' and section.settings.category_icon_casuals != blank -%}
+              {{ section.settings.category_icon_casuals | image_url: width: 60 }}
+            {%- elsif child_title_upper contains 'FORMAL' and section.settings.category_icon_formals != blank -%}
+              {{ section.settings.category_icon_formals | image_url: width: 60 }}
+            {%- elsif child_title_upper contains 'LOAFER' and section.settings.category_icon_loafers != blank -%}
+              {{ section.settings.category_icon_loafers | image_url: width: 60 }}
+            {%- elsif child_title_upper contains 'SANDAL' or child_title_upper contains 'SLIPPER' and section.settings.category_icon_sandals != blank -%}
+              {{ section.settings.category_icon_sandals | image_url: width: 60 }}
+            {%- elsif child_title_upper contains 'SNEAKER' or child_title_upper contains 'LOW' or child_title_upper contains 'RUNNER' or child_title_upper contains 'APEX' or child_title_upper contains 'AEON' or child_title_upper contains 'AERES' and section.settings.category_icon_sneakers != blank -%}
+              {{ section.settings.category_icon_sneakers | image_url: width: 60 }}
+            {%- endif -%}
+          {%- endcapture -%}
+          {%- assign child_matched_category_image = child_matched_category_image | strip -%}
+
           {%- capture child_link_icon_svg -%}
             {%- if child_icon_preset == 'boots' or child_title_upper contains 'BOOT' -%}
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M17 3v9c0 .6.4 1 1 1h2.5c.8 0 1.5.7 1.5 1.5V17c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2v-2.5c0-.8.7-1.5 1.5-1.5H6c1 0 1.8-.7 2-1.7l1-5.3C9.2 4.6 10.4 3 12.8 3H17z"/><path d="M4 17h16M7 17v2M17 17v2"/></svg>
@@ -122,9 +160,9 @@
           {%- endcapture -%}
 
           <a href="{{ childlink.url }}" class="comet-sub-link">
-            {%- if child_icon_block and child_icon_block.settings.icon_image != blank -%}
+            {%- if child_matched_category_image != blank -%}
               <span class="comet-menu-icon">
-                <img src="{{ child_icon_block.settings.icon_image | image_url: width: 60 }}" alt="{{ childlink.title }}" loading="lazy">
+                <img src="{{ child_matched_category_image }}" alt="{{ childlink.title }}" loading="lazy">
               </span>
             {%- elsif child_link_icon_svg != blank -%}
               <span class="comet-menu-icon">
