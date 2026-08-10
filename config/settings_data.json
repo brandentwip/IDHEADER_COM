@@ -1086,7 +1086,7 @@
             "settings": {
               "icon": "shopify://shop_images/loaf.png",
               "title": "Loafers",
-              "link": ""
+              "link": "shopify://collections/reg-loafers"
             }
           },
           "category_rGDGjt": {
@@ -1094,7 +1094,7 @@
             "settings": {
               "icon": "shopify://shop_images/sneakers_cc8492ad-d99c-4c40-ae6b-fd1ce00893d7.png",
               "title": "Sneakers",
-              "link": ""
+              "link": "shopify://collections/sneakers"
             }
           },
           "category_FU8fa4": {
@@ -1102,7 +1102,7 @@
             "settings": {
               "icon": "shopify://shop_images/boots_e4026d53-8c59-4f68-bb9d-0d2da291c5ba.png",
               "title": "Boots",
-              "link": ""
+              "link": "shopify://collections/boots"
             }
           },
           "category_aRhVjb": {
