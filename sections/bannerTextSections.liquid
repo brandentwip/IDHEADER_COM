@@ -20,10 +20,8 @@
   "
 >
   <div class="movable-text-inner">
-
     {% if section.settings.image != blank %}
       <div class="movable-text-image">
-
         {{
           section.settings.image
           | image_url: width: 3000
@@ -33,7 +31,6 @@
             sizes: '100vw',
             class: 'movable-text-image-img'
         }}
-
       </div>
     {% else %}
       <div class="movable-text-placeholder">
@@ -41,28 +38,21 @@
       </div>
     {% endif %}
 
-
     {% if section.settings.show_overlay %}
       <div class="movable-text-overlay"></div>
     {% endif %}
 
-
     {% if section.settings.text != blank %}
       <div class="movable-text-content">
-
         <div class="movable-text-copy">
           {{ section.settings.text }}
         </div>
-
       </div>
     {% endif %}
-
   </div>
 </section>
 
-
 <style>
-
   #movable-text-{{ section.id }} {
     width: 100%;
     position: relative;
@@ -192,9 +182,7 @@
     }
 
   }
-
 </style>
-
 
 {% schema %}
 {
@@ -202,21 +190,20 @@
   "tag": "section",
   "class": "section-image-movable-text",
   "settings": [
-
     {
       "type": "header",
-      "content": "Image"
+      "content": "Images"
     },
-
     {
       "type": "image_picker",
       "id": "image",
-      "label": "Image"
+      "label": "Desktop image"
     },
-
     {
-      "type": "header",
-      "content": "Text"
+      "type": "image_picker",
+      "id": "mobile_image",
+      "label": "Mobile image",
+      "info": "Optional. If empty, the desktop image will be used on mobile."
     },
 
     {
@@ -279,7 +266,6 @@
       "default": 20
     },
 
-
     {
       "type": "header",
       "content": "Desktop text position"
@@ -329,7 +315,6 @@
       "default": 13
     },
 
-
     {
       "type": "header",
       "content": "Mobile text position"
@@ -378,7 +363,6 @@
       "unit": "px",
       "default": 11
     }
-
   ],
 
   "presets": [
