@@ -1134,7 +1134,7 @@
           "logo": "shopify://shop_images/ID_LOGO_WITH_WHITE_BACKGROUND.webp",
           "small_heading": "WELCOME TO IDCULT",
           "heading": "Welcome to idcult",
-          "description": "<p>We've spent over five decades making shoes. We know what a good one feels like, what goes into it, and what most brands skip.<br/>ID is what happens when none of that gets compromised.</p>",
+          "description": "<p>We've spent over five decades making shoes. We know what a good one feels like, what goes into it, and what most brands skip. ID is what happens when none of that gets compromised.</p>",
           "button_label": "SHOP ALL",
           "button_link": "",
           "bg_color": "#ffffff",
@@ -1642,6 +1642,28 @@
           "mobile_width": 70,
           "mobile_font_size": 11
         }
+      },
+      "banner_text_sections_nEBqBk": {
+        "type": "bannerTextSections",
+        "name": "Image with movable text",
+        "settings": {
+          "image": "shopify://shop_images/ChatGPT_Image_Aug_10_2026_12_10_34_PM.png",
+          "mobile_image": "shopify://shop_images/Mask_group_35b88770-315d-4e4b-bf36-2b85697aba27.png",
+          "text": "<p>id is more than just a shoe or a brand. it is a state of mind, an emotion, and a way of life that translates its uniqueness into every aspect of an individual's identity.</p><p>The id customer blends seamlessly into any setting — be it a corporate boardroom meeting or a rock concert while always holding on to their own one-of-a-kind identity.</p>",
+          "text_alignment": "left",
+          "text_color": "#000000",
+          "text_background": false,
+          "show_overlay": false,
+          "overlay_opacity": 20,
+          "desktop_x": 80,
+          "desktop_y": 18,
+          "desktop_width": 30,
+          "desktop_font_size": 16,
+          "mobile_x": 20,
+          "mobile_y": 18,
+          "mobile_width": 70,
+          "mobile_font_size": 11
+        }
       }
     },
     "content_for_index": [
@@ -1653,6 +1675,7 @@
       "stack_section_YaXa36",
       "collection_tabs_yeam43",
       "banner_text_sections_cyFzMm",
+      "banner_text_sections_nEBqBk",
       "editorial_banner_cPjRFx",
       "dual_banner_cus_FbWzhE",
       "editorial_banner_WTyyDx",
