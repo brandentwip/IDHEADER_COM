@@ -1,0 +1,390 @@
+{% comment %}
+  IMAGE WITH MOVABLE TEXT
+  Editorial / Fashion Image Section
+{% endcomment %}
+
+<section
+  id="movable-text-{{ section.id }}"
+  class="movable-text-section"
+  style="
+    --desktop-x: {{ section.settings.desktop_x }}%;
+    --desktop-y: {{ section.settings.desktop_y }}%;
+    --mobile-x: {{ section.settings.mobile_x }}%;
+    --mobile-y: {{ section.settings.mobile_y }}%;
+    --desktop-width: {{ section.settings.desktop_width }}%;
+    --mobile-width: {{ section.settings.mobile_width }}%;
+    --desktop-size: {{ section.settings.desktop_font_size }}px;
+    --mobile-size: {{ section.settings.mobile_font_size }}px;
+    --text-color: {{ section.settings.text_color }};
+    --overlay-opacity: {{ section.settings.overlay_opacity | divided_by: 100.0 }};
+  "
+>
+  <div class="movable-text-inner">
+
+    {% if section.settings.image != blank %}
+      <div class="movable-text-image">
+
+        {{
+          section.settings.image
+          | image_url: width: 3000
+          | image_tag:
+            loading: 'lazy',
+            widths: '750, 1100, 1500, 2000, 2500, 3000',
+            sizes: '100vw',
+            class: 'movable-text-image-img'
+        }}
+
+      </div>
+    {% else %}
+      <div class="movable-text-placeholder">
+        {{ 'lifestyle-2' | placeholder_svg_tag }}
+      </div>
+    {% endif %}
+
+
+    {% if section.settings.show_overlay %}
+      <div class="movable-text-overlay"></div>
+    {% endif %}
+
+
+    {% if section.settings.text != blank %}
+      <div class="movable-text-content">
+
+        <div class="movable-text-copy">
+          {{ section.settings.text }}
+        </div>
+
+      </div>
+    {% endif %}
+
+  </div>
+</section>
+
+
+<style>
+
+  #movable-text-{{ section.id }} {
+    width: 100%;
+    position: relative;
+    overflow: hidden;
+  }
+
+  #movable-text-{{ section.id }} .movable-text-inner {
+    width: 100%;
+    position: relative;
+    overflow: hidden;
+  }
+
+
+  /* =========================
+     IMAGE
+  ========================= */
+
+  #movable-text-{{ section.id }} .movable-text-image {
+    width: 100%;
+    line-height: 0;
+    position: relative;
+  }
+
+  #movable-text-{{ section.id }} .movable-text-image-img {
+    display: block;
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+  }
+
+
+  /* =========================
+     PLACEHOLDER
+  ========================= */
+
+  #movable-text-{{ section.id }} .movable-text-placeholder {
+    width: 100%;
+    background: #e5e5e5;
+    line-height: 0;
+  }
+
+  #movable-text-{{ section.id }} .movable-text-placeholder svg {
+    width: 100%;
+    height: auto;
+    display: block;
+  }
+
+
+  /* =========================
+     OVERLAY
+  ========================= */
+
+  #movable-text-{{ section.id }} .movable-text-overlay {
+    position: absolute;
+    inset: 0;
+    background: #000;
+    opacity: var(--overlay-opacity);
+    pointer-events: none;
+  }
+
+
+  /* =========================
+     TEXT POSITION
+  ========================= */
+
+  #movable-text-{{ section.id }} .movable-text-content {
+    position: absolute;
+
+    left: var(--desktop-x);
+    top: var(--desktop-y);
+
+    width: var(--desktop-width);
+
+    transform: translate(-50%, -50%);
+
+    z-index: 2;
+  }
+
+
+  /* =========================
+     TEXT
+  ========================= */
+
+  #movable-text-{{ section.id }} .movable-text-copy {
+    color: var(--text-color);
+    font-size: var(--desktop-size);
+    line-height: 1.35;
+    letter-spacing: 0;
+    font-weight: 400;
+
+    {% if section.settings.text_background %}
+      background: rgba(255,255,255,0.85);
+      padding: 16px 20px;
+    {% endif %}
+  }
+
+  #movable-text-{{ section.id }} .movable-text-copy p {
+    margin: 0 0 14px;
+  }
+
+  #movable-text-{{ section.id }} .movable-text-copy p:last-child {
+    margin-bottom: 0;
+  }
+
+  #movable-text-{{ section.id }} .movable-text-copy h1,
+  #movable-text-{{ section.id }} .movable-text-copy h2,
+  #movable-text-{{ section.id }} .movable-text-copy h3,
+  #movable-text-{{ section.id }} .movable-text-copy h4 {
+    margin-top: 0;
+  }
+
+
+  /* =========================
+     MOBILE
+  ========================= */
+
+  @media screen and (max-width: 749px) {
+
+    #movable-text-{{ section.id }} .movable-text-content {
+      left: var(--mobile-x);
+      top: var(--mobile-y);
+      width: var(--mobile-width);
+    }
+
+    #movable-text-{{ section.id }} .movable-text-copy {
+      font-size: var(--mobile-size);
+    }
+
+  }
+
+</style>
+
+
+{% schema %}
+{
+  "name": "Image with movable text",
+  "tag": "section",
+  "class": "section-image-movable-text",
+  "settings": [
+
+    {
+      "type": "header",
+      "content": "Image"
+    },
+
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Image"
+    },
+
+    {
+      "type": "header",
+      "content": "Text"
+    },
+
+    {
+      "type": "richtext",
+      "id": "text",
+      "label": "Text",
+      "default": "<p>id is more than just a shoe or a brand. it is a state of mind, an emotion, and a way of life that translates its uniqueness into every aspect of an individual's identity.</p><p>The id customer blends seamlessly into any setting — be it a corporate boardroom meeting or a rock concert while always holding on to their own one-of-a-kind identity.</p>"
+    },
+
+    {
+      "type": "select",
+      "id": "text_alignment",
+      "label": "Text alignment",
+      "options": [
+        {
+          "value": "left",
+          "label": "Left"
+        },
+        {
+          "value": "center",
+          "label": "Center"
+        },
+        {
+          "value": "right",
+          "label": "Right"
+        }
+      ],
+      "default": "left"
+    },
+
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text color",
+      "default": "#000000"
+    },
+
+    {
+      "type": "checkbox",
+      "id": "text_background",
+      "label": "Add text background",
+      "default": false
+    },
+
+    {
+      "type": "checkbox",
+      "id": "show_overlay",
+      "label": "Add image overlay",
+      "default": false
+    },
+
+    {
+      "type": "range",
+      "id": "overlay_opacity",
+      "label": "Overlay opacity",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "unit": "%",
+      "default": 20
+    },
+
+
+    {
+      "type": "header",
+      "content": "Desktop text position"
+    },
+
+    {
+      "type": "range",
+      "id": "desktop_x",
+      "label": "Horizontal position",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "%",
+      "default": 15
+    },
+
+    {
+      "type": "range",
+      "id": "desktop_y",
+      "label": "Vertical position",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "%",
+      "default": 18
+    },
+
+    {
+      "type": "range",
+      "id": "desktop_width",
+      "label": "Text width",
+      "min": 10,
+      "max": 80,
+      "step": 1,
+      "unit": "%",
+      "default": 30
+    },
+
+    {
+      "type": "range",
+      "id": "desktop_font_size",
+      "label": "Font size",
+      "min": 10,
+      "max": 40,
+      "step": 1,
+      "unit": "px",
+      "default": 13
+    },
+
+
+    {
+      "type": "header",
+      "content": "Mobile text position"
+    },
+
+    {
+      "type": "range",
+      "id": "mobile_x",
+      "label": "Horizontal position",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "%",
+      "default": 20
+    },
+
+    {
+      "type": "range",
+      "id": "mobile_y",
+      "label": "Vertical position",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "%",
+      "default": 18
+    },
+
+    {
+      "type": "range",
+      "id": "mobile_width",
+      "label": "Text width",
+      "min": 20,
+      "max": 95,
+      "step": 1,
+      "unit": "%",
+      "default": 70
+    },
+
+    {
+      "type": "range",
+      "id": "mobile_font_size",
+      "label": "Font size",
+      "min": 8,
+      "max": 28,
+      "step": 1,
+      "unit": "px",
+      "default": 11
+    }
+
+  ],
+
+  "presets": [
+    {
+      "name": "Image with movable text"
+    }
+  ]
+}
+{% endschema %}
