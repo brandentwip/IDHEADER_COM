@@ -1575,30 +1575,6 @@
           "padding_bottom": 20
         }
       },
-      "editorial_banner_cPjRFx": {
-        "type": "editorial-banner",
-        "name": "Editorial Banner",
-        "settings": {
-          "desktop_image": "shopify://shop_images/Banner_82a50613-d3b3-4812-b051-a553a57ec83d.png",
-          "mobile_image": "shopify://shop_images/Mobile.png",
-          "label": "",
-          "heading": "",
-          "text": "",
-          "button_label": "",
-          "button_link": "",
-          "full_width": true,
-          "desktop_height": "adapt",
-          "mobile_height": "adapt",
-          "text_position": "bottom-left",
-          "text_alignment": "left",
-          "text_color": "#ffffff",
-          "overlay_color": "#000000",
-          "overlay_opacity": 20,
-          "button_style": "outline",
-          "padding_top": 40,
-          "padding_bottom": 40
-        }
-      },
       "editorial_banner_WTyyDx": {
         "type": "editorial-banner",
         "name": "Editorial Banner",
@@ -1676,7 +1652,6 @@
       "collection_tabs_yeam43",
       "banner_text_sections_cyFzMm",
       "banner_text_sections_nEBqBk",
-      "editorial_banner_cPjRFx",
       "dual_banner_cus_FbWzhE",
       "editorial_banner_WTyyDx",
       "trustmedia_3APFiW",
