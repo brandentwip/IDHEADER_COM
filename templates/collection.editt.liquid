@@ -44,17 +44,21 @@
   {% assign row_images = raw_row_images %}
 {% endif %}
 
-{% comment %} ---------- ROW IMAGE LINKS (List of Product references from collection metafield: custom.row_image_links) ---------- {% endcomment %}
-{% assign row_image_links = collection.metafields.custom.row_image_links.value %}
-{% comment %} Debug: output the raw metafield to help troubleshoot {% endcomment %}
-<!-- DEBUG row_image_links count: {{ row_image_links.size | default: 0 }} -->
-<!-- DEBUG row_image_links raw: {{ collection.metafields.custom.row_image_links }} -->
-<!-- DEBUG row_image_links type: {{ collection.metafields.custom.row_image_links.type }} -->
-{% if row_image_links.size > 0 %}
-  <!-- DEBUG first item raw: {{ row_image_links[0] }} -->
-  <!-- DEBUG first item url: {{ row_image_links[0].url | default: 'EMPTY' }} -->
-  <!-- DEBUG first item title: {{ row_image_links[0].title | default: 'EMPTY' }} -->
-  <!-- DEBUG first item class: {{ row_image_links[0] | class }} -->
+{% comment %} ---------- ROW IMAGE LINKS (from collection metafield: custom.row_image_links) ---------- {% endcomment %}
+{% assign raw_row_links = collection.metafields.custom.row_image_links.value | default: collection.metafields.custom.row_image_links %}
+{% assign row_image_links = nil %}
+
+{% if raw_row_links != blank %}
+  {% if raw_row_links.first == nil %}
+    {% assign raw_links_str = raw_row_links | strip %}
+    {% if raw_links_str contains ',' %}
+      {% assign row_image_links = raw_links_str | split: ',' %}
+    {% else %}
+      {% assign row_image_links = raw_links_str | newline_to_br | split: '<br />' %}
+    {% endif %}
+  {% else %}
+    {% assign row_image_links = raw_row_links %}
+  {% endif %}
 {% endif %}
 
 {% assign row_image_count = 0 %}
@@ -533,14 +537,11 @@
               {% endif %}
             {% endif %}
 
-            {% comment %} Resolve the link for this row image (product reference → product URL) {% endcomment %}
+            {% comment %} Resolve the link for this row image {% endcomment %}
             {% assign row_link_index = next_row_image_index | minus: 1 %}
             {% assign row_link_url = '' %}
             {% if row_image_links and row_link_index >= 0 %}
-              {% assign row_link_product = row_image_links[row_link_index] %}
-              {% if row_link_product.url != blank %}
-                {% assign row_link_url = row_link_product.url %}
-              {% endif %}
+              {% assign row_link_url = row_image_links[row_link_index] | strip %}
             {% endif %}
 
             <div class="collection-row-image-card">
