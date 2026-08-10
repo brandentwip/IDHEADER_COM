@@ -927,7 +927,6 @@
       },
       "background_video_text_YbNqkx": {
         "type": "background-video-text",
-        "disabled": true,
         "name": "Large video with text box",
         "settings": {
           "subtitle": "",
@@ -935,7 +934,7 @@
           "text": "",
           "button_label": "",
           "button_link": "",
-          "video_url": "https://cdn.shopify.com/videos/c/o/v/f8054de4f2b0475790a973f42146c4e7.mp4",
+          "video_url": "https://cdn.shopify.com/videos/c/o/v/297d0ce4d6a94501ba0fcb3f99dabafe.mp4",
           "color_border": "#f4f4f4",
           "layout": "left",
           "height": 750
