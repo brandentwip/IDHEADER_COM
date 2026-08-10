@@ -1559,7 +1559,7 @@
         "name": "Trust Media Panel",
         "settings": {
           "media_type": "video",
-          "shopify_video": "shopify://files/videos/ID_reel_3.mp4",
+          "shopify_video": "shopify://files/videos/ID 1080&1080.mp4",
           "video_url": "",
           "autoplay": true,
           "loop": true,
