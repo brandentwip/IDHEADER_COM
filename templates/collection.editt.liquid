@@ -44,23 +44,6 @@
   {% assign row_images = raw_row_images %}
 {% endif %}
 
-{% comment %} ---------- ROW IMAGE LINKS (from collection metafield: custom.row_image_links) ---------- {% endcomment %}
-{% assign raw_row_links = collection.metafields.custom.row_image_links.value | default: collection.metafields.custom.row_image_links %}
-{% assign row_image_links = nil %}
-
-{% if raw_row_links != blank %}
-  {% if raw_row_links.first == nil %}
-    {% assign raw_links_str = raw_row_links | strip %}
-    {% if raw_links_str contains ',' %}
-      {% assign row_image_links = raw_links_str | split: ',' %}
-    {% else %}
-      {% assign row_image_links = raw_links_str | newline_to_br | split: '<br />' %}
-    {% endif %}
-  {% else %}
-    {% assign row_image_links = raw_row_links %}
-  {% endif %}
-{% endif %}
-
 {% assign row_image_count = 0 %}
 {% if row_images %}
   {% assign row_image_count = row_images.size %}
@@ -476,7 +459,7 @@
         {% comment %} ---------- ROW IMAGE INSERTION (Row 1 slot 4, then every 3 rows = 12 products) ---------- {% endcomment %}
         {% if row_image_count > 0 and next_row_image_index < row_image_count %}
           {% assign items_since_last_image = items_since_last_image | plus: 1 %}
-          {% assign target_interval = 12 %}
+          {% assign target_interval = 5 %}
           {% if next_row_image_index == 0 %}
             {% assign target_interval = 3 %}
           {% endif %}
@@ -537,19 +520,8 @@
               {% endif %}
             {% endif %}
 
-            {% comment %} Resolve the link for this row image (index = next_row_image_index - 1 since we already incremented) {% endcomment %}
-            {% assign row_link_index = next_row_image_index | minus: 1 %}
-            {% assign row_link_url = '' %}
-            {% if row_image_links and row_link_index >= 0 %}
-              {% assign row_link_url = row_image_links[row_link_index] | strip %}
-            {% endif %}
-
             <div class="collection-row-image-card">
               <div class="row-image-container">
-                {% if row_link_url != blank %}
-                  <a href="{{ row_link_url }}" class="row-image-link">
-                {% endif %}
-
                 {% if row_img_src != blank %}
                   <img
                     src="{{ row_img_src }}"
@@ -565,10 +537,6 @@
                     {{ collection.title | upcase }}
                   {% endif %}
                 </span>
-
-                {% if row_link_url != blank %}
-                  </a>
-                {% endif %}
               </div>
             </div>
           {% endif %}
