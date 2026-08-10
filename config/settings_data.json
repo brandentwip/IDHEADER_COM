@@ -1542,7 +1542,7 @@
             "type": "link",
             "settings": {
               "link_label": "Pick Something To Try Out",
-              "link_url": ""
+              "link_url": "shopify://collections/leather-sneakers"
             }
           }
         },
