@@ -48,9 +48,13 @@
 {% assign row_image_links = collection.metafields.custom.row_image_links.value %}
 {% comment %} Debug: output the raw metafield to help troubleshoot {% endcomment %}
 <!-- DEBUG row_image_links count: {{ row_image_links.size | default: 0 }} -->
+<!-- DEBUG row_image_links raw: {{ collection.metafields.custom.row_image_links }} -->
+<!-- DEBUG row_image_links type: {{ collection.metafields.custom.row_image_links.type }} -->
 {% if row_image_links.size > 0 %}
-  <!-- DEBUG first link product url: {{ row_image_links[0].url | default: 'EMPTY' }} -->
-  <!-- DEBUG first link product title: {{ row_image_links[0].title | default: 'EMPTY' }} -->
+  <!-- DEBUG first item raw: {{ row_image_links[0] }} -->
+  <!-- DEBUG first item url: {{ row_image_links[0].url | default: 'EMPTY' }} -->
+  <!-- DEBUG first item title: {{ row_image_links[0].title | default: 'EMPTY' }} -->
+  <!-- DEBUG first item class: {{ row_image_links[0] | class }} -->
 {% endif %}
 
 {% assign row_image_count = 0 %}
