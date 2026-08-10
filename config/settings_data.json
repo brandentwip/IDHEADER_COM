@@ -1621,6 +1621,27 @@
           "padding_top": 40,
           "padding_bottom": 40
         }
+      },
+      "banner_text_sections_cyFzMm": {
+        "type": "bannerTextSections",
+        "disabled": true,
+        "name": "Image with movable text",
+        "settings": {
+          "text": "<p>id is more than just a shoe or a brand. it is a state of mind, an emotion, and a way of life that translates its uniqueness into every aspect of an individual's identity.</p><p>The id customer blends seamlessly into any setting — be it a corporate boardroom meeting or a rock concert while always holding on to their own one-of-a-kind identity.</p>",
+          "text_alignment": "left",
+          "text_color": "#000000",
+          "text_background": false,
+          "show_overlay": false,
+          "overlay_opacity": 20,
+          "desktop_x": 15,
+          "desktop_y": 18,
+          "desktop_width": 30,
+          "desktop_font_size": 13,
+          "mobile_x": 20,
+          "mobile_y": 18,
+          "mobile_width": 70,
+          "mobile_font_size": 11
+        }
       }
     },
     "content_for_index": [
@@ -1631,6 +1652,7 @@
       "collection_tabs_3fxzUa",
       "stack_section_YaXa36",
       "collection_tabs_yeam43",
+      "banner_text_sections_cyFzMm",
       "editorial_banner_cPjRFx",
       "dual_banner_cus_FbWzhE",
       "editorial_banner_WTyyDx",
