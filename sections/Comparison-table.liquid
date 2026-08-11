@@ -198,20 +198,39 @@
 <style>
 
   /* ==========================================================
-     MAIN SECTION
+     FULL WIDTH SECTION
      ========================================================== */
 
   #comparison-{{ section.id }} {
-    width: 100%;
-    overflow: hidden;
+    width: 100vw !important;
+    max-width: 100vw !important;
+
+    margin-left: calc(50% - 50vw) !important;
+    margin-right: calc(50% - 50vw) !important;
+
+    padding: 0 !important;
+
+    overflow: visible !important;
+
     background: #ffffff;
+
+    position: relative;
+    display: block;
+    clear: both;
   }
 
 
+  /* ==========================================================
+     INNER CONTAINER
+     ========================================================== */
+
   #comparison-{{ section.id }} .comparison-inner {
-    width: 100%;
+    width: 100% !important;
     max-width: 1080px;
+
     margin: 0 auto;
+
+    position: relative;
   }
 
 
@@ -221,21 +240,28 @@
 
   #comparison-{{ section.id }} .comparison-heading {
     width: 100%;
-    padding: 65px 30px var(--comparison-heading-bottom);
+
+    padding: 65px 30px 35px;
+
+    box-sizing: border-box;
 
     text-align: center;
 
     font-size: var(--comparison-heading-size);
+
     line-height: 0.95;
+
     font-weight: 800;
 
     letter-spacing: -1.5px;
+
     text-transform: uppercase;
 
     color: #000000;
 
     position: relative;
-    z-index: 10;
+
+    z-index: 20;
   }
 
 
@@ -244,33 +270,46 @@
      ========================================================== */
 
   #comparison-{{ section.id }} .comparison-labels {
+
     width: 100%;
 
     display: grid;
+
     grid-template-columns: 1fr 1fr;
 
-    height: 185px;
+    height: 180px;
 
     position: relative;
+
     z-index: 5;
+
+    box-sizing: border-box;
   }
 
 
   #comparison-{{ section.id }} .comparison-label {
+
     display: flex;
+
     align-items: center;
+
+    box-sizing: border-box;
   }
 
 
   #comparison-{{ section.id }} .comparison-label-left {
+
     justify-content: center;
-    padding-right: 80px;
+
+    padding-right: 180px;
   }
 
 
   #comparison-{{ section.id }} .comparison-label-right {
+
     justify-content: center;
-    padding-left: 80px;
+
+    padding-left: 180px;
   }
 
 
@@ -279,27 +318,37 @@
      ========================================================== */
 
   #comparison-{{ section.id }} .comparison-logo {
+
     max-width: 150px;
+
+    width: 100%;
   }
 
 
   #comparison-{{ section.id }} .comparison-logo-image {
+
     display: block;
+
     width: 100%;
+
     height: auto;
   }
 
 
   /* ==========================================================
-     OTHERS TEXT
+     OTHERS
      ========================================================== */
 
   #comparison-{{ section.id }} .comparison-label-right span {
+
     font-size: 32px;
+
     line-height: 1;
+
     font-weight: 800;
 
     text-transform: uppercase;
+
     letter-spacing: -0.5px;
 
     color: #000000;
@@ -311,11 +360,14 @@
      ========================================================== */
 
   #comparison-{{ section.id }} .comparison-table {
+
     width: 100%;
 
     position: relative;
 
     overflow: visible;
+
+    box-sizing: border-box;
   }
 
 
@@ -324,22 +376,31 @@
      ========================================================== */
 
   #comparison-{{ section.id }} .comparison-background {
+
     position: absolute;
+
     inset: 0;
 
+    width: 100%;
+
     display: grid;
+
     grid-template-columns: 1fr 1fr;
 
     z-index: 0;
+
+    pointer-events: none;
   }
 
 
   #comparison-{{ section.id }} .comparison-background-left {
+
     background: var(--comparison-dark);
   }
 
 
   #comparison-{{ section.id }} .comparison-background-right {
+
     background: var(--comparison-light);
   }
 
@@ -349,49 +410,68 @@
      ========================================================== */
 
   #comparison-{{ section.id }} .comparison-rows {
+
+    width: 100%;
+
     position: relative;
+
     z-index: 2;
   }
 
 
   #comparison-{{ section.id }} .comparison-row {
+
+    width: 100%;
+
     display: grid;
+
     grid-template-columns: 1fr 1fr;
 
     min-height: var(--comparison-row-height);
 
     border-bottom: 1px solid rgba(0, 0, 0, 0.8);
-  }
 
-
-  #comparison-{{ section.id }} .comparison-row:first-child {
-    border-top: 1px solid rgba(0, 0, 0, 0.15);
+    box-sizing: border-box;
   }
 
 
   #comparison-{{ section.id }} .comparison-cell {
+
     min-height: var(--comparison-row-height);
 
     display: flex;
+
     align-items: center;
 
     position: relative;
+
+    box-sizing: border-box;
   }
 
 
+  /* ==========================================================
+     LEFT CELL
+     ========================================================== */
+
   #comparison-{{ section.id }} .comparison-cell-left {
+
     justify-content: flex-start;
 
-    padding: 22px 40px 22px 35px;
+    padding: 25px 55px 25px 35px;
 
     background: var(--comparison-dark);
   }
 
 
+  /* ==========================================================
+     RIGHT CELL
+     ========================================================== */
+
   #comparison-{{ section.id }} .comparison-cell-right {
+
     justify-content: flex-end;
 
-    padding: 22px 35px 22px 40px;
+    padding: 25px 35px 25px 55px;
 
     background: var(--comparison-light);
 
@@ -400,34 +480,43 @@
 
 
   /* ==========================================================
-     ROW TEXT
+     TEXT
      ========================================================== */
 
   #comparison-{{ section.id }} .comparison-cell-text {
+
     width: 100%;
 
     font-size: 20px;
+
     line-height: 1.75;
 
     font-weight: 700;
 
     text-transform: uppercase;
+
     letter-spacing: 0;
 
     position: relative;
 
-    z-index: 1;
+    z-index: 3;
   }
 
 
-  #comparison-{{ section.id }} .comparison-cell-left .comparison-cell-text {
+  #comparison-{{ section.id }} .comparison-cell-left
+  .comparison-cell-text {
+
     color: var(--comparison-text-dark);
+
     text-align: left;
   }
 
 
-  #comparison-{{ section.id }} .comparison-cell-right .comparison-cell-text {
+  #comparison-{{ section.id }} .comparison-cell-right
+  .comparison-cell-text {
+
     color: var(--comparison-text-light);
+
     text-align: right;
   }
 
@@ -437,33 +526,41 @@
      ========================================================== */
 
   #comparison-{{ section.id }} .comparison-shoe {
+
     position: absolute;
 
-    top: 50%;
+    top: 0;
+
     left: 50%;
 
     width: var(--comparison-image-width);
+
     height: var(--comparison-image-height);
 
-    transform: translate(-50%, -50%);
+    transform: translateX(-50%);
 
     z-index: 10;
 
     pointer-events: none;
+
+    overflow: visible;
   }
 
 
   /* ==========================================================
-     BOTH IMAGE HALVES
+     IMAGE HALVES
      ========================================================== */
 
   #comparison-{{ section.id }} .comparison-shoe-half {
+
     position: absolute;
 
     top: 0;
+
     left: 0;
 
     width: 100%;
+
     height: 100%;
 
     overflow: hidden;
@@ -471,9 +568,15 @@
 
 
   #comparison-{{ section.id }} .comparison-shoe-image {
+
     position: absolute;
 
+    top: 0;
+
+    left: 0;
+
     width: 100%;
+
     height: 100%;
 
     display: block;
@@ -481,89 +584,28 @@
     object-fit: contain;
 
     object-position: center center;
+
+    max-width: none !important;
   }
 
 
   /* ==========================================================
-     REAL SHOE = LEFT HALF
+     REAL SHOE - LEFT HALF
      ========================================================== */
 
   #comparison-{{ section.id }} .comparison-shoe-real {
+
     clip-path: inset(0 50% 0 0);
   }
 
 
   /* ==========================================================
-     OUTLINE SHOE = RIGHT HALF
+     OUTLINE SHOE - RIGHT HALF
      ========================================================== */
 
   #comparison-{{ section.id }} .comparison-shoe-outline {
+
     clip-path: inset(0 0 0 50%);
-  }
-
-
-  /* ==========================================================
-     CENTER SEAM
-     ========================================================== */
-
-  #comparison-{{ section.id }} .comparison-shoe::after {
-    content: "";
-
-    position: absolute;
-
-    top: 0;
-    bottom: 0;
-
-    left: 50%;
-
-    width: 1px;
-
-    transform: translateX(-50%);
-
-    background: transparent;
-
-    z-index: 20;
-  }
-
-
-  /* ==========================================================
-     TABLET
-     ========================================================== */
-
-  @media screen and (max-width: 900px) {
-
-    #comparison-{{ section.id }} .comparison-heading {
-      font-size: 58px;
-    }
-
-
-    #comparison-{{ section.id }} .comparison-labels {
-      height: 150px;
-    }
-
-
-    #comparison-{{ section.id }} .comparison-label-right span {
-      font-size: 26px;
-    }
-
-
-    #comparison-{{ section.id }} .comparison-cell-text {
-      font-size: 17px;
-      line-height: 1.55;
-    }
-
-
-    #comparison-{{ section.id }} .comparison-cell-left {
-      padding-left: 25px;
-      padding-right: 25px;
-    }
-
-
-    #comparison-{{ section.id }} .comparison-cell-right {
-      padding-left: 25px;
-      padding-right: 25px;
-    }
-
   }
 
 
@@ -573,79 +615,91 @@
 
   @media screen and (max-width: 749px) {
 
+    #comparison-{{ section.id }} {
+
+      width: 100vw !important;
+
+      max-width: 100vw !important;
+
+      margin-left: calc(50% - 50vw) !important;
+
+      margin-right: calc(50% - 50vw) !important;
+    }
+
+
+    #comparison-{{ section.id }} .comparison-inner {
+
+      width: 100%;
+
+      max-width: 100%;
+    }
+
+
     #comparison-{{ section.id }} .comparison-heading {
+
       padding: 40px 20px 25px;
 
       font-size: var(--comparison-heading-mobile-size);
 
       line-height: 0.95;
-
-      letter-spacing: -0.8px;
     }
 
 
     #comparison-{{ section.id }} .comparison-labels {
-      height: 105px;
+
+      height: 110px;
     }
 
 
     #comparison-{{ section.id }} .comparison-label-left {
-      padding-right: 35px;
+
+      padding-right: 50px;
     }
 
 
     #comparison-{{ section.id }} .comparison-label-right {
-      padding-left: 35px;
+
+      padding-left: 50px;
     }
 
 
     #comparison-{{ section.id }} .comparison-logo {
-      max-width: 100px;
+
+      max-width: 90px;
     }
 
 
     #comparison-{{ section.id }} .comparison-label-right span {
-      font-size: 20px;
-    }
 
-
-    #comparison-{{ section.id }} .comparison-row {
-      min-height: 95px;
-    }
-
-
-    #comparison-{{ section.id }} .comparison-cell {
-      min-height: 95px;
+      font-size: 19px;
     }
 
 
     #comparison-{{ section.id }} .comparison-cell-left {
-      padding: 18px 18px 18px 16px;
+
+      padding: 18px 20px 18px 15px;
     }
 
 
     #comparison-{{ section.id }} .comparison-cell-right {
-      padding: 18px 16px 18px 18px;
+
+      padding: 18px 15px 18px 20px;
     }
 
 
     #comparison-{{ section.id }} .comparison-cell-text {
+
       font-size: 12px;
-      line-height: 1.55;
-      font-weight: 700;
+
+      line-height: 1.5;
     }
 
 
     #comparison-{{ section.id }} .comparison-shoe {
-      width: min(
-        var(--comparison-image-width),
-        65vw
-      );
 
-      height: min(
-        var(--comparison-image-height),
-        520px
-      );
+      width: 250px;
+
+      height: 600px;
     }
 
   }
@@ -658,54 +712,44 @@
   @media screen and (max-width: 480px) {
 
     #comparison-{{ section.id }} .comparison-heading {
+
       font-size: 34px;
+
+      padding-left: 15px;
+
+      padding-right: 15px;
     }
 
 
     #comparison-{{ section.id }} .comparison-labels {
-      height: 85px;
+
+      height: 90px;
     }
 
 
     #comparison-{{ section.id }} .comparison-logo {
-      max-width: 80px;
+
+      max-width: 75px;
     }
 
 
     #comparison-{{ section.id }} .comparison-label-right span {
+
       font-size: 16px;
     }
 
 
-    #comparison-{{ section.id }} .comparison-row {
-      min-height: 85px;
-    }
-
-
-    #comparison-{{ section.id }} .comparison-cell {
-      min-height: 85px;
-    }
-
-
-    #comparison-{{ section.id }} .comparison-cell-left {
-      padding: 15px 12px;
-    }
-
-
-    #comparison-{{ section.id }} .comparison-cell-right {
-      padding: 15px 12px;
-    }
-
-
     #comparison-{{ section.id }} .comparison-cell-text {
+
       font-size: 10px;
-      line-height: 1.5;
     }
 
 
     #comparison-{{ section.id }} .comparison-shoe {
-      width: 230px;
-      height: 480px;
+
+      width: 210px;
+
+      height: 500px;
     }
 
   }
@@ -804,7 +848,7 @@
       "max": 1200,
       "step": 10,
       "unit": "px",
-      "default": 900
+      "default": 700
     },
 
 
@@ -869,7 +913,7 @@
       "max": 220,
       "step": 5,
       "unit": "px",
-      "default": 150
+      "default": 145
     }
 
   ],
