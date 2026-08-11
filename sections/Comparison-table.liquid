@@ -1,388 +1,962 @@
-{%- comment -%}
-  Section: Comparing With Others
-  Split visual comparison — genuine leather product photo on the left,
-  generic outline artwork on the right, with editable comparison rows below.
-  Rows = blocks, fully editable via theme customizer.
-{%- endcomment -%}
+{% comment %}
+  ============================================================
+  COMPARING WITH OTHERS - PRODUCT COMPARISON SECTION
+  ============================================================
+  Designed to recreate the provided reference.
 
-<div class="cwo-section-{{ section.id }} cwo-section" style="background:{{ section.settings.bg_color }};">
+  Uses:
+  - 1 real/product shoe image
+  - 1 outline shoe image
+  - Editable comparison rows through Shopify blocks
+  ============================================================
+{% endcomment %}
 
-  {%- if section.settings.heading != blank -%}
-    <h2 class="cwo-heading">{{ section.settings.heading }}</h2>
-  {%- endif -%}
+<section
+  id="comparison-{{ section.id }}"
+  class="comparison-section"
+  style="
+    --comparison-heading-size: {{ section.settings.heading_size }}px;
+    --comparison-heading-mobile-size: {{ section.settings.heading_mobile_size }}px;
+    --comparison-image-width: {{ section.settings.image_width }}px;
+    --comparison-image-height: {{ section.settings.image_height }}px;
+    --comparison-dark: {{ section.settings.left_background }};
+    --comparison-light: {{ section.settings.right_background }};
+    --comparison-text-dark: {{ section.settings.left_text_color }};
+    --comparison-text-light: {{ section.settings.right_text_color }};
+    --comparison-row-height: {{ section.settings.row_height }}px;
+    --comparison-heading-bottom: {{ section.settings.heading_bottom }}px;
+  "
+>
+  <div class="comparison-inner">
 
-  <div class="cwo-labels">
-    <div class="cwo-brand-logo">
-      {%- if section.settings.logo_image != blank -%}
-        <img
-          class="cwo-brand-logo-img"
-          src="{{ section.settings.logo_image | image_url: width: 200 }}"
-          alt="{{ section.settings.logo_image.alt | default: shop.name | escape }}"
-          width="{{ section.settings.logo_image.width }}"
-          height="{{ section.settings.logo_image.height }}"
-          loading="lazy"
-        >
-      {%- else -%}
-        <div class="cwo-mark">
-          <span></span>
-          <span class="cwo-big-d">{{ section.settings.logo_text | default: 'iD' }}</span>
-        </div>
-        {%- if section.settings.logo_subtext != blank -%}
-          <div class="cwo-logo-text">
-            <span class="cwo-since">{{ section.settings.logo_subtext }}</span>
-          </div>
-        {%- endif -%}
-      {%- endif -%}
+    <!-- ======================================================
+         HEADING
+         ====================================================== -->
+
+    {% if section.settings.heading != blank %}
+      <div class="comparison-heading">
+        {{ section.settings.heading }}
+      </div>
+    {% endif %}
+
+
+    <!-- ======================================================
+         TOP LABELS
+         ====================================================== -->
+
+    <div class="comparison-labels">
+
+      <div class="comparison-label comparison-label-left">
+
+        {% if section.settings.brand_logo != blank %}
+          <div class="comparison-logo">
+            {{
+              section.settings.brand_logo
+              | image_url: width: 500
+              | image_tag:
+                loading: 'lazy',
+                widths: '150, 250, 350, 500',
+                class: 'comparison-logo-image'
+            }}
+          >
+        {% endif %}
+
+      </div>
+
+
+      <div class="comparison-label comparison-label-right">
+
+        {% if section.settings.others_heading != blank %}
+          <span>{{ section.settings.others_heading }}</span>
+        {% endif %}
+
+      </div>
+
     </div>
-    <div class="cwo-others-label">{{ section.settings.others_label | default: 'Others' }}</div>
-  </div>
 
-  <div class="cwo-split-visual">
-    {%- if section.settings.leather_image != blank -%}
-      <img
-        src="{{ section.settings.leather_image | image_url: width: 1080 }}"
-        srcset="
-          {{ section.settings.leather_image | image_url: width: 540 }} 540w,
-          {{ section.settings.leather_image | image_url: width: 1080 }} 1080w,
-          {{ section.settings.leather_image | image_url: width: 1600 }} 1600w
-        "
-        sizes="(max-width: 640px) 300px, 480px"
-        alt="{{ section.settings.leather_image.alt | default: 'Genuine leather shoe' | escape }}"
-        width="{{ section.settings.leather_image.width }}"
-        height="{{ section.settings.leather_image.height }}"
-        loading="lazy"
-      >
-    {%- else -%}
-      <div class="cwo-split-visual-placeholder">
-        {{ 'shoe-1' | placeholder_svg_tag: 'cwo-placeholder-svg' }}
+
+    <!-- ======================================================
+         COMPARISON TABLE
+         ====================================================== -->
+
+    <div class="comparison-table">
+
+      <!-- LEFT / RIGHT BACKGROUND -->
+      <div class="comparison-background">
+
+        <div class="comparison-background-left"></div>
+
+        <div class="comparison-background-right"></div>
+
       </div>
-    {%- endif -%}
 
-    {%- if section.settings.outline_image != blank -%}
-      <img
-        src="{{ section.settings.outline_image | image_url: width: 1080 }}"
-        srcset="
-          {{ section.settings.outline_image | image_url: width: 540 }} 540w,
-          {{ section.settings.outline_image | image_url: width: 1080 }} 1080w,
-          {{ section.settings.outline_image | image_url: width: 1600 }} 1600w
-        "
-        sizes="(max-width: 640px) 300px, 480px"
-        alt="{{ section.settings.outline_image.alt | default: 'Generic outline shoe comparison' | escape }}"
-        width="{{ section.settings.outline_image.width }}"
-        height="{{ section.settings.outline_image.height }}"
-        loading="lazy"
-      >
-    {%- endif -%}
-  </div>
 
-  <div class="cwo-rows">
-    {%- for block in section.blocks -%}
-      <div class="cwo-row-pair" {{ block.shopify_attributes }}>
-        <div class="cwo-cell cwo-dark">{{ block.settings.left_text }}</div>
-        <div class="cwo-cell cwo-light">{{ block.settings.right_text }}</div>
+      <!-- COMPARISON ROWS -->
+
+      <div class="comparison-rows">
+
+        {% for block in section.blocks %}
+
+          <div
+            class="comparison-row"
+            {{ block.shopify_attributes }}
+          >
+
+            <!-- LEFT SIDE -->
+
+            <div class="comparison-cell comparison-cell-left">
+
+              {% if block.settings.left_text != blank %}
+
+                <div class="comparison-cell-text">
+                  {{ block.settings.left_text | newline_to_br }}
+                </div>
+
+              {% endif %}
+
+            </div>
+
+
+            <!-- RIGHT SIDE -->
+
+            <div class="comparison-cell comparison-cell-right">
+
+              {% if block.settings.right_text != blank %}
+
+                <div class="comparison-cell-text">
+                  {{ block.settings.right_text | newline_to_br }}
+                </div>
+
+              {% endif %}
+
+            </div>
+
+          </div>
+
+        {% endfor %}
+
       </div>
-    {%- endfor -%}
-  </div>
 
-</div>
+
+      <!-- ====================================================
+           CENTER SHOE IMAGES
+           ==================================================== -->
+
+      {% if section.settings.real_shoe != blank or section.settings.outline_shoe != blank %}
+
+        <div class="comparison-shoe">
+
+          <!-- REAL SHOE -->
+
+          {% if section.settings.real_shoe != blank %}
+
+            <div class="comparison-shoe-half comparison-shoe-real">
+
+              {{
+                section.settings.real_shoe
+                | image_url: width: 1600
+                | image_tag:
+                  loading: 'lazy',
+                  widths: '500, 800, 1200, 1600',
+                  class: 'comparison-shoe-image'
+              }}
+
+            </div>
+
+          {% endif %}
+
+
+          <!-- OUTLINE SHOE -->
+
+          {% if section.settings.outline_shoe != blank %}
+
+            <div class="comparison-shoe-half comparison-shoe-outline">
+
+              {{
+                section.settings.outline_shoe
+                | image_url: width: 1600
+                | image_tag:
+                  loading: 'lazy',
+                  widths: '500, 800, 1200, 1600',
+                  class: 'comparison-shoe-image'
+              }}
+
+            </div>
+
+          {% endif %}
+
+        </div>
+
+      {% endif %}
+
+    </div>
+
+  </div>
+</section>
+
 
 <style>
-  .cwo-section{
-    --cwo-dark: #2b2b2b;
-    --cwo-dark-text: #ffffff;
-    --cwo-light-bg: #eeeeee;
-    --cwo-light-text: #1a1a1a;
-    --cwo-accent-gold: #d4a017;
-    --cwo-line: rgba(0,0,0,0.15);
-    --cwo-line-on-dark: rgba(255,255,255,0.15);
 
-    max-width: 1100px;
-    margin: 0 auto;
-    padding: 60px 20px 60px;
-  }
+  /* ==========================================================
+     MAIN SECTION
+     ========================================================== */
 
-  .cwo-section *{ box-sizing: border-box; }
-
-  .cwo-heading{
-    text-align:center;
-    font-size: clamp(32px, 5vw, 56px);
-    font-weight: 800;
-    letter-spacing: -1px;
-    line-height: 1.1;
-    color: #111;
-    margin: 0 0 40px;
-    text-transform: uppercase;
-  }
-
-  /* ---------- Logo / Others row ---------- */
-  .cwo-labels{
-    display:grid;
-    grid-template-columns: 1fr 1fr;
-    align-items:center;
-    margin-bottom: 10px;
-  }
-
-  .cwo-brand-logo{
-    display:flex;
-    align-items:center;
-    gap: 4px;
-    padding-left: 10px;
-  }
-  .cwo-brand-logo-img{
-    max-width: 160px;
-    height: auto;
-  }
-  .cwo-mark{
-    display:flex;
-    flex-direction:column;
-    line-height:0.75;
-  }
-  .cwo-mark span:first-child{
-    width: 22px;
-    height: 6px;
-    background: var(--cwo-accent-gold);
-    margin-bottom: 4px;
-  }
-  .cwo-mark .cwo-big-d{
-    font-size: 34px;
-    font-weight: 900;
-    line-height: 0.8;
-    color: #111;
-  }
-  .cwo-since{
-    font-size: 10px;
-    letter-spacing: 2px;
-    color: #444;
-    margin-left: 2px;
-  }
-  .cwo-logo-text{
-    display:flex;
-    flex-direction:column;
-  }
-
-  .cwo-others-label{
-    text-align:right;
-    padding-right: 10px;
-    font-size: clamp(20px, 2.5vw, 30px);
-    font-weight: 800;
-    color: #111;
-    text-transform: uppercase;
-  }
-
-  /* ---------- Center split visual ---------- */
-  /* Both source images should share the same canvas size, each transparent
-     on the half they don't use, so stacking them lines the seam up exactly. */
-  .cwo-split-visual{
-    position: relative;
+  #comparison-{{ section.id }} {
     width: 100%;
-    max-width: 640px;
-    margin: 0 auto;
-    aspect-ratio: 1080 / 1124;
+    overflow: hidden;
     background: #ffffff;
   }
 
-  .cwo-split-visual img{
-    position: absolute;
-    top: 0;
-    left: 0;
+
+  #comparison-{{ section.id }} .comparison-inner {
     width: 100%;
-    height: 100%;
-    display: block;
+    max-width: 1080px;
+    margin: 0 auto;
   }
 
-  .cwo-split-visual-placeholder{
-    position: absolute;
-    inset: 0;
-  }
-  .cwo-split-visual-placeholder .cwo-placeholder-svg{
+
+  /* ==========================================================
+     HEADING
+     ========================================================== */
+
+  #comparison-{{ section.id }} .comparison-heading {
     width: 100%;
-    height: 100%;
+    padding: 65px 30px var(--comparison-heading-bottom);
+
+    text-align: center;
+
+    font-size: var(--comparison-heading-size);
+    line-height: 0.95;
+    font-weight: 800;
+
+    letter-spacing: -1.5px;
+    text-transform: uppercase;
+
+    color: #000000;
+
+    position: relative;
+    z-index: 10;
   }
 
-  /* ---------- Comparison rows ---------- */
-  /* Each block renders one .cwo-row-pair with display:contents, so its two
-     cells become direct grid children — this guarantees the left/right
-     cells for a given row sit at the same height, even if one side's
-     text wraps to more lines than the other. */
-  .cwo-rows{
+
+  /* ==========================================================
+     TOP LABELS
+     ========================================================== */
+
+  #comparison-{{ section.id }} .comparison-labels {
+    width: 100%;
+
     display: grid;
     grid-template-columns: 1fr 1fr;
-    margin-top: 0;
+
+    height: 185px;
+
+    position: relative;
+    z-index: 5;
   }
 
-  .cwo-row-pair{
-    display: contents;
-  }
 
-  .cwo-cell{
-    padding: 26px 28px;
-    font-weight: 700;
-    font-size: 15px;
-    letter-spacing: 0.3px;
-    text-transform: uppercase;
-    line-height: 1.4;
+  #comparison-{{ section.id }} .comparison-label {
     display: flex;
     align-items: center;
   }
 
-  .cwo-cell.cwo-dark{
-    background: var(--cwo-dark);
-    color: var(--cwo-dark-text);
-    border-bottom: 1px solid var(--cwo-line-on-dark);
+
+  #comparison-{{ section.id }} .comparison-label-left {
+    justify-content: center;
+    padding-right: 80px;
   }
-  .cwo-cell.cwo-light{
-    background: var(--cwo-light-bg);
-    color: var(--cwo-light-text);
-    border-bottom: 1px solid var(--cwo-line);
+
+
+  #comparison-{{ section.id }} .comparison-label-right {
+    justify-content: center;
+    padding-left: 80px;
+  }
+
+
+  /* ==========================================================
+     LOGO
+     ========================================================== */
+
+  #comparison-{{ section.id }} .comparison-logo {
+    max-width: 150px;
+  }
+
+
+  #comparison-{{ section.id }} .comparison-logo-image {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+
+
+  /* ==========================================================
+     OTHERS TEXT
+     ========================================================== */
+
+  #comparison-{{ section.id }} .comparison-label-right span {
+    font-size: 32px;
+    line-height: 1;
+    font-weight: 800;
+
+    text-transform: uppercase;
+    letter-spacing: -0.5px;
+
+    color: #000000;
+  }
+
+
+  /* ==========================================================
+     TABLE
+     ========================================================== */
+
+  #comparison-{{ section.id }} .comparison-table {
+    width: 100%;
+
+    position: relative;
+
+    overflow: visible;
+  }
+
+
+  /* ==========================================================
+     BACKGROUND
+     ========================================================== */
+
+  #comparison-{{ section.id }} .comparison-background {
+    position: absolute;
+    inset: 0;
+
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+
+    z-index: 0;
+  }
+
+
+  #comparison-{{ section.id }} .comparison-background-left {
+    background: var(--comparison-dark);
+  }
+
+
+  #comparison-{{ section.id }} .comparison-background-right {
+    background: var(--comparison-light);
+  }
+
+
+  /* ==========================================================
+     ROWS
+     ========================================================== */
+
+  #comparison-{{ section.id }} .comparison-rows {
+    position: relative;
+    z-index: 2;
+  }
+
+
+  #comparison-{{ section.id }} .comparison-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+
+    min-height: var(--comparison-row-height);
+
+    border-bottom: 1px solid rgba(0, 0, 0, 0.8);
+  }
+
+
+  #comparison-{{ section.id }} .comparison-row:first-child {
+    border-top: 1px solid rgba(0, 0, 0, 0.15);
+  }
+
+
+  #comparison-{{ section.id }} .comparison-cell {
+    min-height: var(--comparison-row-height);
+
+    display: flex;
+    align-items: center;
+
+    position: relative;
+  }
+
+
+  #comparison-{{ section.id }} .comparison-cell-left {
+    justify-content: flex-start;
+
+    padding: 22px 40px 22px 35px;
+
+    background: var(--comparison-dark);
+  }
+
+
+  #comparison-{{ section.id }} .comparison-cell-right {
     justify-content: flex-end;
+
+    padding: 22px 35px 22px 40px;
+
+    background: var(--comparison-light);
+
     text-align: right;
   }
 
-  .cwo-rows .cwo-row-pair:last-child .cwo-cell{
-    border-bottom: none;
+
+  /* ==========================================================
+     ROW TEXT
+     ========================================================== */
+
+  #comparison-{{ section.id }} .comparison-cell-text {
+    width: 100%;
+
+    font-size: 20px;
+    line-height: 1.75;
+
+    font-weight: 700;
+
+    text-transform: uppercase;
+    letter-spacing: 0;
+
+    position: relative;
+
+    z-index: 1;
   }
 
-  /* ---------- Responsive ---------- */
-  @media (max-width: 749px){
-    .cwo-section{ padding: 40px 16px 40px; }
-    .cwo-others-label{ font-size: 20px; }
-    .cwo-mark .cwo-big-d{ font-size: 24px; }
-    .cwo-cell{
-      padding: 18px 16px;
-      font-size: 12.5px;
-    }
-    .cwo-split-visual{ max-width: 300px; }
+
+  #comparison-{{ section.id }} .comparison-cell-left .comparison-cell-text {
+    color: var(--comparison-text-dark);
+    text-align: left;
   }
+
+
+  #comparison-{{ section.id }} .comparison-cell-right .comparison-cell-text {
+    color: var(--comparison-text-light);
+    text-align: right;
+  }
+
+
+  /* ==========================================================
+     CENTER SHOE
+     ========================================================== */
+
+  #comparison-{{ section.id }} .comparison-shoe {
+    position: absolute;
+
+    top: 50%;
+    left: 50%;
+
+    width: var(--comparison-image-width);
+    height: var(--comparison-image-height);
+
+    transform: translate(-50%, -50%);
+
+    z-index: 10;
+
+    pointer-events: none;
+  }
+
+
+  /* ==========================================================
+     BOTH IMAGE HALVES
+     ========================================================== */
+
+  #comparison-{{ section.id }} .comparison-shoe-half {
+    position: absolute;
+
+    top: 0;
+    left: 0;
+
+    width: 100%;
+    height: 100%;
+
+    overflow: hidden;
+  }
+
+
+  #comparison-{{ section.id }} .comparison-shoe-image {
+    position: absolute;
+
+    width: 100%;
+    height: 100%;
+
+    display: block;
+
+    object-fit: contain;
+
+    object-position: center center;
+  }
+
+
+  /* ==========================================================
+     REAL SHOE = LEFT HALF
+     ========================================================== */
+
+  #comparison-{{ section.id }} .comparison-shoe-real {
+    clip-path: inset(0 50% 0 0);
+  }
+
+
+  /* ==========================================================
+     OUTLINE SHOE = RIGHT HALF
+     ========================================================== */
+
+  #comparison-{{ section.id }} .comparison-shoe-outline {
+    clip-path: inset(0 0 0 50%);
+  }
+
+
+  /* ==========================================================
+     CENTER SEAM
+     ========================================================== */
+
+  #comparison-{{ section.id }} .comparison-shoe::after {
+    content: "";
+
+    position: absolute;
+
+    top: 0;
+    bottom: 0;
+
+    left: 50%;
+
+    width: 1px;
+
+    transform: translateX(-50%);
+
+    background: transparent;
+
+    z-index: 20;
+  }
+
+
+  /* ==========================================================
+     TABLET
+     ========================================================== */
+
+  @media screen and (max-width: 900px) {
+
+    #comparison-{{ section.id }} .comparison-heading {
+      font-size: 58px;
+    }
+
+
+    #comparison-{{ section.id }} .comparison-labels {
+      height: 150px;
+    }
+
+
+    #comparison-{{ section.id }} .comparison-label-right span {
+      font-size: 26px;
+    }
+
+
+    #comparison-{{ section.id }} .comparison-cell-text {
+      font-size: 17px;
+      line-height: 1.55;
+    }
+
+
+    #comparison-{{ section.id }} .comparison-cell-left {
+      padding-left: 25px;
+      padding-right: 25px;
+    }
+
+
+    #comparison-{{ section.id }} .comparison-cell-right {
+      padding-left: 25px;
+      padding-right: 25px;
+    }
+
+  }
+
+
+  /* ==========================================================
+     MOBILE
+     ========================================================== */
+
+  @media screen and (max-width: 749px) {
+
+    #comparison-{{ section.id }} .comparison-heading {
+      padding: 40px 20px 25px;
+
+      font-size: var(--comparison-heading-mobile-size);
+
+      line-height: 0.95;
+
+      letter-spacing: -0.8px;
+    }
+
+
+    #comparison-{{ section.id }} .comparison-labels {
+      height: 105px;
+    }
+
+
+    #comparison-{{ section.id }} .comparison-label-left {
+      padding-right: 35px;
+    }
+
+
+    #comparison-{{ section.id }} .comparison-label-right {
+      padding-left: 35px;
+    }
+
+
+    #comparison-{{ section.id }} .comparison-logo {
+      max-width: 100px;
+    }
+
+
+    #comparison-{{ section.id }} .comparison-label-right span {
+      font-size: 20px;
+    }
+
+
+    #comparison-{{ section.id }} .comparison-row {
+      min-height: 95px;
+    }
+
+
+    #comparison-{{ section.id }} .comparison-cell {
+      min-height: 95px;
+    }
+
+
+    #comparison-{{ section.id }} .comparison-cell-left {
+      padding: 18px 18px 18px 16px;
+    }
+
+
+    #comparison-{{ section.id }} .comparison-cell-right {
+      padding: 18px 16px 18px 18px;
+    }
+
+
+    #comparison-{{ section.id }} .comparison-cell-text {
+      font-size: 12px;
+      line-height: 1.55;
+      font-weight: 700;
+    }
+
+
+    #comparison-{{ section.id }} .comparison-shoe {
+      width: min(
+        var(--comparison-image-width),
+        65vw
+      );
+
+      height: min(
+        var(--comparison-image-height),
+        520px
+      );
+    }
+
+  }
+
+
+  /* ==========================================================
+     SMALL MOBILE
+     ========================================================== */
+
+  @media screen and (max-width: 480px) {
+
+    #comparison-{{ section.id }} .comparison-heading {
+      font-size: 34px;
+    }
+
+
+    #comparison-{{ section.id }} .comparison-labels {
+      height: 85px;
+    }
+
+
+    #comparison-{{ section.id }} .comparison-logo {
+      max-width: 80px;
+    }
+
+
+    #comparison-{{ section.id }} .comparison-label-right span {
+      font-size: 16px;
+    }
+
+
+    #comparison-{{ section.id }} .comparison-row {
+      min-height: 85px;
+    }
+
+
+    #comparison-{{ section.id }} .comparison-cell {
+      min-height: 85px;
+    }
+
+
+    #comparison-{{ section.id }} .comparison-cell-left {
+      padding: 15px 12px;
+    }
+
+
+    #comparison-{{ section.id }} .comparison-cell-right {
+      padding: 15px 12px;
+    }
+
+
+    #comparison-{{ section.id }} .comparison-cell-text {
+      font-size: 10px;
+      line-height: 1.5;
+    }
+
+
+    #comparison-{{ section.id }} .comparison-shoe {
+      width: 230px;
+      height: 480px;
+    }
+
+  }
+
 </style>
 
+
 {% schema %}
+
 {
   "name": "Comparing With Others",
+  "tag": "section",
+  "class": "comparison-with-others-section",
+
   "settings": [
+
+    {
+      "type": "header",
+      "content": "Heading"
+    },
+
     {
       "type": "text",
       "id": "heading",
       "label": "Heading",
-      "default": "Comparing With Others?"
+      "default": "COMPARING WITH OTHERS?"
     },
+
+    {
+      "type": "range",
+      "id": "heading_size",
+      "label": "Desktop heading size",
+      "min": 30,
+      "max": 100,
+      "step": 2,
+      "unit": "px",
+      "default": 68
+    },
+
+    {
+      "type": "range",
+      "id": "heading_mobile_size",
+      "label": "Mobile heading size",
+      "min": 24,
+      "max": 60,
+      "step": 2,
+      "unit": "px",
+      "default": 38
+    },
+
+    {
+      "type": "range",
+      "id": "heading_bottom",
+      "label": "Heading bottom spacing",
+      "min": 10,
+      "max": 100,
+      "step": 5,
+      "unit": "px",
+      "default": 25
+    },
+
+
+    {
+      "type": "header",
+      "content": "Images"
+    },
+
+    {
+      "type": "image_picker",
+      "id": "real_shoe",
+      "label": "Real / leather shoe image"
+    },
+
+    {
+      "type": "image_picker",
+      "id": "outline_shoe",
+      "label": "Outline shoe image"
+    },
+
+    {
+      "type": "range",
+      "id": "image_width",
+      "label": "Shoe image width",
+      "min": 200,
+      "max": 700,
+      "step": 10,
+      "unit": "px",
+      "default": 420
+    },
+
+    {
+      "type": "range",
+      "id": "image_height",
+      "label": "Shoe image height",
+      "min": 300,
+      "max": 1200,
+      "step": 10,
+      "unit": "px",
+      "default": 900
+    },
+
+
+    {
+      "type": "header",
+      "content": "Top labels"
+    },
+
+    {
+      "type": "image_picker",
+      "id": "brand_logo",
+      "label": "Brand logo"
+    },
+
+    {
+      "type": "text",
+      "id": "others_heading",
+      "label": "Others heading",
+      "default": "OTHERS"
+    },
+
+
+    {
+      "type": "header",
+      "content": "Colors"
+    },
+
     {
       "type": "color",
-      "id": "bg_color",
-      "label": "Section background color",
-      "default": "#ffffff"
+      "id": "left_background",
+      "label": "Left background",
+      "default": "#363435"
     },
+
     {
-      "type": "header",
-      "content": "Left brand mark"
+      "type": "color",
+      "id": "right_background",
+      "label": "Right background",
+      "default": "#EEEEEE"
     },
+
     {
-      "type": "image_picker",
-      "id": "logo_image",
-      "label": "Logo image (optional)",
-      "info": "If set, this replaces the text logo below."
+      "type": "color",
+      "id": "left_text_color",
+      "label": "Left text",
+      "default": "#FFFFFF"
     },
+
     {
-      "type": "text",
-      "id": "logo_text",
-      "label": "Logo text (used if no logo image)",
-      "default": "iD"
+      "type": "color",
+      "id": "right_text_color",
+      "label": "Right text",
+      "default": "#333333"
     },
+
+
     {
-      "type": "text",
-      "id": "logo_subtext",
-      "label": "Logo subtext",
-      "default": "SINCE 1969"
-    },
-    {
-      "type": "header",
-      "content": "Right label"
-    },
-    {
-      "type": "text",
-      "id": "others_label",
-      "label": "Right-side label",
-      "default": "Others"
-    },
-    {
-      "type": "header",
-      "content": "Split comparison image"
-    },
-    {
-      "type": "paragraph",
-      "content": "Upload two images exported on the same canvas size, each showing only its half (transparent on the other half) so the seam lines up automatically."
-    },
-    {
-      "type": "image_picker",
-      "id": "leather_image",
-      "label": "Left half image (e.g. product photo)"
-    },
-    {
-      "type": "image_picker",
-      "id": "outline_image",
-      "label": "Right half image (e.g. outline artwork)"
+      "type": "range",
+      "id": "row_height",
+      "label": "Comparison row height",
+      "min": 60,
+      "max": 220,
+      "step": 5,
+      "unit": "px",
+      "default": 150
     }
+
   ],
+
+
   "blocks": [
+
     {
-      "type": "comparison_row",
+      "type": "comparison",
       "name": "Comparison row",
+
       "settings": [
+
         {
-          "type": "text",
+          "type": "textarea",
           "id": "left_text",
-          "label": "Left side text",
-          "default": "Genuine Leather & High Quality Materials"
+          "label": "Your brand",
+          "default": "GENUINE LEATHER &\nHIGH QUALITY MATERIALS"
         },
+
         {
-          "type": "text",
+          "type": "textarea",
           "id": "right_text",
-          "label": "Right side text",
-          "default": "Synthetic or Blended Materials"
+          "label": "Others",
+          "default": "SYNTHETIC OR BLENDED\nMATERIALS"
         }
+
       ]
+
     }
+
   ],
+
+
   "presets": [
+
     {
       "name": "Comparing With Others",
+
       "blocks": [
+
         {
-          "type": "comparison_row",
+          "type": "comparison",
           "settings": {
-            "left_text": "Genuine Leather & High Quality Materials",
-            "right_text": "Synthetic or Blended Materials"
+            "left_text": "GENUINE LEATHER &\nHIGH QUALITY MATERIALS",
+            "right_text": "SYNTHETIC OR BLENDED\nMATERIALS"
           }
         },
+
         {
-          "type": "comparison_row",
+          "type": "comparison",
           "settings": {
-            "left_text": "Anti Bacterial Coating – NODR",
-            "right_text": "No Odour or Hygiene Treatment"
+            "left_text": "ANTI BACTERIAL\nCOATING - NODR",
+            "right_text": "NO ODOUR OR HYGIENE\nTREATMENT"
           }
         },
+
         {
-          "type": "comparison_row",
+          "type": "comparison",
           "settings": {
-            "left_text": "56 Air Pocket Soles, Ultra HD Bounce Back Cushion",
-            "right_text": "Basic Foam Insole"
+            "left_text": "56 AIR POCKET SOLES\nULTRA HD BOUNCE\nBACK CUSHION",
+            "right_text": "BASIC FOAM INSOLE"
           }
         },
+
         {
-          "type": "comparison_row",
+          "type": "comparison",
           "settings": {
-            "left_text": "Original Indian Design Language",
-            "right_text": "Generic Silhouettes"
+            "left_text": "ORIGINAL INDIAN\nDESIGN LANGUAGE",
+            "right_text": "GENERIC\nSILHOUETTES"
           }
         },
+
         {
-          "type": "comparison_row",
+          "type": "comparison",
           "settings": {
-            "left_text": "Return / Exchange Support",
-            "right_text": "Rigid Return Policies"
+            "left_text": "RETURN / EXCHANGE\nSUPPORT",
+            "right_text": "RIGID RETURN\nPOLICIES"
           }
         }
+
       ]
+
     }
+
   ]
+
 }
+
 {% endschema %}
