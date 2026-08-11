@@ -1,758 +1,838 @@
 {% comment %}
   ============================================================
-  COMPARING WITH OTHERS - PRODUCT COMPARISON SECTION
-  ============================================================
-  Designed to recreate the provided reference.
-
-  Uses:
-  - 1 real/product shoe image
-  - 1 outline shoe image
-  - Editable comparison rows through Shopify blocks
+  COMPARING WITH OTHERS
   ============================================================
 {% endcomment %}
 
 <section
   id="comparison-{{ section.id }}"
   class="comparison-section"
-  style="
-    --comparison-heading-size: {{ section.settings.heading_size }}px;
-    --comparison-heading-mobile-size: {{ section.settings.heading_mobile_size }}px;
-    --comparison-image-width: {{ section.settings.image_width }}px;
-    --comparison-image-height: {{ section.settings.image_height }}px;
-    --comparison-dark: {{ section.settings.left_background }};
-    --comparison-light: {{ section.settings.right_background }};
-    --comparison-text-dark: {{ section.settings.left_text_color }};
-    --comparison-text-light: {{ section.settings.right_text_color }};
-    --comparison-row-height: {{ section.settings.row_height }}px;
-    --comparison-heading-bottom: {{ section.settings.heading_bottom }}px;
-  "
 >
-  <div class="comparison-inner">
+  <!-- ========================================================
+       HEADING
+       ======================================================== -->
 
-    <!-- ======================================================
-         HEADING
-         ====================================================== -->
-
-    {% if section.settings.heading != blank %}
-      <div class="comparison-heading">
-        {{ section.settings.heading }}
-      </div>
-    {% endif %}
-
-
-    <!-- ======================================================
-         TOP LABELS
-         ====================================================== -->
-
-    <div class="comparison-labels">
-
-      <div class="comparison-label comparison-label-left">
-
-        {% if section.settings.brand_logo != blank %}
-          <div class="comparison-logo">
-            {{
-              section.settings.brand_logo
-              | image_url: width: 500
-              | image_tag:
-                loading: 'lazy',
-                widths: '150, 250, 350, 500',
-                class: 'comparison-logo-image'
-            }}
-          >
-        {% endif %}
-
-      </div>
-
-
-      <div class="comparison-label comparison-label-right">
-
-        {% if section.settings.others_heading != blank %}
-          <span>{{ section.settings.others_heading }}</span>
-        {% endif %}
-
-      </div>
-
+  {% if section.settings.heading != blank %}
+    <div class="comparison-heading">
+      {{ section.settings.heading }}
     </div>
+  {% endif %}
 
 
-    <!-- ======================================================
-         COMPARISON TABLE
-         ====================================================== -->
+  <!-- ========================================================
+       TOP BRAND / OTHERS
+       ======================================================== -->
 
-    <div class="comparison-table">
+  <div class="comparison-header">
 
-      <!-- LEFT / RIGHT BACKGROUND -->
-      <div class="comparison-background">
+    <div class="comparison-header-side comparison-header-left">
 
-        <div class="comparison-background-left"></div>
+      {% if section.settings.brand_logo != blank %}
 
-        <div class="comparison-background-right"></div>
-
-      </div>
-
-
-      <!-- COMPARISON ROWS -->
-
-      <div class="comparison-rows">
-
-        {% for block in section.blocks %}
-
-          <div
-            class="comparison-row"
-            {{ block.shopify_attributes }}
-          >
-
-            <!-- LEFT SIDE -->
-
-            <div class="comparison-cell comparison-cell-left">
-
-              {% if block.settings.left_text != blank %}
-
-                <div class="comparison-cell-text">
-                  {{ block.settings.left_text | newline_to_br }}
-                </div>
-
-              {% endif %}
-
-            </div>
-
-
-            <!-- RIGHT SIDE -->
-
-            <div class="comparison-cell comparison-cell-right">
-
-              {% if block.settings.right_text != blank %}
-
-                <div class="comparison-cell-text">
-                  {{ block.settings.right_text | newline_to_br }}
-                </div>
-
-              {% endif %}
-
-            </div>
-
-          </div>
-
-        {% endfor %}
-
-      </div>
-
-
-      <!-- ====================================================
-           CENTER SHOE IMAGES
-           ==================================================== -->
-
-      {% if section.settings.real_shoe != blank or section.settings.outline_shoe != blank %}
-
-        <div class="comparison-shoe">
-
-          <!-- REAL SHOE -->
-
-          {% if section.settings.real_shoe != blank %}
-
-            <div class="comparison-shoe-half comparison-shoe-real">
-
-              {{
-                section.settings.real_shoe
-                | image_url: width: 1600
-                | image_tag:
-                  loading: 'lazy',
-                  widths: '500, 800, 1200, 1600',
-                  class: 'comparison-shoe-image'
-              }}
-
-            </div>
-
-          {% endif %}
-
-
-          <!-- OUTLINE SHOE -->
-
-          {% if section.settings.outline_shoe != blank %}
-
-            <div class="comparison-shoe-half comparison-shoe-outline">
-
-              {{
-                section.settings.outline_shoe
-                | image_url: width: 1600
-                | image_tag:
-                  loading: 'lazy',
-                  widths: '500, 800, 1200, 1600',
-                  class: 'comparison-shoe-image'
-              }}
-
-            </div>
-
-          {% endif %}
-
+        <div class="comparison-logo">
+          {{
+            section.settings.brand_logo
+            | image_url: width: 500
+            | image_tag:
+              loading: 'lazy',
+              widths: '150, 250, 350, 500',
+              class: 'comparison-logo-image'
+          }}
         </div>
 
       {% endif %}
 
     </div>
 
+
+    <div class="comparison-header-side comparison-header-right">
+
+      {% if section.settings.others_heading != blank %}
+        <div class="comparison-others">
+          {{ section.settings.others_heading }}
+        </div>
+      {% endif %}
+
+    </div>
+
   </div>
+
+
+  <!-- ========================================================
+       COMPARISON TABLE
+       ======================================================== -->
+
+  <div class="comparison-table">
+
+    <!-- LEFT BACKGROUND -->
+
+    <div class="comparison-side comparison-side-left">
+    </div>
+
+
+    <!-- RIGHT BACKGROUND -->
+
+    <div class="comparison-side comparison-side-right">
+    </div>
+
+
+    <!-- ======================================================
+         ROWS
+         ====================================================== -->
+
+    <div class="comparison-content">
+
+      {% for block in section.blocks %}
+
+        <div
+          class="comparison-row"
+          {{ block.shopify_attributes }}
+        >
+
+          <!-- LEFT -->
+
+          <div class="comparison-column comparison-column-left">
+
+            {% if block.settings.left_text != blank %}
+
+              <div class="comparison-text">
+                {{ block.settings.left_text | newline_to_br }}
+              </div>
+
+            {% endif %}
+
+          </div>
+
+
+          <!-- RIGHT -->
+
+          <div class="comparison-column comparison-column-right">
+
+            {% if block.settings.right_text != blank %}
+
+              <div class="comparison-text">
+                {{ block.settings.right_text | newline_to_br }}
+              </div>
+
+            {% endif %}
+
+          </div>
+
+        </div>
+
+      {% endfor %}
+
+    </div>
+
+
+    <!-- ======================================================
+         CENTER SHOE
+         ====================================================== -->
+
+    {% if section.settings.real_shoe != blank or section.settings.outline_shoe != blank %}
+
+      <div
+        class="comparison-shoe"
+        style="
+          --shoe-width: {{ section.settings.image_width }}px;
+          --shoe-height: {{ section.settings.image_height }}px;
+        "
+      >
+
+        <!-- REAL / LEATHER SHOE -->
+
+        {% if section.settings.real_shoe != blank %}
+
+          <div class="comparison-shoe-half comparison-shoe-left">
+
+            {{
+              section.settings.real_shoe
+              | image_url: width: 1800
+              | image_tag:
+                loading: 'lazy',
+                widths: '600, 900, 1200, 1500, 1800',
+                class: 'comparison-shoe-img'
+            }}
+
+          </div>
+
+        {% endif %}
+
+
+        <!-- OUTLINE SHOE -->
+
+        {% if section.settings.outline_shoe != blank %}
+
+          <div class="comparison-shoe-half comparison-shoe-right">
+
+            {{
+              section.settings.outline_shoe
+              | image_url: width: 1800
+              | image_tag:
+                loading: 'lazy',
+                widths: '600, 900, 1200, 1500, 1800',
+                class: 'comparison-shoe-img'
+            }}
+
+          </div>
+
+        {% endif %}
+
+      </div>
+
+    {% endif %}
+
+  </div>
+
 </section>
 
 
 <style>
 
-  /* ==========================================================
-     FULL WIDTH SECTION
-     ========================================================== */
+/* ============================================================
+   SECTION
+   ============================================================ */
 
-  #comparison-{{ section.id }} {
-    width: 100vw !important;
-    max-width: 100vw !important;
+#comparison-{{ section.id }} {
 
-    margin-left: calc(50% - 50vw) !important;
-    margin-right: calc(50% - 50vw) !important;
+  width: 100%;
 
-    padding: 0 !important;
+  display: block;
 
-    overflow: visible !important;
+  position: relative;
 
-    background: #ffffff;
+  margin: 0;
 
-    position: relative;
-    display: block;
-    clear: both;
-  }
+  padding: 0;
 
+  background: #ffffff;
 
-  /* ==========================================================
-     INNER CONTAINER
-     ========================================================== */
+  box-sizing: border-box;
 
-  #comparison-{{ section.id }} .comparison-inner {
-    width: 100% !important;
-    max-width: 1080px;
-
-    margin: 0 auto;
-
-    position: relative;
-  }
+  overflow: hidden;
+}
 
 
-  /* ==========================================================
-     HEADING
-     ========================================================== */
+/* ============================================================
+   HEADING
+   ============================================================ */
+
+#comparison-{{ section.id }} .comparison-heading {
+
+  width: 100%;
+
+  padding: 70px 20px 35px;
+
+  box-sizing: border-box;
+
+  text-align: center;
+
+  font-size: {{ section.settings.heading_size }}px;
+
+  line-height: 0.95;
+
+  font-weight: 800;
+
+  letter-spacing: -1.5px;
+
+  color: #000000;
+
+  text-transform: uppercase;
+}
+
+
+/* ============================================================
+   HEADER
+   ============================================================ */
+
+#comparison-{{ section.id }} .comparison-header {
+
+  width: 100%;
+
+  display: grid;
+
+  grid-template-columns: 1fr 1fr;
+
+  height: 150px;
+
+  box-sizing: border-box;
+
+  position: relative;
+
+  z-index: 5;
+}
+
+
+#comparison-{{ section.id }} .comparison-header-side {
+
+  display: flex;
+
+  align-items: center;
+
+  box-sizing: border-box;
+}
+
+
+#comparison-{{ section.id }} .comparison-header-left {
+
+  justify-content: center;
+
+  padding-right: 160px;
+}
+
+
+#comparison-{{ section.id }} .comparison-header-right {
+
+  justify-content: center;
+
+  padding-left: 160px;
+}
+
+
+/* ============================================================
+   LOGO
+   ============================================================ */
+
+#comparison-{{ section.id }} .comparison-logo {
+
+  width: 150px;
+
+  max-width: 150px;
+}
+
+
+#comparison-{{ section.id }} .comparison-logo-image {
+
+  display: block;
+
+  width: 100%;
+
+  height: auto;
+}
+
+
+/* ============================================================
+   OTHERS
+   ============================================================ */
+
+#comparison-{{ section.id }} .comparison-others {
+
+  font-size: 32px;
+
+  line-height: 1;
+
+  font-weight: 800;
+
+  letter-spacing: -0.5px;
+
+  text-transform: uppercase;
+
+  color: #000000;
+
+  white-space: nowrap;
+}
+
+
+/* ============================================================
+   TABLE
+   ============================================================ */
+
+#comparison-{{ section.id }} .comparison-table {
+
+  width: 100%;
+
+  position: relative;
+
+  box-sizing: border-box;
+
+  overflow: hidden;
+}
+
+
+/* ============================================================
+   LEFT / RIGHT BACKGROUNDS
+   ============================================================ */
+
+#comparison-{{ section.id }} .comparison-side {
+
+  position: absolute;
+
+  top: 0;
+
+  bottom: 0;
+
+  width: 50%;
+
+  z-index: 0;
+
+  pointer-events: none;
+}
+
+
+#comparison-{{ section.id }} .comparison-side-left {
+
+  left: 0;
+
+  background: {{ section.settings.left_background }};
+}
+
+
+#comparison-{{ section.id }} .comparison-side-right {
+
+  right: 0;
+
+  background: {{ section.settings.right_background }};
+}
+
+
+/* ============================================================
+   CONTENT
+   ============================================================ */
+
+#comparison-{{ section.id }} .comparison-content {
+
+  width: 100%;
+
+  position: relative;
+
+  z-index: 2;
+}
+
+
+/* ============================================================
+   ROW
+   ============================================================ */
+
+#comparison-{{ section.id }} .comparison-row {
+
+  width: 100%;
+
+  min-height: {{ section.settings.row_height }}px;
+
+  display: grid;
+
+  grid-template-columns: 1fr 1fr;
+
+  box-sizing: border-box;
+
+  border-bottom: 1px solid rgba(0, 0, 0, 0.65);
+}
+
+
+/* ============================================================
+   COLUMNS
+   ============================================================ */
+
+#comparison-{{ section.id }} .comparison-column {
+
+  min-height: {{ section.settings.row_height }}px;
+
+  display: flex;
+
+  align-items: center;
+
+  box-sizing: border-box;
+
+  position: relative;
+}
+
+
+#comparison-{{ section.id }} .comparison-column-left {
+
+  justify-content: flex-start;
+
+  padding: 25px 70px 25px 40px;
+}
+
+
+#comparison-{{ section.id }} .comparison-column-right {
+
+  justify-content: flex-end;
+
+  padding: 25px 40px 25px 70px;
+
+  text-align: right;
+}
+
+
+/* ============================================================
+   TEXT
+   ============================================================ */
+
+#comparison-{{ section.id }} .comparison-text {
+
+  width: 100%;
+
+  font-size: 20px;
+
+  line-height: 1.55;
+
+  font-weight: 700;
+
+  letter-spacing: 0;
+
+  text-transform: uppercase;
+
+  position: relative;
+
+  z-index: 3;
+}
+
+
+#comparison-{{ section.id }} .comparison-column-left .comparison-text {
+
+  color: {{ section.settings.left_text_color }};
+
+  text-align: left;
+}
+
+
+#comparison-{{ section.id }} .comparison-column-right .comparison-text {
+
+  color: {{ section.settings.right_text_color }};
+
+  text-align: right;
+}
+
+
+/* ============================================================
+   CENTER SHOE
+   ============================================================ */
+
+#comparison-{{ section.id }} .comparison-shoe {
+
+  position: absolute;
+
+  left: 50%;
+
+  top: 0;
+
+  width: var(--shoe-width);
+
+  height: var(--shoe-height);
+
+  transform: translateX(-50%);
+
+  z-index: 10;
+
+  pointer-events: none;
+}
+
+
+/* ============================================================
+   SHOE HALF
+   ============================================================ */
+
+#comparison-{{ section.id }} .comparison-shoe-half {
+
+  position: absolute;
+
+  top: 0;
+
+  left: 0;
+
+  width: 100%;
+
+  height: 100%;
+
+  overflow: hidden;
+}
+
+
+/* ============================================================
+   SHOE IMAGE
+   ============================================================ */
+
+#comparison-{{ section.id }} .comparison-shoe-img {
+
+  position: absolute;
+
+  top: 0;
+
+  left: 0;
+
+  width: 100% !important;
+
+  height: 100% !important;
+
+  max-width: none !important;
+
+  display: block;
+
+  object-fit: contain;
+
+  object-position: center center;
+}
+
+
+/* ============================================================
+   REAL SHOE = LEFT HALF
+   ============================================================ */
+
+#comparison-{{ section.id }} .comparison-shoe-left {
+
+  clip-path: inset(0 50% 0 0);
+}
+
+
+/* ============================================================
+   OUTLINE = RIGHT HALF
+   ============================================================ */
+
+#comparison-{{ section.id }} .comparison-shoe-right {
+
+  clip-path: inset(0 0 0 50%);
+}
+
+
+/* ============================================================
+   CENTER LINE
+   ============================================================ */
+
+#comparison-{{ section.id }} .comparison-shoe::after {
+
+  content: "";
+
+  position: absolute;
+
+  top: 0;
+
+  bottom: 0;
+
+  left: 50%;
+
+  width: 1px;
+
+  transform: translateX(-50%);
+
+  background: transparent;
+}
+
+
+/* ============================================================
+   TABLET
+   ============================================================ */
+
+@media screen and (max-width: 990px) {
 
   #comparison-{{ section.id }} .comparison-heading {
-    width: 100%;
 
-    padding: 65px 30px 35px;
+    font-size: 55px;
 
-    box-sizing: border-box;
-
-    text-align: center;
-
-    font-size: var(--comparison-heading-size);
-
-    line-height: 0.95;
-
-    font-weight: 800;
-
-    letter-spacing: -1.5px;
-
-    text-transform: uppercase;
-
-    color: #000000;
-
-    position: relative;
-
-    z-index: 20;
+    padding-top: 55px;
   }
 
 
-  /* ==========================================================
-     TOP LABELS
-     ========================================================== */
+  #comparison-{{ section.id }} .comparison-header-left {
 
-  #comparison-{{ section.id }} .comparison-labels {
-
-    width: 100%;
-
-    display: grid;
-
-    grid-template-columns: 1fr 1fr;
-
-    height: 180px;
-
-    position: relative;
-
-    z-index: 5;
-
-    box-sizing: border-box;
+    padding-right: 100px;
   }
 
 
-  #comparison-{{ section.id }} .comparison-label {
+  #comparison-{{ section.id }} .comparison-header-right {
 
-    display: flex;
-
-    align-items: center;
-
-    box-sizing: border-box;
+    padding-left: 100px;
   }
 
 
-  #comparison-{{ section.id }} .comparison-label-left {
+  #comparison-{{ section.id }} .comparison-text {
 
-    justify-content: center;
-
-    padding-right: 180px;
+    font-size: 17px;
   }
 
 
-  #comparison-{{ section.id }} .comparison-label-right {
+  #comparison-{{ section.id }} .comparison-column-left {
 
-    justify-content: center;
+    padding-left: 25px;
 
-    padding-left: 180px;
+    padding-right: 55px;
   }
 
 
-  /* ==========================================================
-     LOGO
-     ========================================================== */
+  #comparison-{{ section.id }} .comparison-column-right {
+
+    padding-left: 55px;
+
+    padding-right: 25px;
+  }
+
+}
+
+
+/* ============================================================
+   MOBILE
+   ============================================================ */
+
+@media screen and (max-width: 749px) {
+
+  #comparison-{{ section.id }} .comparison-heading {
+
+    padding: 45px 15px 25px;
+
+    font-size: {{ section.settings.heading_mobile_size }}px;
+
+    letter-spacing: -0.8px;
+  }
+
+
+  #comparison-{{ section.id }} .comparison-header {
+
+    height: 100px;
+  }
+
+
+  #comparison-{{ section.id }} .comparison-header-left {
+
+    padding-right: 45px;
+  }
+
+
+  #comparison-{{ section.id }} .comparison-header-right {
+
+    padding-left: 45px;
+  }
+
 
   #comparison-{{ section.id }} .comparison-logo {
 
-    max-width: 150px;
+    width: 90px;
 
-    width: 100%;
+    max-width: 90px;
   }
 
 
-  #comparison-{{ section.id }} .comparison-logo-image {
+  #comparison-{{ section.id }} .comparison-others {
 
-    display: block;
-
-    width: 100%;
-
-    height: auto;
-  }
-
-
-  /* ==========================================================
-     OTHERS
-     ========================================================== */
-
-  #comparison-{{ section.id }} .comparison-label-right span {
-
-    font-size: 32px;
-
-    line-height: 1;
-
-    font-weight: 800;
-
-    text-transform: uppercase;
-
-    letter-spacing: -0.5px;
-
-    color: #000000;
-  }
-
-
-  /* ==========================================================
-     TABLE
-     ========================================================== */
-
-  #comparison-{{ section.id }} .comparison-table {
-
-    width: 100%;
-
-    position: relative;
-
-    overflow: visible;
-
-    box-sizing: border-box;
-  }
-
-
-  /* ==========================================================
-     BACKGROUND
-     ========================================================== */
-
-  #comparison-{{ section.id }} .comparison-background {
-
-    position: absolute;
-
-    inset: 0;
-
-    width: 100%;
-
-    display: grid;
-
-    grid-template-columns: 1fr 1fr;
-
-    z-index: 0;
-
-    pointer-events: none;
-  }
-
-
-  #comparison-{{ section.id }} .comparison-background-left {
-
-    background: var(--comparison-dark);
-  }
-
-
-  #comparison-{{ section.id }} .comparison-background-right {
-
-    background: var(--comparison-light);
-  }
-
-
-  /* ==========================================================
-     ROWS
-     ========================================================== */
-
-  #comparison-{{ section.id }} .comparison-rows {
-
-    width: 100%;
-
-    position: relative;
-
-    z-index: 2;
+    font-size: 19px;
   }
 
 
   #comparison-{{ section.id }} .comparison-row {
 
-    width: 100%;
-
-    display: grid;
-
-    grid-template-columns: 1fr 1fr;
-
-    min-height: var(--comparison-row-height);
-
-    border-bottom: 1px solid rgba(0, 0, 0, 0.8);
-
-    box-sizing: border-box;
+    min-height: 100px;
   }
 
 
-  #comparison-{{ section.id }} .comparison-cell {
+  #comparison-{{ section.id }} .comparison-column {
 
-    min-height: var(--comparison-row-height);
-
-    display: flex;
-
-    align-items: center;
-
-    position: relative;
-
-    box-sizing: border-box;
+    min-height: 100px;
   }
 
 
-  /* ==========================================================
-     LEFT CELL
-     ========================================================== */
+  #comparison-{{ section.id }} .comparison-column-left {
 
-  #comparison-{{ section.id }} .comparison-cell-left {
-
-    justify-content: flex-start;
-
-    padding: 25px 55px 25px 35px;
-
-    background: var(--comparison-dark);
+    padding: 18px 30px 18px 15px;
   }
 
 
-  /* ==========================================================
-     RIGHT CELL
-     ========================================================== */
+  #comparison-{{ section.id }} .comparison-column-right {
 
-  #comparison-{{ section.id }} .comparison-cell-right {
-
-    justify-content: flex-end;
-
-    padding: 25px 35px 25px 55px;
-
-    background: var(--comparison-light);
-
-    text-align: right;
+    padding: 18px 15px 18px 30px;
   }
 
 
-  /* ==========================================================
-     TEXT
-     ========================================================== */
+  #comparison-{{ section.id }} .comparison-text {
 
-  #comparison-{{ section.id }} .comparison-cell-text {
+    font-size: 11px;
 
-    width: 100%;
-
-    font-size: 20px;
-
-    line-height: 1.75;
-
-    font-weight: 700;
-
-    text-transform: uppercase;
-
-    letter-spacing: 0;
-
-    position: relative;
-
-    z-index: 3;
+    line-height: 1.5;
   }
 
-
-  #comparison-{{ section.id }} .comparison-cell-left
-  .comparison-cell-text {
-
-    color: var(--comparison-text-dark);
-
-    text-align: left;
-  }
-
-
-  #comparison-{{ section.id }} .comparison-cell-right
-  .comparison-cell-text {
-
-    color: var(--comparison-text-light);
-
-    text-align: right;
-  }
-
-
-  /* ==========================================================
-     CENTER SHOE
-     ========================================================== */
 
   #comparison-{{ section.id }} .comparison-shoe {
 
-    position: absolute;
+    width: 230px;
 
-    top: 0;
+    height: 500px;
+  }
 
-    left: 50%;
+}
 
-    width: var(--comparison-image-width);
 
-    height: var(--comparison-image-height);
+/* ============================================================
+   SMALL MOBILE
+   ============================================================ */
 
-    transform: translateX(-50%);
+@media screen and (max-width: 480px) {
 
-    z-index: 10;
+  #comparison-{{ section.id }} .comparison-heading {
 
-    pointer-events: none;
-
-    overflow: visible;
+    font-size: 34px;
   }
 
 
-  /* ==========================================================
-     IMAGE HALVES
-     ========================================================== */
+  #comparison-{{ section.id }} .comparison-header {
 
-  #comparison-{{ section.id }} .comparison-shoe-half {
-
-    position: absolute;
-
-    top: 0;
-
-    left: 0;
-
-    width: 100%;
-
-    height: 100%;
-
-    overflow: hidden;
+    height: 85px;
   }
 
 
-  #comparison-{{ section.id }} .comparison-shoe-image {
+  #comparison-{{ section.id }} .comparison-header-left {
 
-    position: absolute;
-
-    top: 0;
-
-    left: 0;
-
-    width: 100%;
-
-    height: 100%;
-
-    display: block;
-
-    object-fit: contain;
-
-    object-position: center center;
-
-    max-width: none !important;
+    padding-right: 30px;
   }
 
 
-  /* ==========================================================
-     REAL SHOE - LEFT HALF
-     ========================================================== */
+  #comparison-{{ section.id }} .comparison-header-right {
 
-  #comparison-{{ section.id }} .comparison-shoe-real {
-
-    clip-path: inset(0 50% 0 0);
+    padding-left: 30px;
   }
 
 
-  /* ==========================================================
-     OUTLINE SHOE - RIGHT HALF
-     ========================================================== */
+  #comparison-{{ section.id }} .comparison-logo {
 
-  #comparison-{{ section.id }} .comparison-shoe-outline {
+    width: 75px;
 
-    clip-path: inset(0 0 0 50%);
+    max-width: 75px;
   }
 
 
-  /* ==========================================================
-     MOBILE
-     ========================================================== */
+  #comparison-{{ section.id }} .comparison-others {
 
-  @media screen and (max-width: 749px) {
-
-    #comparison-{{ section.id }} {
-
-      width: 100vw !important;
-
-      max-width: 100vw !important;
-
-      margin-left: calc(50% - 50vw) !important;
-
-      margin-right: calc(50% - 50vw) !important;
-    }
-
-
-    #comparison-{{ section.id }} .comparison-inner {
-
-      width: 100%;
-
-      max-width: 100%;
-    }
-
-
-    #comparison-{{ section.id }} .comparison-heading {
-
-      padding: 40px 20px 25px;
-
-      font-size: var(--comparison-heading-mobile-size);
-
-      line-height: 0.95;
-    }
-
-
-    #comparison-{{ section.id }} .comparison-labels {
-
-      height: 110px;
-    }
-
-
-    #comparison-{{ section.id }} .comparison-label-left {
-
-      padding-right: 50px;
-    }
-
-
-    #comparison-{{ section.id }} .comparison-label-right {
-
-      padding-left: 50px;
-    }
-
-
-    #comparison-{{ section.id }} .comparison-logo {
-
-      max-width: 90px;
-    }
-
-
-    #comparison-{{ section.id }} .comparison-label-right span {
-
-      font-size: 19px;
-    }
-
-
-    #comparison-{{ section.id }} .comparison-cell-left {
-
-      padding: 18px 20px 18px 15px;
-    }
-
-
-    #comparison-{{ section.id }} .comparison-cell-right {
-
-      padding: 18px 15px 18px 20px;
-    }
-
-
-    #comparison-{{ section.id }} .comparison-cell-text {
-
-      font-size: 12px;
-
-      line-height: 1.5;
-    }
-
-
-    #comparison-{{ section.id }} .comparison-shoe {
-
-      width: 250px;
-
-      height: 600px;
-    }
-
+    font-size: 16px;
   }
 
 
-  /* ==========================================================
-     SMALL MOBILE
-     ========================================================== */
+  #comparison-{{ section.id }} .comparison-row {
 
-  @media screen and (max-width: 480px) {
-
-    #comparison-{{ section.id }} .comparison-heading {
-
-      font-size: 34px;
-
-      padding-left: 15px;
-
-      padding-right: 15px;
-    }
-
-
-    #comparison-{{ section.id }} .comparison-labels {
-
-      height: 90px;
-    }
-
-
-    #comparison-{{ section.id }} .comparison-logo {
-
-      max-width: 75px;
-    }
-
-
-    #comparison-{{ section.id }} .comparison-label-right span {
-
-      font-size: 16px;
-    }
-
-
-    #comparison-{{ section.id }} .comparison-cell-text {
-
-      font-size: 10px;
-    }
-
-
-    #comparison-{{ section.id }} .comparison-shoe {
-
-      width: 210px;
-
-      height: 500px;
-    }
-
+    min-height: 85px;
   }
+
+
+  #comparison-{{ section.id }} .comparison-column {
+
+    min-height: 85px;
+  }
+
+
+  #comparison-{{ section.id }} .comparison-column-left {
+
+    padding: 14px 20px 14px 12px;
+  }
+
+
+  #comparison-{{ section.id }} .comparison-column-right {
+
+    padding: 14px 12px 14px 20px;
+  }
+
+
+  #comparison-{{ section.id }} .comparison-text {
+
+    font-size: 9px;
+
+    line-height: 1.45;
+  }
+
+
+  #comparison-{{ section.id }} .comparison-shoe {
+
+    width: 190px;
+
+    height: 430px;
+  }
+
+}
 
 </style>
 
@@ -761,7 +841,9 @@
 
 {
   "name": "Comparing With Others",
+
   "tag": "section",
+
   "class": "comparison-with-others-section",
 
   "settings": [
@@ -800,39 +882,28 @@
       "default": 38
     },
 
-    {
-      "type": "range",
-      "id": "heading_bottom",
-      "label": "Heading bottom spacing",
-      "min": 10,
-      "max": 100,
-      "step": 5,
-      "unit": "px",
-      "default": 25
-    },
-
 
     {
       "type": "header",
-      "content": "Images"
+      "content": "Shoe Images"
     },
 
     {
       "type": "image_picker",
       "id": "real_shoe",
-      "label": "Real / leather shoe image"
+      "label": "Real / leather shoe"
     },
 
     {
       "type": "image_picker",
       "id": "outline_shoe",
-      "label": "Outline shoe image"
+      "label": "Outline shoe"
     },
 
     {
       "type": "range",
       "id": "image_width",
-      "label": "Shoe image width",
+      "label": "Shoe width",
       "min": 200,
       "max": 700,
       "step": 10,
@@ -843,7 +914,7 @@
     {
       "type": "range",
       "id": "image_height",
-      "label": "Shoe image height",
+      "label": "Shoe height",
       "min": 300,
       "max": 1200,
       "step": 10,
@@ -854,7 +925,7 @@
 
     {
       "type": "header",
-      "content": "Top labels"
+      "content": "Comparison Header"
     },
 
     {
@@ -908,7 +979,7 @@
     {
       "type": "range",
       "id": "row_height",
-      "label": "Comparison row height",
+      "label": "Row height",
       "min": 60,
       "max": 220,
       "step": 5,
@@ -923,21 +994,28 @@
 
     {
       "type": "comparison",
+
       "name": "Comparison row",
 
       "settings": [
 
         {
           "type": "textarea",
+
           "id": "left_text",
+
           "label": "Your brand",
+
           "default": "GENUINE LEATHER &\nHIGH QUALITY MATERIALS"
         },
 
         {
           "type": "textarea",
+
           "id": "right_text",
+
           "label": "Others",
+
           "default": "SYNTHETIC OR BLENDED\nMATERIALS"
         }
 
@@ -957,40 +1035,50 @@
 
         {
           "type": "comparison",
+
           "settings": {
             "left_text": "GENUINE LEATHER &\nHIGH QUALITY MATERIALS",
+
             "right_text": "SYNTHETIC OR BLENDED\nMATERIALS"
           }
         },
 
         {
           "type": "comparison",
+
           "settings": {
             "left_text": "ANTI BACTERIAL\nCOATING - NODR",
+
             "right_text": "NO ODOUR OR HYGIENE\nTREATMENT"
           }
         },
 
         {
           "type": "comparison",
+
           "settings": {
             "left_text": "56 AIR POCKET SOLES\nULTRA HD BOUNCE\nBACK CUSHION",
+
             "right_text": "BASIC FOAM INSOLE"
           }
         },
 
         {
           "type": "comparison",
+
           "settings": {
             "left_text": "ORIGINAL INDIAN\nDESIGN LANGUAGE",
+
             "right_text": "GENERIC\nSILHOUETTES"
           }
         },
 
         {
           "type": "comparison",
+
           "settings": {
             "left_text": "RETURN / EXCHANGE\nSUPPORT",
+
             "right_text": "RIGID RETURN\nPOLICIES"
           }
         }
