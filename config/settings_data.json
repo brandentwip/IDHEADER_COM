@@ -191,20 +191,25 @@
           "comet_tab_bg": "#ffffff",
           "comet_tab_text": "#111111",
           "comet_tab_active": "#f2d21d",
-          "comet_tab1_title": "Categories",
+          "comet_tab1_title": "MEN",
           "comet_tab1_menu": "men-women-tab-head",
           "comet_tab1_image": "shopify://shop_images/Artboard_2_02414caa-2a5c-42d1-83a0-8cc3e7a72cef.png",
           "comet_tab1_image_link": "shopify://collections/boots",
-          "comet_tab2_title": "Collections",
+          "comet_tab2_title": "WOMEN",
           "comet_tab2_menu": "men-women-tab-headwomen",
-          "comet_tab2_image": "shopify://shop_images/Collection_Suede.jpg",
+          "comet_tab2_image": "shopify://shop_images/banner_2_1a9843fe-b7af-4cdb-87ac-eedff2563a05.png",
           "comet_tab2_image_link": "shopify://collections/womenboots",
           "comet_tab3_title": "ABOUT US",
           "comet_tab3_menu": "footer-information",
           "comet_tab3_image_link": "",
           "comet_tab4_title": "",
           "comet_tab4_menu": "footer",
-          "comet_tab4_image_link": ""
+          "comet_tab4_image_link": "",
+          "category_icon_boots": "shopify://shop_images/boots_e4026d53-8c59-4f68-bb9d-0d2da291c5ba.png",
+          "category_icon_formals": "shopify://shop_images/formals.png",
+          "category_icon_loafers": "shopify://shop_images/loaf.png",
+          "category_icon_sandals": "shopify://shop_images/Sandals_3287b8fe-20aa-4232-939d-f8a7443c4e20.png",
+          "category_icon_sneakers": "shopify://shop_images/sneakers_cc8492ad-d99c-4c40-ae6b-fd1ce00893d7.png"
         }
       },
       "footer": {
@@ -923,6 +928,7 @@
       },
       "background_video_text_YbNqkx": {
         "type": "background-video-text",
+        "disabled": true,
         "name": "Large video with text box",
         "settings": {
           "subtitle": "",
@@ -1555,7 +1561,7 @@
         "name": "Trust Media Panel",
         "settings": {
           "media_type": "video",
-          "shopify_video": "shopify://files/videos/ID 1080&1080.mp4",
+          "shopify_video": "shopify://files/videos/ID 1080&1080_442e955c-5ae4-4a8e-8d33-dd4609727cfa.mp4",
           "video_url": "",
           "autoplay": true,
           "loop": true,
