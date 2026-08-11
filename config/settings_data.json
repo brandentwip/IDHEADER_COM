@@ -1659,22 +1659,29 @@
           "comparison_bJbBhx": {
             "type": "comparison",
             "settings": {
-              "left_text": "GENUINE LEATHER &\nHIGH QUALITY MATERIALS",
-              "right_text": "SYNTHETIC OR BLENDED\nMATERIALS"
+              "left_text": "ANTI BACTERIAL \nCOATING - NODR",
+              "right_text": "NO ODOUR OR \nHYGIENE TREATMENT"
             }
           },
           "comparison_QFe7aE": {
             "type": "comparison",
             "settings": {
-              "left_text": "GENUINE LEATHER &\nHIGH QUALITY MATERIALS",
-              "right_text": "SYNTHETIC OR BLENDED\nMATERIALS"
+              "left_text": "56 AIR POCKET SOLES \nULTRA HD BOUNCE BACK CUSHION",
+              "right_text": "BASIC FOAM INSOLE"
             }
           },
           "comparison_EKPp8R": {
             "type": "comparison",
             "settings": {
-              "left_text": "GENUINE LEATHER &\nHIGH QUALITY MATERIALS",
-              "right_text": "SYNTHETIC OR BLENDED\nMATERIALS"
+              "left_text": "ORIGINAL INDIAN DESIGN \nLANGUAGE",
+              "right_text": "GENERIC SILHOUETTES"
+            }
+          },
+          "comparison_nQnRrT": {
+            "type": "comparison",
+            "settings": {
+              "left_text": "RETURN / EXCHANGE SUPPORT",
+              "right_text": "RIGID RETURN POLICIES"
             }
           }
         },
@@ -1682,7 +1689,8 @@
           "comparison_AUPWBz",
           "comparison_bJbBhx",
           "comparison_QFe7aE",
-          "comparison_EKPp8R"
+          "comparison_EKPp8R",
+          "comparison_nQnRrT"
         ],
         "settings": {
           "heading": "Comparing With Others?",
@@ -1691,7 +1699,7 @@
           "real_shoe": "shopify://shop_images/shoe-leather-half.png",
           "outline_shoe": "shopify://shop_images/shoe-outline-half.png",
           "image_width": 550,
-          "image_height": 440,
+          "image_height": 460,
           "brand_logo": "shopify://shop_images/logo-id-being-cult-112-x-74px.png",
           "others_heading": "OTHERS",
           "left_background": "#363435",
