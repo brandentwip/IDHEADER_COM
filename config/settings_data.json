@@ -1649,57 +1649,56 @@
       "Comparison-table": {
         "type": "Comparison-table",
         "blocks": {
-          "comparison_row_VGArYN": {
-            "type": "comparison_row",
+          "comparison_AUPWBz": {
+            "type": "comparison",
             "settings": {
-              "left_text": "Genuine Leather & High Quality Materials",
-              "right_text": "Synthetic or Blended Materials"
+              "left_text": "GENUINE LEATHER &\nHIGH QUALITY MATERIALS",
+              "right_text": "SYNTHETIC OR BLENDED\nMATERIALS"
             }
           },
-          "comparison_row_aRWLmH": {
-            "type": "comparison_row",
+          "comparison_bJbBhx": {
+            "type": "comparison",
             "settings": {
-              "left_text": "Genuine Leather & High Quality Materials",
-              "right_text": "Synthetic or Blended Materials"
+              "left_text": "GENUINE LEATHER &\nHIGH QUALITY MATERIALS",
+              "right_text": "SYNTHETIC OR BLENDED\nMATERIALS"
             }
           },
-          "comparison_row_XkJYh6": {
-            "type": "comparison_row",
+          "comparison_QFe7aE": {
+            "type": "comparison",
             "settings": {
-              "left_text": "Genuine Leather & High Quality Materials",
-              "right_text": "Synthetic or Blended Materials"
+              "left_text": "GENUINE LEATHER &\nHIGH QUALITY MATERIALS",
+              "right_text": "SYNTHETIC OR BLENDED\nMATERIALS"
             }
           },
-          "comparison_row_cFrGJ7": {
-            "type": "comparison_row",
+          "comparison_EKPp8R": {
+            "type": "comparison",
             "settings": {
-              "left_text": "Genuine Leather & High Quality Materials",
-              "right_text": "Synthetic or Blended Materials"
-            }
-          },
-          "comparison_row_GJH4JF": {
-            "type": "comparison_row",
-            "settings": {
-              "left_text": "Genuine Leather & High Quality Materials",
-              "right_text": "Synthetic or Blended Materials"
+              "left_text": "GENUINE LEATHER &\nHIGH QUALITY MATERIALS",
+              "right_text": "SYNTHETIC OR BLENDED\nMATERIALS"
             }
           }
         },
         "block_order": [
-          "comparison_row_VGArYN",
-          "comparison_row_aRWLmH",
-          "comparison_row_XkJYh6",
-          "comparison_row_cFrGJ7",
-          "comparison_row_GJH4JF"
+          "comparison_AUPWBz",
+          "comparison_bJbBhx",
+          "comparison_QFe7aE",
+          "comparison_EKPp8R"
         ],
         "settings": {
           "heading": "Comparing With Others?",
-          "bg_color": "#ffffff",
-          "logo_text": "iD",
-          "logo_subtext": "SINCE 1969",
-          "others_label": "Others",
-          "leather_image": "shopify://shop_images/shoe-leather-half.png",
-          "outline_image": "shopify://shop_images/shoe-outline-half.png"
+          "heading_size": 68,
+          "heading_mobile_size": 38,
+          "real_shoe": "shopify://shop_images/shoe-leather-half.png",
+          "outline_shoe": "shopify://shop_images/shoe-outline-half.png",
+          "image_width": 550,
+          "image_height": 440,
+          "brand_logo": "shopify://shop_images/logo-id-being-cult-112-x-74px.png",
+          "others_heading": "OTHERS",
+          "left_background": "#363435",
+          "right_background": "#eeeeee",
+          "left_text_color": "#ffffff",
+          "right_text_color": "#333333",
+          "row_height": 85
         }
       }
     },
