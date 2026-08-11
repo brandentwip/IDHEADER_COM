@@ -168,7 +168,8 @@
           "802073a3-8b09-43ed-9e31-bd635392ffb2"
         ],
         "custom_css": [
-          "li.site-nav__item.site-nav__expanded-item a {font-size: 10px; letter-spacing: 1px; font-weight: 400;}"
+          "li.site-nav__item.site-nav__expanded-item a {font-size: 10px; letter-spacing: 1px; font-weight: 400;}",
+          ".comet-menu-icon{display: none;}"
         ],
         "settings": {
           "main_menu_link_list": "new-main-menu-v2",
