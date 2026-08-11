@@ -1,431 +1,386 @@
 {%- comment -%}
-  Section: Comparison Table
-  Usage: Add via {% section 'comparison-table' %} inside product.liquid,
-  or add as a section block if your theme supports {% sections %} rendering.
-  Fully editable via theme customizer (blocks = rows).
+  Section: Comparing With Others
+  Split visual comparison — genuine leather product photo on the left,
+  generic outline artwork on the right, with editable comparison rows below.
+  Rows = blocks, fully editable via theme customizer.
 {%- endcomment -%}
 
-<div class="comparison-table-section" style="background:{{ section.settings.bg_color }};">
-  <div class="comparison-table-wrapper">
-    <div class="comparison-table">
+<div class="cwo-section-{{ section.id }} cwo-section" style="background:{{ section.settings.bg_color }};">
 
-      <!-- Header Row -->
-      <div class="ct-row ct-header-row">
-        <div class="ct-cell ct-feature-col"></div>
-        <div class="ct-cell ct-highlight-col ct-highlight-header">
-          {%- if section.settings.brand_logo != blank -%}
-            <img src="{{ section.settings.brand_logo | image_url: width: 120 }}" alt="{{ section.settings.brand_name }}" loading="lazy">
-          {%- else -%}
-            <span class="ct-brand-name">{{ section.settings.brand_name }}</span>
-          {%- endif -%}
-        </div>
-        <div class="ct-cell ct-normal-col">
-          <span class="ct-col-title">{{ section.settings.competitor1_title }}</span>
-        </div>
-        <div class="ct-cell ct-normal-col">
-          <span class="ct-col-title">{{ section.settings.competitor2_title }}</span>
-        </div>
-      </div>
+  {%- if section.settings.heading != blank -%}
+    <h2 class="cwo-heading">{{ section.settings.heading }}</h2>
+  {%- endif -%}
 
-      <!-- Data Rows -->
-      {%- if section.blocks.size > 0 -%}
-        {%- for block in section.blocks -%}
-          <div class="ct-row" {{ block.shopify_attributes }}>
-            <div class="ct-cell ct-feature-col">
-              <strong>{{ block.settings.feature_label }}</strong>
-            </div>
-            <div class="ct-cell ct-highlight-col">
-              <span class="ct-mini-logo">
-                {%- if section.settings.brand_logo != blank -%}
-                  <img src="{{ section.settings.brand_logo | image_url: width: 60 }}" alt="{{ section.settings.brand_name }}" loading="lazy">
-                {%- else -%}
-                  {{ section.settings.brand_name | default: 'Your Brand' }}
-                {%- endif -%}
-              </span>
-              {%- if block.settings.highlight_text != blank -%}
-                <span class="ct-highlight-text">{{ block.settings.highlight_text }}</span>
-              {%- else -%}
-                <span class="ct-check">
-                  <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M5 13l4 4L19 7" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
-                  </svg>
-                </span>
-              {%- endif -%}
-            </div>
-            <div class="ct-cell ct-normal-col" data-label="{{ section.settings.competitor1_title }}">
-              <span class="ct-muted-text">{{ block.settings.competitor1_text }}</span>
-            </div>
-            <div class="ct-cell ct-normal-col" data-label="{{ section.settings.competitor2_title }}">
-              <span class="ct-muted-text">{{ block.settings.competitor2_text }}</span>
-            </div>
-          </div>
-        {%- endfor -%}
+  <div class="cwo-labels">
+    <div class="cwo-brand-logo">
+      {%- if section.settings.logo_image != blank -%}
+        <img
+          class="cwo-brand-logo-img"
+          src="{{ section.settings.logo_image | image_url: width: 200 }}"
+          alt="{{ section.settings.logo_image.alt | default: shop.name | escape }}"
+          width="{{ section.settings.logo_image.width }}"
+          height="{{ section.settings.logo_image.height }}"
+          loading="lazy"
+        >
       {%- else -%}
-        {%- comment -%} Fallback default rows — used when this section is hardcoded via {% section %} tag, since presets/blocks only auto-populate when added through the theme customizer's "Add section" button {%- endcomment -%}
-        {%- assign default_rows = "Return / exchange support|30-day|7-day rigid policies|Fixed email support,High-quality Materials||Basic synthetics|Standardized materials,Handcrafted Detailing||Simpler detailing|Standardized detailing,Cushioned PU-poured footbeds||Basic foam insoles|Standard comfort systems,Original Indian design language||Trend-led designs|Global silhouettes" | split: "," -%}
-        {%- for row in default_rows -%}
-          {%- assign parts = row | split: "|" -%}
-          <div class="ct-row">
-            <div class="ct-cell ct-feature-col">
-              <strong>{{ parts[0] }}</strong>
-            </div>
-            <div class="ct-cell ct-highlight-col">
-              <span class="ct-mini-logo">
-                {%- if section.settings.brand_logo != blank -%}
-                  <img src="{{ section.settings.brand_logo | image_url: width: 60 }}" alt="{{ section.settings.brand_name }}" loading="lazy">
-                {%- else -%}
-                  {{ section.settings.brand_name | default: 'Your Brand' }}
-                {%- endif -%}
-              </span>
-              {%- if parts[1] != blank -%}
-                <span class="ct-highlight-text">{{ parts[1] }}</span>
-              {%- else -%}
-                <span class="ct-check">
-                  <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M5 13l4 4L19 7" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
-                  </svg>
-                </span>
-              {%- endif -%}
-            </div>
-            <div class="ct-cell ct-normal-col" data-label="{{ section.settings.competitor1_title }}">
-              <span class="ct-muted-text">{{ parts[2] }}</span>
-            </div>
-            <div class="ct-cell ct-normal-col" data-label="{{ section.settings.competitor2_title }}">
-              <span class="ct-muted-text">{{ parts[3] }}</span>
-            </div>
+        <div class="cwo-mark">
+          <span></span>
+          <span class="cwo-big-d">{{ section.settings.logo_text | default: 'iD' }}</span>
+        </div>
+        {%- if section.settings.logo_subtext != blank -%}
+          <div class="cwo-logo-text">
+            <span class="cwo-since">{{ section.settings.logo_subtext }}</span>
           </div>
-        {%- endfor -%}
+        {%- endif -%}
       {%- endif -%}
+    </div>
+    <div class="cwo-others-label">{{ section.settings.others_label | default: 'Others' }}</div>
+  </div>
 
+  <div class="cwo-split-visual">
+    {%- if section.settings.leather_image != blank -%}
+      <img
+        src="{{ section.settings.leather_image | image_url: width: 1080 }}"
+        srcset="
+          {{ section.settings.leather_image | image_url: width: 540 }} 540w,
+          {{ section.settings.leather_image | image_url: width: 1080 }} 1080w,
+          {{ section.settings.leather_image | image_url: width: 1600 }} 1600w
+        "
+        sizes="(max-width: 640px) 300px, 480px"
+        alt="{{ section.settings.leather_image.alt | default: 'Genuine leather shoe' | escape }}"
+        width="{{ section.settings.leather_image.width }}"
+        height="{{ section.settings.leather_image.height }}"
+        loading="lazy"
+      >
+    {%- else -%}
+      <div class="cwo-split-visual-placeholder">
+        {{ 'shoe-1' | placeholder_svg_tag: 'cwo-placeholder-svg' }}
+      </div>
+    {%- endif -%}
+
+    {%- if section.settings.outline_image != blank -%}
+      <img
+        src="{{ section.settings.outline_image | image_url: width: 1080 }}"
+        srcset="
+          {{ section.settings.outline_image | image_url: width: 540 }} 540w,
+          {{ section.settings.outline_image | image_url: width: 1080 }} 1080w,
+          {{ section.settings.outline_image | image_url: width: 1600 }} 1600w
+        "
+        sizes="(max-width: 640px) 300px, 480px"
+        alt="{{ section.settings.outline_image.alt | default: 'Generic outline shoe comparison' | escape }}"
+        width="{{ section.settings.outline_image.width }}"
+        height="{{ section.settings.outline_image.height }}"
+        loading="lazy"
+      >
+    {%- endif -%}
+  </div>
+
+  <div class="cwo-rows">
+    <div class="cwo-col cwo-dark">
+      {%- for block in section.blocks -%}
+        <div class="cwo-row" {{ block.shopify_attributes }}>{{ block.settings.left_text }}</div>
+      {%- endfor -%}
+    </div>
+    <div class="cwo-col cwo-light">
+      {%- for block in section.blocks -%}
+        <div class="cwo-row" {{ block.shopify_attributes }}>{{ block.settings.right_text }}</div>
+      {%- endfor -%}
     </div>
   </div>
+
 </div>
 
 <style>
-  .comparison-table-section {
-    padding: 48px 16px;
-  }
+  .cwo-section{
+    --cwo-dark: #2b2b2b;
+    --cwo-dark-text: #ffffff;
+    --cwo-light-bg: #eeeeee;
+    --cwo-light-text: #1a1a1a;
+    --cwo-accent-gold: #d4a017;
+    --cwo-line: rgba(0,0,0,0.15);
+    --cwo-line-on-dark: rgba(255,255,255,0.15);
 
-  .comparison-table-wrapper {
-    max-width: 900px;
+    max-width: 1100px;
     margin: 0 auto;
-    overflow-x: auto;
+    padding: 60px 20px 60px;
   }
 
-  .comparison-table {
-    display: grid;
-    grid-template-columns: 1.3fr 1fr 1fr 1fr;
-    border: 1px solid #ececec;
-    border-radius: 16px;
-    overflow: hidden;
-    background: #fff;
-    min-width: 640px;
-    position: relative;
+  .cwo-section *{ box-sizing: border-box; }
+
+  .cwo-heading{
+    text-align:center;
+    font-size: clamp(32px, 5vw, 56px);
+    font-weight: 800;
+    letter-spacing: -1px;
+    line-height: 1.1;
+    color: #111;
+    margin: 0 0 40px;
+    text-transform: uppercase;
   }
 
-  .ct-row {
-    display: contents;
+  /* ---------- Logo / Others row ---------- */
+  .cwo-labels{
+    display:grid;
+    grid-template-columns: 1fr 1fr;
+    align-items:center;
+    margin-bottom: 10px;
   }
 
-  .ct-cell {
-    padding: 20px 16px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-    border-bottom: 1px solid #f0f0f0;
-    font-size: 14px;
+  .cwo-brand-logo{
+    display:flex;
+    align-items:center;
+    gap: 4px;
+    padding-left: 10px;
   }
-
-  .ct-feature-col {
-    justify-content: flex-start;
-    text-align: left;
-    color: #1a1a1a;
-    font-size: 15px;
-  }
-
-  .ct-header-row .ct-cell {
-    border-bottom: none;
-    padding-top: 28px;
-    padding-bottom: 20px;
-  }
-
-  .ct-highlight-header img {
-    max-width: 110px;
+  .cwo-brand-logo-img{
+    max-width: 160px;
     height: auto;
   }
+  .cwo-mark{
+    display:flex;
+    flex-direction:column;
+    line-height:0.75;
+  }
+  .cwo-mark span:first-child{
+    width: 22px;
+    height: 6px;
+    background: var(--cwo-accent-gold);
+    margin-bottom: 4px;
+  }
+  .cwo-mark .cwo-big-d{
+    font-size: 34px;
+    font-weight: 900;
+    line-height: 0.8;
+    color: #111;
+  }
+  .cwo-since{
+    font-size: 10px;
+    letter-spacing: 2px;
+    color: #444;
+    margin-left: 2px;
+  }
+  .cwo-logo-text{
+    display:flex;
+    flex-direction:column;
+  }
 
-  .ct-brand-name {
+  .cwo-others-label{
+    text-align:right;
+    padding-right: 10px;
+    font-size: clamp(20px, 2.5vw, 30px);
     font-weight: 800;
-    font-size: 18px;
+    color: #111;
+    text-transform: uppercase;
   }
 
-  .ct-col-title {
-    font-weight: 700;
-    color: #1a1a1a;
-    font-size: 14px;
-  }
-
-  /* Highlighted middle column with gradient */
-  .ct-highlight-col {
+  /* ---------- Center split visual ---------- */
+  /* Both source images should share the same canvas size, each transparent
+     on the half they don't use, so stacking them lines the seam up exactly. */
+  .cwo-split-visual{
     position: relative;
-    color: #fff;
-    font-weight: 600;
+    width: 100%;
+    max-width: 480px;
+    margin: 0 auto;
+    aspect-ratio: 1080 / 1350;
+    background: #ffffff;
   }
 
-  .ct-highlight-col::after {
-    content: "";
+  .cwo-split-visual img{
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: block;
+  }
+
+  .cwo-split-visual-placeholder{
     position: absolute;
     inset: 0;
-    background: linear-gradient(180deg, #eaf0ff 0%, #3b5bfd 100%);
-    z-index: 0;
+  }
+  .cwo-split-visual-placeholder .cwo-placeholder-svg{
+    width: 100%;
+    height: 100%;
   }
 
-  /* Give the highlight column rounded top/bottom only on first/last row */
-  .ct-header-row .ct-highlight-col::after {
-    border-radius: 16px 16px 0 0;
+  /* ---------- Comparison rows ---------- */
+  .cwo-rows{
+    display:grid;
+    grid-template-columns: 1fr 1fr;
+    margin-top: 10px;
   }
 
-  .comparison-table > .ct-row:last-child .ct-highlight-col::after {
-    border-radius: 0 0 16px 16px;
+  .cwo-rows .cwo-col{
+    display:flex;
+    flex-direction:column;
   }
 
-  .ct-highlight-col > * {
-    position: relative;
-    z-index: 1;
+  .cwo-rows .cwo-dark{
+    background: var(--cwo-dark);
+    color: var(--cwo-dark-text);
+  }
+  .cwo-rows .cwo-light{
+    background: var(--cwo-light-bg);
+    color: var(--cwo-light-text);
   }
 
-  .ct-highlight-text {
+  .cwo-rows .cwo-row{
+    padding: 26px 28px;
     font-weight: 700;
-  }
-
-  .ct-mini-logo {
-    display: none;
-  }
-
-  .ct-check {
-    width: 26px;
-    height: 26px;
-    border-radius: 50%;
-    background: #fff;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: #3b5bfd;
-  }
-
-  .ct-check svg {
-    width: 15px;
-    height: 15px;
-  }
-
-  .ct-muted-text {
-    color: #9a9a9a;
+    font-size: 15px;
+    letter-spacing: 0.3px;
+    text-transform: uppercase;
     line-height: 1.4;
+    border-bottom: 1px solid var(--cwo-line-on-dark);
+  }
+  .cwo-rows .cwo-light .cwo-row{
+    border-bottom: 1px solid var(--cwo-line);
+    text-align: right;
+  }
+  .cwo-rows .cwo-dark .cwo-row:last-child,
+  .cwo-rows .cwo-light .cwo-row:last-child{
+    border-bottom: none;
   }
 
-  /* Mobile: stacked card layout, no horizontal scroll */
-  @media (max-width: 749px) {
-    .comparison-table-wrapper {
-      overflow-x: visible;
+  /* ---------- Responsive ---------- */
+  @media (max-width: 749px){
+    .cwo-section{ padding: 40px 16px 40px; }
+    .cwo-others-label{ font-size: 20px; }
+    .cwo-mark .cwo-big-d{ font-size: 24px; }
+    .cwo-rows .cwo-row{
+      padding: 18px 16px;
+      font-size: 12.5px;
     }
-
-    .comparison-table {
-      display: block;
-      min-width: 0;
-    }
-
-    /* Hide the desktop header row entirely — labels move inline per cell instead */
-    .ct-row.ct-header-row {
-      display: none !important;
-    }
-
-    .ct-row {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 6px;
-      padding: 16px 14px;
-      border-bottom: 1px solid #f0f0f0;
-    }
-
-    .comparison-table > .ct-row:last-child {
-      border-bottom: none;
-    }
-
-    .ct-feature-col {
-      grid-column: 1 / -1;
-      padding: 0 0 10px 0;
-      border-bottom: none;
-      font-size: 14px;
-    }
-
-    .ct-highlight-col,
-    .ct-normal-col {
-      flex-direction: column;
-      padding: 10px 6px;
-      border-bottom: none;
-      border-radius: 10px;
-      font-size: 12px;
-    }
-
-    .ct-normal-col {
-      background: #fafafa;
-    }
-
-    .ct-highlight-col::after {
-      border-radius: 10px;
-    }
-
-    /* Each row is its own rounded card now */
-    .comparison-table > .ct-row:last-child .ct-highlight-col::after {
-      border-radius: 10px;
-    }
-
-    .ct-highlight-col,
-    .ct-normal-col {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-    }
-
-    /* Inline column label shown above the value — normal columns only (highlight column shows a real logo instead) */
-    .ct-normal-col::before {
-      content: attr(data-label);
-      position: absolute;
-      top: 8px;
-      left: 4px;
-      right: 4px;
-      text-align: center;
-      font-size: 8px;
-      line-height: 1.2;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.02em;
-      opacity: 0.75;
-      z-index: 1;
-      word-break: break-word;
-      color: #9a9a9a;
-    }
-
-    .ct-normal-col {
-      position: relative;
-      padding-top: 34px;
-    }
-
-    .ct-highlight-col {
-      position: relative;
-      flex-direction: column;
-      gap: 6px;
-    }
-
-    .ct-mini-logo {
-      display: block;
-      font-size: 9px;
-      font-weight: 700;
-      letter-spacing: 0.02em;
-      opacity: 0.9;
-    }
-
-    .ct-mini-logo img {
-      max-width: 34px;
-      height: auto;
-      display: block;
-      margin: 0 auto;
-    }
-
-    .ct-normal-col .ct-muted-text,
-    .ct-highlight-col .ct-highlight-text {
-      font-size: 11px;
-      line-height: 1.3;
-    }
-
-    .ct-check {
-      width: 22px;
-      height: 22px;
-    }
-
-    .ct-check svg {
-      width: 12px;
-      height: 12px;
-    }
+    .cwo-split-visual{ max-width: 300px; }
   }
 </style>
 
 {% schema %}
 {
-  "name": "Comparison Table",
+  "name": "Comparing With Others",
   "settings": [
     {
       "type": "text",
-      "id": "brand_name",
-      "label": "Your brand name",
-      "default": "Your Brand"
-    },
-    {
-      "type": "image_picker",
-      "id": "brand_logo",
-      "label": "Your brand logo (optional, replaces brand name text)"
-    },
-    {
-      "type": "text",
-      "id": "competitor1_title",
-      "label": "Competitor 1 column title",
-      "default": "Local Brand"
-    },
-    {
-      "type": "text",
-      "id": "competitor2_title",
-      "label": "Competitor 2 column title",
-      "default": "International Brand"
+      "id": "heading",
+      "label": "Heading",
+      "default": "Comparing With Others?"
     },
     {
       "type": "color",
       "id": "bg_color",
       "label": "Section background color",
       "default": "#ffffff"
+    },
+    {
+      "type": "header",
+      "content": "Left brand mark"
+    },
+    {
+      "type": "image_picker",
+      "id": "logo_image",
+      "label": "Logo image (optional)",
+      "info": "If set, this replaces the text logo below."
+    },
+    {
+      "type": "text",
+      "id": "logo_text",
+      "label": "Logo text (used if no logo image)",
+      "default": "iD"
+    },
+    {
+      "type": "text",
+      "id": "logo_subtext",
+      "label": "Logo subtext",
+      "default": "SINCE 1969"
+    },
+    {
+      "type": "header",
+      "content": "Right label"
+    },
+    {
+      "type": "text",
+      "id": "others_label",
+      "label": "Right-side label",
+      "default": "Others"
+    },
+    {
+      "type": "header",
+      "content": "Split comparison image"
+    },
+    {
+      "type": "paragraph",
+      "content": "Upload two images exported on the same canvas size, each showing only its half (transparent on the other half) so the seam lines up automatically."
+    },
+    {
+      "type": "image_picker",
+      "id": "leather_image",
+      "label": "Left half image (e.g. product photo)"
+    },
+    {
+      "type": "image_picker",
+      "id": "outline_image",
+      "label": "Right half image (e.g. outline artwork)"
     }
   ],
   "blocks": [
     {
-      "type": "row",
-      "name": "Comparison Row",
+      "type": "comparison_row",
+      "name": "Comparison row",
       "settings": [
         {
           "type": "text",
-          "id": "feature_label",
-          "label": "Feature label",
-          "default": "Feature name"
+          "id": "left_text",
+          "label": "Left side text",
+          "default": "Genuine Leather & High Quality Materials"
         },
         {
           "type": "text",
-          "id": "highlight_text",
-          "label": "Your brand cell text (leave blank to show a checkmark instead)"
-        },
-        {
-          "type": "text",
-          "id": "competitor1_text",
-          "label": "Competitor 1 cell text",
-          "default": "—"
-        },
-        {
-          "type": "text",
-          "id": "competitor2_text",
-          "label": "Competitor 2 cell text",
-          "default": "—"
+          "id": "right_text",
+          "label": "Right side text",
+          "default": "Synthetic or Blended Materials"
         }
       ]
     }
   ],
   "presets": [
     {
-      "name": "Comparison Table",
+      "name": "Comparing With Others",
       "blocks": [
-        { "type": "row", "settings": { "feature_label": "Return / exchange support", "highlight_text": "30-day" } },
-        { "type": "row", "settings": { "feature_label": "High-quality Materials" } },
-        { "type": "row", "settings": { "feature_label": "Handcrafted Detailing" } },
-        { "type": "row", "settings": { "feature_label": "Cushioned PU-poured footbeds" } },
-        { "type": "row", "settings": { "feature_label": "Original Indian design language" } }
+        {
+          "type": "comparison_row",
+          "settings": {
+            "left_text": "Genuine Leather & High Quality Materials",
+            "right_text": "Synthetic or Blended Materials"
+          }
+        },
+        {
+          "type": "comparison_row",
+          "settings": {
+            "left_text": "Anti Bacterial Coating – NODR",
+            "right_text": "No Odour or Hygiene Treatment"
+          }
+        },
+        {
+          "type": "comparison_row",
+          "settings": {
+            "left_text": "56 Air Pocket Soles, Ultra HD Bounce Back Cushion",
+            "right_text": "Basic Foam Insole"
+          }
+        },
+        {
+          "type": "comparison_row",
+          "settings": {
+            "left_text": "Original Indian Design Language",
+            "right_text": "Generic Silhouettes"
+          }
+        },
+        {
+          "type": "comparison_row",
+          "settings": {
+            "left_text": "Return / Exchange Support",
+            "right_text": "Rigid Return Policies"
+          }
+        }
       ]
     }
   ]
