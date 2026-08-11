@@ -76,16 +76,12 @@
   </div>
 
   <div class="cwo-rows">
-    <div class="cwo-col cwo-dark">
-      {%- for block in section.blocks -%}
-        <div class="cwo-row" {{ block.shopify_attributes }}>{{ block.settings.left_text }}</div>
-      {%- endfor -%}
-    </div>
-    <div class="cwo-col cwo-light">
-      {%- for block in section.blocks -%}
-        <div class="cwo-row" {{ block.shopify_attributes }}>{{ block.settings.right_text }}</div>
-      {%- endfor -%}
-    </div>
+    {%- for block in section.blocks -%}
+      <div class="cwo-row-pair" {{ block.shopify_attributes }}>
+        <div class="cwo-cell cwo-dark">{{ block.settings.left_text }}</div>
+        <div class="cwo-cell cwo-light">{{ block.settings.right_text }}</div>
+      </div>
+    {%- endfor -%}
   </div>
 
 </div>
@@ -179,7 +175,7 @@
   .cwo-split-visual{
     position: relative;
     width: 100%;
-    max-width: 480px;
+    max-width: 640px;
     margin: 0 auto;
     aspect-ratio: 1080 / 1350;
     background: #ffffff;
@@ -204,41 +200,45 @@
   }
 
   /* ---------- Comparison rows ---------- */
+  /* Each block renders one .cwo-row-pair with display:contents, so its two
+     cells become direct grid children — this guarantees the left/right
+     cells for a given row sit at the same height, even if one side's
+     text wraps to more lines than the other. */
   .cwo-rows{
-    display:grid;
+    display: grid;
     grid-template-columns: 1fr 1fr;
-    margin-top: 10px;
+    margin-top: -6px;
   }
 
-  .cwo-rows .cwo-col{
-    display:flex;
-    flex-direction:column;
+  .cwo-row-pair{
+    display: contents;
   }
 
-  .cwo-rows .cwo-dark{
-    background: var(--cwo-dark);
-    color: var(--cwo-dark-text);
-  }
-  .cwo-rows .cwo-light{
-    background: var(--cwo-light-bg);
-    color: var(--cwo-light-text);
-  }
-
-  .cwo-rows .cwo-row{
+  .cwo-cell{
     padding: 26px 28px;
     font-weight: 700;
     font-size: 15px;
     letter-spacing: 0.3px;
     text-transform: uppercase;
     line-height: 1.4;
+    display: flex;
+    align-items: center;
+  }
+
+  .cwo-cell.cwo-dark{
+    background: var(--cwo-dark);
+    color: var(--cwo-dark-text);
     border-bottom: 1px solid var(--cwo-line-on-dark);
   }
-  .cwo-rows .cwo-light .cwo-row{
+  .cwo-cell.cwo-light{
+    background: var(--cwo-light-bg);
+    color: var(--cwo-light-text);
     border-bottom: 1px solid var(--cwo-line);
+    justify-content: flex-end;
     text-align: right;
   }
-  .cwo-rows .cwo-dark .cwo-row:last-child,
-  .cwo-rows .cwo-light .cwo-row:last-child{
+
+  .cwo-rows .cwo-row-pair:last-child .cwo-cell{
     border-bottom: none;
   }
 
@@ -247,7 +247,7 @@
     .cwo-section{ padding: 40px 16px 40px; }
     .cwo-others-label{ font-size: 20px; }
     .cwo-mark .cwo-big-d{ font-size: 24px; }
-    .cwo-rows .cwo-row{
+    .cwo-cell{
       padding: 18px 16px;
       font-size: 12.5px;
     }
