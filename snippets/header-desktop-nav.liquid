@@ -45,7 +45,7 @@
   }
   .megamenu--shop__links a {
     display: inline-block;
-    font-size: 12px;
+    font-size: 17px;
     font-weight: 700;
     color: inherit;
     text-decoration: none;
@@ -101,7 +101,7 @@
   }
   .megamenu--shop__flyout a {
     display: inline-block;
-    font-size: 8px;
+    font-size: 13px;
     font-weight: 400;
     color: inherit;
     text-decoration: none;
@@ -160,7 +160,7 @@
     min-width: 0;
   }
   .megamenu--shop__product-title {
-    font-size: 10px;
+    font-size: 13px;
     font-weight: 700;
     line-height: 1.3;
     margin: 0;
@@ -194,7 +194,7 @@
       endif
 
       assign is_shop_menu = false
-      if menu_collection and menu_collection.products.size > 0 and has_dropdown
+      if menu_collection and has_dropdown
         assign is_shop_menu = true
       endif
     -%}
@@ -214,6 +214,10 @@
 
               <ul class="megamenu--shop__links">
                 {%- for childlink in link.links -%}
+                  {%- if childlink.title contains '*' -%}
+                    {%- continue -%}
+                  {%- endif -%}
+
                   {%- assign has_sub_dropdown = false -%}
                   {%- if childlink.links != blank -%}
                     {%- assign has_sub_dropdown = true -%}
@@ -242,21 +246,35 @@
               </ul>
 
               <div class="megamenu--shop__products">
-                {%- for product in menu_collection.products limit: 5 -%}
-                  <a href="{{ product.url }}" class="megamenu--shop__product">
-                    {%- if product.featured_image != blank -%}
+                {%- for childlink in link.links -%}
+                  {%- unless childlink.title contains '*' -%}
+                    {%- continue -%}
+                  {%- endunless -%}
+
+                  {%- assign card_title = childlink.title | remove: '*' | strip -%}
+                  {%- assign card_collection = false -%}
+                  {%- if childlink.url contains '/collections/' -%}
+                    {%- liquid
+                      assign lang_code_string = request.locale.iso_code | prepend: '/' | downcase
+                      assign card_handle = childlink.url | remove: '/collections/' | remove: lang_code_string
+                      assign card_collection = collections[card_handle]
+                    -%}
+                  {%- endif -%}
+
+                  <a href="{{ childlink.url }}" class="megamenu--shop__product">
+                    {%- if card_collection and card_collection.image != blank -%}
                       <span class="megamenu--shop__product-image-wrap">
                         <img
                           class="megamenu--shop__product-image"
-                          src="{{ product.featured_image | image_url: width: 100 }}"
-                          alt="{{ product.featured_image.alt | default: product.title | escape }}"
+                          src="{{ card_collection.image | image_url: width: 100 }}"
+                          alt="{{ card_collection.image.alt | default: card_title | escape }}"
                           loading="lazy"
                           width="48"
                           height="48">
                       </span>
                     {%- endif -%}
                     <span class="megamenu--shop__product-text">
-                      <p class="megamenu--shop__product-title">{{ product.title }}</p>
+                      <p class="megamenu--shop__product-title">{{ card_title }}</p>
                     </span>
                   </a>
                 {%- endfor -%}
@@ -382,4 +400,3 @@
     });
   })();
 </script>
- 
