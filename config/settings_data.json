@@ -1637,7 +1637,7 @@
           "show_overlay": false,
           "overlay_opacity": 20,
           "desktop_x": 80,
-          "desktop_y": 16,
+          "desktop_y": 25,
           "desktop_width": 30,
           "desktop_font_size": 16,
           "mobile_x": 37,
