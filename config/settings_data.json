@@ -1200,7 +1200,7 @@
               "image": "shopify://shop_images/Artboard_1_19ca55fb-571c-4079-b356-7840f2325c3f.png",
               "heading": "",
               "button": "",
-              "link": "shopify://collections/casuals",
+              "link": "shopify://collections/men-casuals-1",
               "black_white": false
             }
           },
@@ -1210,7 +1210,7 @@
               "image": "shopify://shop_images/Artboard_3_d36adf47-ddff-4296-a345-e5325fc054c0.png",
               "heading": "",
               "button": "",
-              "link": "shopify://collections/formals-shoes",
+              "link": "shopify://collections/formals-shoes-1",
               "black_white": false
             }
           },
@@ -1220,7 +1220,7 @@
               "image": "shopify://shop_images/Loafer_banner_image.png",
               "heading": "",
               "button": "",
-              "link": "shopify://collections/loafers",
+              "link": "shopify://collections/men-loafers-1",
               "black_white": true
             }
           },
@@ -1230,7 +1230,7 @@
               "image": "shopify://shop_images/Artboard_2_02414caa-2a5c-42d1-83a0-8cc3e7a72cef.png",
               "heading": "",
               "button": "",
-              "link": "shopify://collections/boots",
+              "link": "shopify://collections/men-boots-1",
               "black_white": false
             }
           }
