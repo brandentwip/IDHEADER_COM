@@ -1097,7 +1097,7 @@
             "settings": {
               "icon": "shopify://shop_images/sneakers_cc8492ad-d99c-4c40-ae6b-fd1ce00893d7.png",
               "title": "Sneakers",
-              "link": "shopify://collections/sneakers"
+              "link": "shopify://collections/leather-sneakers-1"
             }
           },
           "category_FU8fa4": {
@@ -1105,7 +1105,7 @@
             "settings": {
               "icon": "shopify://shop_images/boots_e4026d53-8c59-4f68-bb9d-0d2da291c5ba.png",
               "title": "Boots",
-              "link": "shopify://collections/boots"
+              "link": "shopify://collections/men-boots-1"
             }
           },
           "category_aRhVjb": {
@@ -1113,7 +1113,7 @@
             "settings": {
               "icon": "shopify://shop_images/formals.png",
               "title": "Formals",
-              "link": ""
+              "link": "shopify://collections/formals-shoes-1"
             }
           },
           "category_eYadFt": {
@@ -1121,7 +1121,7 @@
             "settings": {
               "icon": "shopify://shop_images/Sandals_3287b8fe-20aa-4232-939d-f8a7443c4e20.png",
               "title": "Sandals",
-              "link": ""
+              "link": "shopify://collections/men-sandals-slippers-copy-1"
             }
           }
         },
