@@ -197,12 +197,11 @@
           "comet_tab1_image_link": "shopify://collections/boots",
           "comet_tab2_title": "SALE",
           "comet_tab2_menu": "salemobile",
-          "comet_tab2_image": "shopify://shop_images/Loafer_banner_image.png",
-          "comet_tab2_image_link": "shopify://collections/loafers",
+          "comet_tab2_image": "shopify://shop_images/deskstop_size.jpg",
+          "comet_tab2_image_link": "shopify://collections/womenboots",
           "comet_tab3_title": "collections",
           "comet_tab3_menu": "men-women-tab-headwomen",
-          "comet_tab3_image": "shopify://shop_images/Artboard_1_19ca55fb-571c-4079-b356-7840f2325c3f.png",
-          "comet_tab3_image_link": "shopify://collections/reg-sandals-slippers",
+          "comet_tab3_image_link": "",
           "comet_tab4_title": "",
           "comet_tab4_menu": "footer",
           "comet_tab4_image_link": "",
@@ -1671,7 +1670,7 @@
           "comparison_QFe7aE": {
             "type": "comparison",
             "settings": {
-              "left_text": "56 AIR POCKET SOLES \nULTRA HD BOUNCE BACK CUSHION",
+              "left_text": "56 AIR POCKET SOLES \nULTRA HD BOUNCE BACK \nCUSHION",
               "right_text": "BASIC FOAM INSOLE"
             }
           },
