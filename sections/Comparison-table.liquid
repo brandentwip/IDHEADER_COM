@@ -135,7 +135,6 @@
         class="comparison-shoe"
         style="
           --shoe-width: {{ section.settings.image_width }}px;
-          --shoe-height: {{ section.settings.image_height }}px;
         "
       >
 
@@ -501,17 +500,25 @@
    CENTER SHOE
    ============================================================ */
 
+/*
+  The shoe is anchored to top AND bottom (matching the table's
+  own top/bottom padding) instead of a fixed height. That makes
+  it automatically stretch to exactly cover the row content area,
+  no matter how many rows exist or how tall each one is set to be
+  on any screen size — so it can never run short or overshoot.
+*/
+
 #comparison-{{ section.id }} .comparison-shoe {
 
   position: absolute;
 
   left: 50%;
 
-  top: 0;
+  top: 35px;
+
+  bottom: 35px;
 
   width: var(--shoe-width);
-
-  height: var(--shoe-height);
 
   transform: translateX(-50%);
 
@@ -584,7 +591,6 @@
 #comparison-{{ section.id }} .comparison-shoe-right {
 
   clip-path: inset(0 0 0 50%);
-  transform: translateY(16px);
 }
 
 
@@ -712,25 +718,25 @@
 
   #comparison-{{ section.id }} .comparison-row {
 
-    min-height: 100px;
+    min-height: 80px;
   }
 
 
   #comparison-{{ section.id }} .comparison-column {
 
-    min-height: 100px;
+    min-height: 80px;
   }
 
 
   #comparison-{{ section.id }} .comparison-column-left {
 
-    padding: 18px 30px 18px 15px;
+    padding: 14px 30px 14px 15px;
   }
 
 
   #comparison-{{ section.id }} .comparison-column-right {
 
-    padding: 18px 15px 18px 30px;
+    padding: 14px 15px 14px 30px;
   }
 
 
@@ -738,15 +744,13 @@
 
     font-size: 11px;
 
-    line-height: 1.5;
+    line-height: 1.4;
   }
 
 
   #comparison-{{ section.id }} .comparison-shoe {
 
-    width: 230px;
-
-    height: 500px;
+    width: 190px;
   }
 
 }
@@ -798,25 +802,25 @@
 
   #comparison-{{ section.id }} .comparison-row {
 
-    min-height: 85px;
+    min-height: 68px;
   }
 
 
   #comparison-{{ section.id }} .comparison-column {
 
-    min-height: 85px;
+    min-height: 68px;
   }
 
 
   #comparison-{{ section.id }} .comparison-column-left {
 
-    padding: 14px 20px 14px 12px;
+    padding: 10px 20px 10px 12px;
   }
 
 
   #comparison-{{ section.id }} .comparison-column-right {
 
-    padding: 14px 12px 14px 20px;
+    padding: 10px 12px 10px 20px;
   }
 
 
@@ -824,15 +828,13 @@
 
     font-size: 9px;
 
-    line-height: 1.45;
+    line-height: 1.35;
   }
 
 
   #comparison-{{ section.id }} .comparison-shoe {
 
-    width: 190px;
-
-    height: 430px;
+    width: 160px;
   }
 
 }
@@ -912,17 +914,6 @@
       "step": 10,
       "unit": "px",
       "default": 420
-    },
-
-    {
-      "type": "range",
-      "id": "image_height",
-      "label": "Shoe height",
-      "min": 300,
-      "max": 1200,
-      "step": 10,
-      "unit": "px",
-      "default": 700
     },
 
 
@@ -1052,7 +1043,7 @@
           "settings": {
             "left_text": "ANTI BACTERIAL\nCOATING - NODR",
 
-            "right_text": "NO ODOUR OR HYGIENE\nTREATMENT"
+            "right_text": "NO ODOUR OR\nHYGIENE TREATMENT"
           }
         },
 
