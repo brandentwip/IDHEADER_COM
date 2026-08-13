@@ -1576,7 +1576,7 @@
           "body_color": "#333333",
           "accent_color": "#c9932f",
           "padding_top": 20,
-          "padding_bottom": 20
+          "padding_bottom": 0
         }
       },
       "editorial_banner_WTyyDx": {
