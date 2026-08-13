@@ -1327,7 +1327,7 @@
         ],
         "custom_css": [
           ".dual-banner {margin-top: 3%; margin-bottom: 3%;}",
-          ".dual-banner__eyebrow {margin-bottom: 12px; margin-top: 10px; }"
+          ".dual-banner__eyebrow {margin-bottom: 12px; margin-top: 10px;}"
         ],
         "name": "Dual Image Banner",
         "settings": {
@@ -1404,6 +1404,9 @@
           "usp_Rp3GUP",
           "usp_K4kUJQ"
         ],
+        "custom_css": [
+          "@media screen and (max-width: 990px) {.usp-item {margin-top: -50px; padding: 16px 16px; }}"
+        ],
         "name": "USP Icons",
         "settings": {
           "heading": "",
@@ -1412,7 +1415,7 @@
           "desktop_columns": "3",
           "mobile_columns": "2",
           "show_dividers": true,
-          "icon_size": 48,
+          "icon_size": 44,
           "padding_top": 0,
           "padding_bottom": 0
         }
