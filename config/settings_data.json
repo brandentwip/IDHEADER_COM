@@ -1139,7 +1139,7 @@
           "heading": "Welcome to idcult",
           "description": "<p>We've spent over five decades making shoes. We know what a good one feels like, what goes into it, and what most brands skip. ID is what happens when none of that gets compromised.</p>",
           "button_label": "SHOP ALL",
-          "button_link": "",
+          "button_link": "shopify://collections/all-men",
           "bg_color": "#ffffff",
           "text_color": "#111111",
           "circle_bg": "#f5f5f5",
