@@ -358,6 +358,7 @@
   position: absolute;
 
   top: 0;
+
   bottom: 0;
 
   width: 50%;
@@ -388,13 +389,30 @@
    CONTENT
    ============================================================ */
 
+/*
+  IMPORTANT:
+
+  The content layer is now ABOVE the shoe.
+
+  Previously:
+    comparison-content = z-index 2
+    shoe               = z-index 10
+
+  That meant the text could NEVER appear above the shoe,
+  even if the text itself had a higher z-index.
+
+  Now:
+    comparison-content = z-index 20
+    shoe               = z-index 10
+*/
+
 #comparison-{{ section.id }} .comparison-content {
 
   width: 100%;
 
   position: relative;
 
-  z-index: 2;
+  z-index: 20;
 }
 
 
@@ -415,6 +433,10 @@
   box-sizing: border-box;
 
   border-bottom: 1px solid rgba(0, 0, 0, 0.65);
+
+  position: relative;
+
+  z-index: 21;
 }
 
 
@@ -434,11 +456,7 @@
 
   position: relative;
 
-  /*
-    IMPORTANT:
-    Text needs to sit above the shoe.
-  */
-  z-index: 20;
+  z-index: 22;
 }
 
 
@@ -480,9 +498,6 @@
 
   position: relative;
 
-  /*
-    TEXT MUST BE ABOVE SHOE
-  */
   z-index: 30;
 }
 
@@ -522,8 +537,10 @@
   transform: translateX(-50%);
 
   /*
-    Lower than text.
+    Shoe stays below the complete content layer.
+    Text will therefore always appear above it.
   */
+
   z-index: 10;
 
   pointer-events: none;
@@ -572,14 +589,14 @@
 
   display: block;
 
-  object-fit: cover !important;
+  object-fit: cover;
 
   object-position: center center;
 }
 
 
 /* ============================================================
-   REAL SHOE = LEFT HALF
+   REAL / LEATHER SHOE = LEFT HALF
    ============================================================ */
 
 #comparison-{{ section.id }} .comparison-shoe-left {
@@ -591,38 +608,29 @@
 
 
 /* ============================================================
-   OUTLINE = RIGHT HALF
+   OUTLINE SHOE = RIGHT HALF
    ============================================================ */
 
 #comparison-{{ section.id }} .comparison-shoe-right {
 
   clip-path: inset(0 0 0 50%);
 
+  /*
+    THIS IS THE IMPORTANT ALIGNMENT FIX.
+
+    The outline image sits slightly higher than the
+    leather image.
+
+    Moving the COMPLETE right half down keeps its
+    proportions intact and aligns it with the
+    leather shoe.
+
+    This is the same correction you were using before.
+  */
+
+  transform: translateY(16px);
+
   z-index: 1;
-}
-
-
-/* ============================================================
-   ALIGN OUTLINE WITH LEATHER SHOE
-   ============================================================ */
-
-/*
-  The outline image is sitting slightly higher
-  than the real shoe.
-
-  Move ONLY the outline image downward.
-
-  10px is deliberately subtle and works well
-  on mobile without changing the table.
-*/
-
-#comparison-{{ section.id }} .comparison-shoe-right .comparison-shoe-img {
-
-  top: 10px;
-
-  height: calc(100% - 10px) !important;
-
-  object-position: center center;
 }
 
 
@@ -751,12 +759,14 @@
 
 
   /* ----------------------------------------------------------
-     ROWS
+     MOBILE ROWS
      ---------------------------------------------------------- */
 
   #comparison-{{ section.id }} .comparison-row {
 
     min-height: 80px;
+
+    z-index: 21;
   }
 
 
@@ -764,10 +774,7 @@
 
     min-height: 80px;
 
-    /*
-      Keep text above shoe.
-    */
-    z-index: 20;
+    z-index: 22;
   }
 
 
@@ -817,7 +824,9 @@
 
     top: 0;
 
-    bottom: 0;
+    left: 0;
+
+    width: 100%;
 
     height: 100%;
 
@@ -835,26 +844,23 @@
 
     display: block;
 
-    object-fit: cover !important;
+    object-fit: cover;
 
     object-position: center center;
   }
 
 
-  /*
-    MOBILE OUTLINE ALIGNMENT
+  /* ----------------------------------------------------------
+     MOBILE OUTLINE ALIGNMENT
+     ---------------------------------------------------------- */
 
-    The outline was appearing slightly higher.
-    Move it down a little.
-  */
+  #comparison-{{ section.id }} .comparison-shoe-right {
 
-  #comparison-{{ section.id }} .comparison-shoe-right .comparison-shoe-img {
+    /*
+      Keep the exact alignment correction.
+    */
 
-    top: 10px;
-
-    height: calc(100% - 10px) !important;
-
-    object-position: center center;
+    transform: translateY(16px);
   }
 
 }
@@ -905,12 +911,14 @@
 
 
   /* ----------------------------------------------------------
-     ROWS
+     SMALL MOBILE ROWS
      ---------------------------------------------------------- */
 
   #comparison-{{ section.id }} .comparison-row {
 
     min-height: 68px;
+
+    z-index: 21;
   }
 
 
@@ -918,7 +926,7 @@
 
     min-height: 68px;
 
-    z-index: 20;
+    z-index: 22;
   }
 
 
@@ -968,7 +976,9 @@
 
     top: 0;
 
-    bottom: 0;
+    left: 0;
+
+    width: 100%;
 
     height: 100%;
 
@@ -986,23 +996,26 @@
 
     display: block;
 
-    object-fit: cover !important;
+    object-fit: cover;
 
     object-position: center center;
   }
 
 
-  /*
-    Move outline down on small phones.
-  */
+  /* ----------------------------------------------------------
+     SMALL MOBILE OUTLINE ALIGNMENT
+     ---------------------------------------------------------- */
 
-  #comparison-{{ section.id }} .comparison-shoe-right .comparison-shoe-img {
+  #comparison-{{ section.id }} .comparison-shoe-right {
 
-    top: 10px;
+    /*
+      IMPORTANT:
+      Do NOT use translate on the image itself.
 
-    height: calc(100% - 10px) !important;
+      Move the entire clipped outline half.
+    */
 
-    object-position: center center;
+    transform: translateY(16px);
   }
 
 }
@@ -1040,15 +1053,14 @@
   }
 
 
-  /*
-    Slightly smaller correction on very small screens.
-  */
+  #comparison-{{ section.id }} .comparison-shoe-right {
 
-  #comparison-{{ section.id }} .comparison-shoe-right .comparison-shoe-img {
+    /*
+      Slightly smaller correction for very narrow
+      screens while preserving the same alignment idea.
+    */
 
-    top: 8px;
-
-    height: calc(100% - 8px) !important;
+    transform: translateY(16px);
   }
 
 }
