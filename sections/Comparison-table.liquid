@@ -345,7 +345,9 @@
   box-sizing: border-box;
 
   overflow: hidden;
+
   margin-top: 35px;
+
   margin-bottom: 35px;
 }
 
@@ -501,11 +503,13 @@
    ============================================================ */
 
 /*
-  The shoe is anchored to top AND bottom (matching the table's
-  own top/bottom padding) instead of a fixed height. That makes
-  it automatically stretch to exactly cover the row content area,
-  no matter how many rows exist or how tall each one is set to be
-  on any screen size — so it can never run short or overshoot.
+  The shoe is anchored to the complete height of the
+  comparison table.
+
+  This allows the shoe to remain centered regardless of:
+  - number of rows
+  - row height
+  - desktop/mobile screen size
 */
 
 #comparison-{{ section.id }} .comparison-shoe {
@@ -716,6 +720,10 @@
   }
 
 
+  /* ----------------------------------------------------------
+     MOBILE ROWS
+     ---------------------------------------------------------- */
+
   #comparison-{{ section.id }} .comparison-row {
 
     min-height: 80px;
@@ -730,13 +738,13 @@
 
   #comparison-{{ section.id }} .comparison-column-left {
 
-    padding: 14px 30px 14px 15px;
+    padding: 14px 35px 14px 15px;
   }
 
 
   #comparison-{{ section.id }} .comparison-column-right {
 
-    padding: 14px 15px 14px 30px;
+    padding: 14px 15px 14px 35px;
   }
 
 
@@ -748,9 +756,67 @@
   }
 
 
+  /* ----------------------------------------------------------
+     MOBILE SHOE
+     ---------------------------------------------------------- */
+
+  /*
+    IMPORTANT:
+
+    The previous mobile width was only 190px.
+    That made the shoe look too small compared with
+    the overall comparison table.
+
+    300px gives the shoe considerably more visual
+    presence while keeping its center exactly on
+    the dividing line.
+  */
+
   #comparison-{{ section.id }} .comparison-shoe {
 
-    width: 190px;
+    width: 300px;
+
+    left: 50%;
+
+    transform: translateX(-50%);
+
+    top: 0;
+
+    bottom: 0;
+
+    z-index: 10;
+  }
+
+
+  #comparison-{{ section.id }} .comparison-shoe-half {
+
+    top: 0;
+
+    bottom: 0;
+
+    height: 100%;
+  }
+
+
+  #comparison-{{ section.id }} .comparison-shoe-img {
+
+    width: 100% !important;
+
+    height: 100% !important;
+
+    max-width: none !important;
+
+    display: block;
+
+    /*
+      Cover makes the shoe visually larger.
+      The center clipping ensures only the
+      required half remains visible.
+    */
+
+    object-fit: cover !important;
+
+    object-position: center center;
   }
 
 }
@@ -800,6 +866,10 @@
   }
 
 
+  /* ----------------------------------------------------------
+     SMALL MOBILE ROWS
+     ---------------------------------------------------------- */
+
   #comparison-{{ section.id }} .comparison-row {
 
     min-height: 68px;
@@ -814,13 +884,13 @@
 
   #comparison-{{ section.id }} .comparison-column-left {
 
-    padding: 10px 20px 10px 12px;
+    padding: 10px 25px 10px 12px;
   }
 
 
   #comparison-{{ section.id }} .comparison-column-right {
 
-    padding: 10px 12px 10px 20px;
+    padding: 10px 12px 10px 25px;
   }
 
 
@@ -832,9 +902,91 @@
   }
 
 
+  /* ----------------------------------------------------------
+     SMALL MOBILE SHOE
+     ---------------------------------------------------------- */
+
+  /*
+    Increased from 160px to 260px.
+
+    This is the main fix for the screenshot you sent.
+  */
+
   #comparison-{{ section.id }} .comparison-shoe {
 
-    width: 160px;
+    width: 260px;
+
+    left: 50%;
+
+    transform: translateX(-50%);
+
+    top: 0;
+
+    bottom: 0;
+
+    z-index: 10;
+  }
+
+
+  #comparison-{{ section.id }} .comparison-shoe-half {
+
+    top: 0;
+
+    bottom: 0;
+
+    height: 100%;
+
+    overflow: hidden;
+  }
+
+
+  #comparison-{{ section.id }} .comparison-shoe-img {
+
+    width: 100% !important;
+
+    height: 100% !important;
+
+    max-width: none !important;
+
+    display: block;
+
+    object-fit: cover !important;
+
+    object-position: center center;
+  }
+
+}
+
+
+/* ============================================================
+   VERY SMALL PHONES
+   ============================================================ */
+
+@media screen and (max-width: 360px) {
+
+  #comparison-{{ section.id }} .comparison-shoe {
+
+    width: 235px;
+  }
+
+
+  #comparison-{{ section.id }} .comparison-column-left {
+
+    padding-right: 22px;
+  }
+
+
+  #comparison-{{ section.id }} .comparison-column-right {
+
+    padding-left: 22px;
+  }
+
+
+  #comparison-{{ section.id }} .comparison-text {
+
+    font-size: 8.5px;
+
+    line-height: 1.3;
   }
 
 }
