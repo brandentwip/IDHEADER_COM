@@ -1142,7 +1142,7 @@
           "text_color": "#111111",
           "circle_bg": "#f5f5f5",
           "padding_top": 60,
-          "padding_bottom": 60
+          "padding_bottom": 0
         }
       },
       "collection_tabs_3fxzUa": {
@@ -1699,7 +1699,6 @@
           "real_shoe": "shopify://shop_images/shoe-leather-half.png",
           "outline_shoe": "shopify://shop_images/shoe-outline-half.png",
           "image_width": 550,
-          "image_height": 500,
           "brand_logo": "shopify://shop_images/logo-id-being-cult-112-x-74px.png",
           "others_heading": "OTHERS",
           "left_background": "#363435",
