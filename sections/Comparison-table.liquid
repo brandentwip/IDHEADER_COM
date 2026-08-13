@@ -135,6 +135,7 @@
         class="comparison-shoe"
         style="
           --shoe-width: {{ section.settings.image_width }}px;
+          --shoe-height: {{ section.settings.image_height }}px;
         "
       >
 
@@ -195,10 +196,13 @@
 #comparison-{{ section.id }} {
 
   width: 100%;
+
   display: block;
+
   position: relative;
 
   margin: 0;
+
   padding: 0;
 
   background: #ffffff;
@@ -217,19 +221,19 @@
 
   width: 100%;
 
-  padding: 55px 20px 20px;
+  padding: 70px 20px 35px;
 
   box-sizing: border-box;
 
   text-align: center;
 
-  font-size: 72px;
+  font-size: {{ section.settings.heading_size }}px;
 
   line-height: 0.95;
 
   font-weight: 800;
 
-  letter-spacing: -2.5px;
+  letter-spacing: -1.5px;
 
   color: #000000;
 
@@ -249,7 +253,7 @@
 
   grid-template-columns: 1fr 1fr;
 
-  height: 105px;
+  height: 150px;
 
   box-sizing: border-box;
 
@@ -269,15 +273,11 @@
 }
 
 
-/* ============================================================
-   HEADER LEFT / RIGHT POSITION
-   ============================================================ */
-
 #comparison-{{ section.id }} .comparison-header-left {
 
   justify-content: center;
 
-  padding-right: 80px;
+  padding-right: 160px;
 }
 
 
@@ -285,7 +285,7 @@
 
   justify-content: center;
 
-  padding-left: 80px;
+  padding-left: 160px;
 }
 
 
@@ -295,9 +295,9 @@
 
 #comparison-{{ section.id }} .comparison-logo {
 
-  width: 105px;
+  width: 150px;
 
-  max-width: 105px;
+  max-width: 150px;
 }
 
 
@@ -317,7 +317,7 @@
 
 #comparison-{{ section.id }} .comparison-others {
 
-  font-size: 25px;
+  font-size: 32px;
 
   line-height: 1;
 
@@ -346,10 +346,8 @@
   box-sizing: border-box;
 
   overflow: hidden;
-
-  margin-top: 15px;
-
-  margin-bottom: 35px;
+  padding-top: 35px;
+  padding-bottom: 35px;
 }
 
 
@@ -393,22 +391,13 @@
    CONTENT
    ============================================================ */
 
-/*
-  IMPORTANT:
-
-  Content is ABOVE the shoe.
-
-  This fixes the issue where the comparison text
-  was disappearing underneath the shoe.
-*/
-
 #comparison-{{ section.id }} .comparison-content {
 
   width: 100%;
 
   position: relative;
 
-  z-index: 20;
+  z-index: 2;
 }
 
 
@@ -429,10 +418,6 @@
   box-sizing: border-box;
 
   border-bottom: 1px solid rgba(0, 0, 0, 0.65);
-
-  position: relative;
-
-  z-index: 21;
 }
 
 
@@ -451,8 +436,6 @@
   box-sizing: border-box;
 
   position: relative;
-
-  z-index: 22;
 }
 
 
@@ -494,7 +477,7 @@
 
   position: relative;
 
-  z-index: 30;
+  z-index: 3;
 }
 
 
@@ -526,21 +509,15 @@
 
   top: 0;
 
-  bottom: 0;
-
   width: var(--shoe-width);
 
-  transform: translateX(-50%);
+  height: var(--shoe-height);
 
-  /*
-    Shoe stays BELOW the text/content layer.
-  */
+  transform: translateX(-50%);
 
   z-index: 10;
 
   pointer-events: none;
-
-  overflow: visible;
 }
 
 
@@ -584,49 +561,30 @@
 
   display: block;
 
-  object-fit: cover;
+  object-fit: contain;
 
   object-position: center center;
 }
 
 
 /* ============================================================
-   LEATHER / REAL SHOE
-   LEFT HALF
+   REAL SHOE = LEFT HALF
    ============================================================ */
 
 #comparison-{{ section.id }} .comparison-shoe-left {
 
   clip-path: inset(0 50% 0 0);
-
-  z-index: 1;
 }
 
 
 /* ============================================================
-   OUTLINE SHOE
-   RIGHT HALF
+   OUTLINE = RIGHT HALF
    ============================================================ */
-
-/*
-  IMPORTANT ALIGNMENT FIX
-
-  The outline image was sitting slightly higher
-  than the leather shoe.
-
-  Moving the ENTIRE clipped right half down
-  preserves the image proportions.
-
-  This is the original 16px correction.
-*/
 
 #comparison-{{ section.id }} .comparison-shoe-right {
 
   clip-path: inset(0 0 0 50%);
-
   transform: translateY(16px);
-
-  z-index: 1;
 }
 
 
@@ -651,8 +609,6 @@
   transform: translateX(-50%);
 
   background: transparent;
-
-  z-index: 2;
 }
 
 
@@ -662,67 +618,31 @@
 
 @media screen and (max-width: 990px) {
 
-  /* ---------------- HEADING ---------------- */
-
   #comparison-{{ section.id }} .comparison-heading {
 
     font-size: 55px;
 
-    padding: 50px 20px 20px;
-
-    letter-spacing: -1.8px;
-  }
-
-
-  /* ---------------- HEADER ---------------- */
-
-  #comparison-{{ section.id }} .comparison-header {
-
-    height: 100px;
+    padding-top: 55px;
   }
 
 
   #comparison-{{ section.id }} .comparison-header-left {
 
-    padding-right: 60px;
+    padding-right: 100px;
   }
 
 
   #comparison-{{ section.id }} .comparison-header-right {
 
-    padding-left: 60px;
+    padding-left: 100px;
   }
 
-
-  /* ---------------- LOGO ---------------- */
-
-  #comparison-{{ section.id }} .comparison-logo {
-
-    width: 95px;
-
-    max-width: 95px;
-  }
-
-
-  /* ---------------- OTHERS ---------------- */
-
-  #comparison-{{ section.id }} .comparison-others {
-
-    font-size: 23px;
-  }
-
-
-  /* ---------------- TEXT ---------------- */
 
   #comparison-{{ section.id }} .comparison-text {
 
     font-size: 17px;
-
-    line-height: 1.45;
   }
 
-
-  /* ---------------- COLUMNS ---------------- */
 
   #comparison-{{ section.id }} .comparison-column-left {
 
@@ -739,14 +659,6 @@
     padding-right: 25px;
   }
 
-
-  /* ---------------- SHOE ---------------- */
-
-  #comparison-{{ section.id }} .comparison-shoe-right {
-
-    transform: translateY(16px);
-  }
-
 }
 
 
@@ -756,167 +668,85 @@
 
 @media screen and (max-width: 749px) {
 
-  /* ---------------- HEADING ---------------- */
-
   #comparison-{{ section.id }} .comparison-heading {
 
-    padding: 40px 15px 20px;
+    padding: 45px 15px 25px;
 
     font-size: {{ section.settings.heading_mobile_size }}px;
-
-    line-height: 0.95;
 
     letter-spacing: -0.8px;
   }
 
 
-  /* ---------------- HEADER ---------------- */
-
   #comparison-{{ section.id }} .comparison-header {
 
-    height: 85px;
+    height: 100px;
   }
 
 
   #comparison-{{ section.id }} .comparison-header-left {
 
-    padding-right: 35px;
+    padding-right: 45px;
   }
 
 
   #comparison-{{ section.id }} .comparison-header-right {
 
-    padding-left: 35px;
+    padding-left: 45px;
   }
 
-
-  /* ---------------- LOGO ---------------- */
 
   #comparison-{{ section.id }} .comparison-logo {
 
-    width: 80px;
+    width: 90px;
 
-    max-width: 80px;
+    max-width: 90px;
   }
 
-
-  /* ---------------- OTHERS ---------------- */
 
   #comparison-{{ section.id }} .comparison-others {
 
-    font-size: 17px;
-
-    letter-spacing: -0.3px;
+    font-size: 19px;
   }
 
-
-  /* ---------------- TABLE ---------------- */
-
-  #comparison-{{ section.id }} .comparison-table {
-
-    margin-top: 10px;
-
-    margin-bottom: 25px;
-  }
-
-
-  /* ---------------- ROW ---------------- */
 
   #comparison-{{ section.id }} .comparison-row {
 
-    min-height: 80px;
-
-    z-index: 21;
+    min-height: 100px;
   }
 
 
-  /* ---------------- COLUMN ---------------- */
-
   #comparison-{{ section.id }} .comparison-column {
 
-    min-height: 80px;
-
-    z-index: 22;
+    min-height: 100px;
   }
 
 
   #comparison-{{ section.id }} .comparison-column-left {
 
-    padding: 14px 35px 14px 15px;
+    padding: 18px 30px 18px 15px;
   }
 
 
   #comparison-{{ section.id }} .comparison-column-right {
 
-    padding: 14px 15px 14px 35px;
+    padding: 18px 15px 18px 30px;
   }
 
-
-  /* ---------------- TEXT ---------------- */
 
   #comparison-{{ section.id }} .comparison-text {
 
     font-size: 11px;
 
-    line-height: 1.4;
-
-    z-index: 30;
+    line-height: 1.5;
   }
 
-
-  /* ---------------- SHOE ---------------- */
 
   #comparison-{{ section.id }} .comparison-shoe {
 
-    width: 300px;
+    width: 230px;
 
-    left: 50%;
-
-    transform: translateX(-50%);
-
-    top: 0;
-
-    bottom: 0;
-
-    z-index: 10;
-  }
-
-
-  #comparison-{{ section.id }} .comparison-shoe-half {
-
-    top: 0;
-
-    left: 0;
-
-    width: 100%;
-
-    height: 100%;
-
-    overflow: hidden;
-  }
-
-
-  #comparison-{{ section.id }} .comparison-shoe-img {
-
-    width: 100% !important;
-
-    height: 100% !important;
-
-    max-width: none !important;
-
-    display: block;
-
-    object-fit: cover;
-
-    object-position: center center;
-  }
-
-
-  /* ---------------- OUTLINE ALIGNMENT ---------------- */
-
-  #comparison-{{ section.id }} .comparison-shoe-right {
-
-    transform: translateY(16px);
+    height: 500px;
   }
 
 }
@@ -928,254 +758,87 @@
 
 @media screen and (max-width: 480px) {
 
-  /* ---------------- HEADING ---------------- */
-
   #comparison-{{ section.id }} .comparison-heading {
 
     font-size: 34px;
-
-    padding: 35px 15px 18px;
-
-    letter-spacing: -0.6px;
   }
 
 
-  /* ---------------- HEADER ---------------- */
-
   #comparison-{{ section.id }} .comparison-header {
 
-    height: 75px;
+    height: 85px;
   }
 
 
   #comparison-{{ section.id }} .comparison-header-left {
 
-    padding-right: 25px;
+    padding-right: 30px;
   }
 
 
   #comparison-{{ section.id }} .comparison-header-right {
 
-    padding-left: 25px;
+    padding-left: 30px;
   }
 
-
-  /* ---------------- LOGO ---------------- */
 
   #comparison-{{ section.id }} .comparison-logo {
 
-    width: 70px;
+    width: 75px;
 
-    max-width: 70px;
+    max-width: 75px;
   }
 
-
-  /* ---------------- OTHERS ---------------- */
 
   #comparison-{{ section.id }} .comparison-others {
 
-    font-size: 15px;
-
-    letter-spacing: -0.2px;
+    font-size: 16px;
   }
 
-
-  /* ---------------- TABLE ---------------- */
-
-  #comparison-{{ section.id }} .comparison-table {
-
-    margin-top: 8px;
-
-    margin-bottom: 20px;
-  }
-
-
-  /* ---------------- ROW ---------------- */
 
   #comparison-{{ section.id }} .comparison-row {
 
-    min-height: 68px;
-
-    z-index: 21;
+    min-height: 85px;
   }
 
 
-  /* ---------------- COLUMN ---------------- */
-
   #comparison-{{ section.id }} .comparison-column {
 
-    min-height: 68px;
-
-    z-index: 22;
+    min-height: 85px;
   }
 
 
   #comparison-{{ section.id }} .comparison-column-left {
 
-    padding: 10px 25px 10px 12px;
+    padding: 14px 20px 14px 12px;
   }
 
 
   #comparison-{{ section.id }} .comparison-column-right {
 
-    padding: 10px 12px 10px 25px;
+    padding: 14px 12px 14px 20px;
   }
 
-
-  /* ---------------- TEXT ---------------- */
 
   #comparison-{{ section.id }} .comparison-text {
 
     font-size: 9px;
 
-    line-height: 1.35;
-
-    z-index: 30;
+    line-height: 1.45;
   }
 
-
-  /* ---------------- SHOE ---------------- */
 
   #comparison-{{ section.id }} .comparison-shoe {
 
-    width: 260px;
+    width: 190px;
 
-    left: 50%;
-
-    transform: translateX(-50%);
-
-    top: 0;
-
-    bottom: 0;
-
-    z-index: 10;
-  }
-
-
-  #comparison-{{ section.id }} .comparison-shoe-half {
-
-    top: 0;
-
-    left: 0;
-
-    width: 100%;
-
-    height: 100%;
-
-    overflow: hidden;
-  }
-
-
-  #comparison-{{ section.id }} .comparison-shoe-img {
-
-    width: 100% !important;
-
-    height: 100% !important;
-
-    max-width: none !important;
-
-    display: block;
-
-    object-fit: cover;
-
-    object-position: center center;
-  }
-
-
-  /* ---------------- OUTLINE ALIGNMENT ---------------- */
-
-  #comparison-{{ section.id }} .comparison-shoe-right {
-
-    transform: translateY(16px);
-  }
-
-}
-
-
-/* ============================================================
-   VERY SMALL PHONES
-   ============================================================ */
-
-@media screen and (max-width: 360px) {
-
-  /* ---------------- HEADING ---------------- */
-
-  #comparison-{{ section.id }} .comparison-heading {
-
-    font-size: 31px;
-
-    padding-top: 30px;
-
-    padding-bottom: 15px;
-  }
-
-
-  /* ---------------- HEADER ---------------- */
-
-  #comparison-{{ section.id }} .comparison-header {
-
-    height: 70px;
-  }
-
-
-  #comparison-{{ section.id }} .comparison-header-left {
-
-    padding-right: 20px;
-  }
-
-
-  #comparison-{{ section.id }} .comparison-header-right {
-
-    padding-left: 20px;
-  }
-
-
-  /* ---------------- LOGO ---------------- */
-
-  #comparison-{{ section.id }} .comparison-logo {
-
-    width: 65px;
-
-    max-width: 65px;
-  }
-
-
-  /* ---------------- OTHERS ---------------- */
-
-  #comparison-{{ section.id }} .comparison-others {
-
-    font-size: 14px;
-  }
-
-
-  /* ---------------- TEXT ---------------- */
-
-  #comparison-{{ section.id }} .comparison-text {
-
-    font-size: 8.5px;
-
-    line-height: 1.3;
-  }
-
-
-  /* ---------------- SHOE ---------------- */
-
-  #comparison-{{ section.id }} .comparison-shoe {
-
-    width: 235px;
-  }
-
-
-  /* ---------------- OUTLINE ALIGNMENT ---------------- */
-
-  #comparison-{{ section.id }} .comparison-shoe-right {
-
-    transform: translateY(12px);
+    height: 430px;
   }
 
 }
 
 </style>
+
 
 {% schema %}
 
@@ -1249,6 +912,17 @@
       "step": 10,
       "unit": "px",
       "default": 420
+    },
+
+    {
+      "type": "range",
+      "id": "image_height",
+      "label": "Shoe height",
+      "min": 300,
+      "max": 1200,
+      "step": 10,
+      "unit": "px",
+      "default": 700
     },
 
 
@@ -1378,7 +1052,7 @@
           "settings": {
             "left_text": "ANTI BACTERIAL\nCOATING - NODR",
 
-            "right_text": "NO ODOUR OR\nHYGIENE TREATMENT"
+            "right_text": "NO ODOUR OR HYGIENE\nTREATMENT"
           }
         },
 
