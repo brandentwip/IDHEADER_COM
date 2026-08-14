@@ -138,7 +138,7 @@
           "1524770014057": {
             "type": "logo",
             "settings": {
-              "logo": "shopify://shop_images/Untitled-1_upscaled_1.png",
+              "logo": "shopify://shop_images/id_logo_1.png",
               "desktop_logo_width": 100,
               "mobile_logo_width": 60
             }
@@ -195,15 +195,15 @@
           "comet_tab1_title": "Categories",
           "comet_tab1_menu": "men-women-tab-head",
           "comet_tab1_image": "shopify://shop_images/Artboard_2_02414caa-2a5c-42d1-83a0-8cc3e7a72cef.png",
-          "comet_tab1_image_link": "shopify://collections/boots",
+          "comet_tab1_image_link": "https://idcult.com/collections/men-boots-1",
           "comet_tab2_title": "SALE",
           "comet_tab2_menu": "salemobile",
           "comet_tab2_image": "shopify://shop_images/Loafer_banner_image.png",
-          "comet_tab2_image_link": "shopify://collections/loafers",
+          "comet_tab2_image_link": "https://idcult.com/collections/men-loafers-1",
           "comet_tab3_title": "collections",
           "comet_tab3_menu": "men-women-tab-headwomen",
           "comet_tab3_image": "shopify://shop_images/Artboard_1_19ca55fb-571c-4079-b356-7840f2325c3f.png",
-          "comet_tab3_image_link": "shopify://collections/reg-sandals-slippers",
+          "comet_tab3_image_link": "https://idcult.com/collections/men-sandals-slippers-1",
           "comet_tab4_title": "",
           "comet_tab4_menu": "footer",
           "comet_tab4_image_link": "",
@@ -1154,28 +1154,20 @@
             "type": "collection",
             "settings": {
               "collection": "men-boots-1",
-              "label": ""
+              "label": "Boots"
             }
           },
           "collection_mcLKMt": {
             "type": "collection",
             "settings": {
               "collection": "bootsnew_nb-copy",
-              "label": ""
-            }
-          },
-          "collection_wLQ3df": {
-            "type": "collection",
-            "settings": {
-              "collection": "leather-sneakers-1",
-              "label": ""
+              "label": "Loafers"
             }
           }
         },
         "block_order": [
           "collection_XKAbAJ",
-          "collection_mcLKMt",
-          "collection_wLQ3df"
+          "collection_mcLKMt"
         ],
         "name": "Collection Tabs",
         "settings": {
@@ -1254,28 +1246,20 @@
             "type": "collection",
             "settings": {
               "collection": "bootsnew_nb-copy",
-              "label": ""
+              "label": "lOAFERS"
             }
           },
           "collection_yekjNp": {
             "type": "collection",
             "settings": {
               "collection": "bootsbs_nb",
-              "label": ""
-            }
-          },
-          "collection_drWL4G": {
-            "type": "collection",
-            "settings": {
-              "collection": "leather-sneakers-1",
-              "label": ""
+              "label": "boots"
             }
           }
         },
         "block_order": [
           "collection_pCRwgL",
-          "collection_yekjNp",
-          "collection_drWL4G"
+          "collection_yekjNp"
         ],
         "name": "Collection Tabs",
         "settings": {
@@ -1287,7 +1271,7 @@
           "show_button": true,
           "button_label": "SHOW ALL PRODUCTS",
           "background": "#ffffff",
-          "padding_top": 52,
+          "padding_top": 56,
           "padding_bottom": 52
         }
       },
