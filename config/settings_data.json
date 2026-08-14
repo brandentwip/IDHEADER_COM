@@ -1153,29 +1153,21 @@
           "collection_XKAbAJ": {
             "type": "collection",
             "settings": {
-              "collection": "men-boots-1",
-              "label": ""
+              "collection": "bootsnew_nb",
+              "label": "Boots"
             }
           },
           "collection_mcLKMt": {
             "type": "collection",
             "settings": {
-              "collection": "men-casuals-1",
-              "label": ""
-            }
-          },
-          "collection_wLQ3df": {
-            "type": "collection",
-            "settings": {
-              "collection": "leather-sneakers-1",
-              "label": ""
+              "collection": "bootsnew_nb-copy",
+              "label": "Loafers"
             }
           }
         },
         "block_order": [
           "collection_XKAbAJ",
-          "collection_mcLKMt",
-          "collection_wLQ3df"
+          "collection_mcLKMt"
         ],
         "name": "Collection Tabs",
         "settings": {
