@@ -154,13 +154,15 @@
  <div class="idc-return-wrapper">
   <button class="idc-return-header">
     Return Policy
-    {% if product.collections contains collections['clearancesale'] %}
+    {% if product.collections contains collections['clearance-men-nb']
+   or product.collections contains collections['womenclearance'] %}
       <span class="idc-clearance-badge">NO EXCHANGE / NO RETURN ON CLEARANCE SALE ITEMS</span>
     {% endif %}
   </button>
 
   <div class="idc-return-body">
-    {% if product.collections contains collections['clearancesale'] %}
+    {% if product.collections contains collections['clearance-men-nb']
+   or product.collections contains collections['womenclearance'] %}
       <p class="idc-clearance-alert">
         <strong>Note:</strong> This item is part of our <strong>Clearance Sale</strong>.
         Therefore, it is <strong>not eligible for return or exchange</strong>.
