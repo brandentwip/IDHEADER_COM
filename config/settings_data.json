@@ -1095,7 +1095,7 @@
           "category_rGDGjt": {
             "type": "category",
             "settings": {
-              "icon": "shopify://shop_images/sneakers_cc8492ad-d99c-4c40-ae6b-fd1ce00893d7.png",
+              "icon": "shopify://shop_images/Sneakers_bac94033-947e-4c2c-98df-81d3bc754e80.png",
               "title": "Sneakers",
               "link": "shopify://collections/leather-sneakers-1"
             }
@@ -1103,7 +1103,7 @@
           "category_FU8fa4": {
             "type": "category",
             "settings": {
-              "icon": "shopify://shop_images/boots_e4026d53-8c59-4f68-bb9d-0d2da291c5ba.png",
+              "icon": "shopify://shop_images/Boots_a58bfbfc-1c2b-4517-a12e-ec5577732600.png",
               "title": "Boots",
               "link": "shopify://collections/men-boots-1"
             }
@@ -1111,7 +1111,7 @@
           "category_aRhVjb": {
             "type": "category",
             "settings": {
-              "icon": "shopify://shop_images/formals.png",
+              "icon": "shopify://shop_images/Formals_d42ab5db-7355-4882-88c0-48c6953d70f2.png",
               "title": "Formals",
               "link": "shopify://collections/formals-shoes-1"
             }
@@ -1119,7 +1119,7 @@
           "category_eYadFt": {
             "type": "category",
             "settings": {
-              "icon": "shopify://shop_images/Sandals_3287b8fe-20aa-4232-939d-f8a7443c4e20.png",
+              "icon": "shopify://shop_images/Sandals_d935fbfa-535b-48d6-bfae-81a31e45e886.png",
               "title": "Sandals",
               "link": "shopify://collections/men-sandals-slippers-copy-1"
             }
@@ -1142,7 +1142,7 @@
           "button_link": "shopify://collections/all-men",
           "bg_color": "#ffffff",
           "text_color": "#111111",
-          "circle_bg": "#f5f5f5",
+          "circle_bg": "#FFFFFF",
           "padding_top": 0,
           "padding_bottom": 0
         }
