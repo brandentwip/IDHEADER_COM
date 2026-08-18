@@ -83,21 +83,23 @@
       <h1 class="arigato-collection-title">{{ collection.title | upcase }}</h1>
     </div>
     
-    <div class="arigato-header-col arigato-header-nav-col">
-      {% if collection.all_types.size > 0 %}
-        <ul class="arigato-subcat-links">
-          {% for type in collection.all_types %}
-            {% if type != blank %}
-              <li>
-                <a href="{{ collection.url }}?filter.p.product_type={{ type | url_encode }}" class="arigato-subcat-link">
-                  {{ type | upcase }}
-                </a>
-              </li>
-            {% endif %}
-          {% endfor %}
-        </ul>
-      {% endif %}
-    </div>
+   {% unless collection.handle == 'slide-n-go' %}
+  <div class="arigato-header-col arigato-header-nav-col">
+    {% if collection.all_types.size > 0 %}
+      <ul class="arigato-subcat-links">
+        {% for type in collection.all_types %}
+          {% if type != blank %}
+            <li>
+              <a href="{{ collection.url }}?filter.p.product_type={{ type | url_encode }}" class="arigato-subcat-link">
+                {{ type | upcase }}
+              </a>
+            </li>
+          {% endif %}
+        {% endfor %}
+      </ul>
+    {% endif %}
+  </div>
+{% endunless %}
 
     <div class="arigato-header-col arigato-header-desc-col">
       {% if top_text != blank %}
