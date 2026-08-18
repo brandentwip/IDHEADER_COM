@@ -1263,7 +1263,7 @@
         ],
         "name": "Collection Tabs",
         "settings": {
-          "heading": "Best Sellers",
+          "heading": "TOP SELLERS",
           "products_to_show": 4,
           "desktop_columns": 2,
           "mobile_columns": "2",
