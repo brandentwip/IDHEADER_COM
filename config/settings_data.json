@@ -1150,13 +1150,6 @@
       "collection_tabs_3fxzUa": {
         "type": "collection-tabs",
         "blocks": {
-          "collection_eEJRhn": {
-            "type": "collection",
-            "settings": {
-              "collection": "formals-shoes-1",
-              "label": ""
-            }
-          },
           "collection_XKAbAJ": {
             "type": "collection",
             "settings": {
@@ -1173,7 +1166,6 @@
           }
         },
         "block_order": [
-          "collection_eEJRhn",
           "collection_XKAbAJ",
           "collection_mcLKMt"
         ],
@@ -1253,7 +1245,7 @@
           "collection_8i7KFG": {
             "type": "collection",
             "settings": {
-              "collection": "men-casuals-1",
+              "collection": "reg-casuals",
               "label": ""
             }
           },
