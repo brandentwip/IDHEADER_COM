@@ -1697,4 +1697,13 @@ document.addEventListener('DOMContentLoaded', function() {
     font-size: 10px;
   }
 }
+
+
+{% if collection.handle == 'slide-n-go' %}
+  <style>
+    .arigato-header-col.arigato-header-nav-col {
+      display: none !important;
+    }
+  </style>
+{% endif %}
 </style>
