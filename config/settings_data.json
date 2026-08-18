@@ -1132,6 +1132,9 @@
           "category_aRhVjb",
           "category_eYadFt"
         ],
+        "custom_css": [
+          "#brand-story-brand_story_categories_gf7CWn {--heading-size: 54px; --body-size: 16px; --circle-size: 150px;}"
+        ],
         "name": "Brand Story with Categories",
         "settings": {
           "logo": "shopify://shop_images/id_logo_1.png",
