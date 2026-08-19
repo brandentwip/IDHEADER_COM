@@ -1084,6 +1084,14 @@
       "brand_story_categories_gf7CWn": {
         "type": "brand-story-categories",
         "blocks": {
+          "category_D7wEGy": {
+            "type": "category",
+            "settings": {
+              "icon": "shopify://shop_images/Slide_N_Go.png",
+              "title": "Slide N GO",
+              "link": "shopify://collections/slide-n-go"
+            }
+          },
           "category_BTtFwp": {
             "type": "category",
             "settings": {
@@ -1126,6 +1134,7 @@
           }
         },
         "block_order": [
+          "category_D7wEGy",
           "category_BTtFwp",
           "category_rGDGjt",
           "category_FU8fa4",
