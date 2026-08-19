@@ -1494,6 +1494,22 @@
               "overlay_opacity": 20
             }
           },
+          "slide_4CtQY4": {
+            "type": "slide",
+            "settings": {
+              "desktop_image": "shopify://shop_images/Slide_n_go_20a4a3a9-4386-406c-b896-8b69968163a5.png",
+              "mobile_image": "shopify://shop_images/Mobile_2_33ee26d8-2f96-4981-b839-5a5c0b292eb5.png",
+              "label": "",
+              "heading": "Slide-N-GO",
+              "text": "",
+              "button_label": "SHOP NOW",
+              "button_link": "https://idcult.com/collections/bestseller_nb",
+              "text_position": "bottom-left",
+              "text_color": "#ffffff",
+              "overlay_color": "#000000",
+              "overlay_opacity": 20
+            }
+          },
           "slide_hNEHTR": {
             "type": "slide",
             "settings": {
@@ -1515,6 +1531,7 @@
           "slide_3BDMMr",
           "slide_Cyamqc",
           "slide_KXYFxT",
+          "slide_4CtQY4",
           "slide_hNEHTR"
         ],
         "name": "Editorial Banner_SLIDESHOW",
