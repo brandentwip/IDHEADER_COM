@@ -1,7 +1,8 @@
 {% comment %}
   Product Offers
-  Offer 1: Buy 2 shoes → Free Wallet
+  Offer 1: Shop for Rs.3499 or above → Free Wallet
   Offer 2: Orders above ₹4,999 → Free Shoe Travel Bag
+  Offer 3: Extra 5% off on first purchase → Code WELCOME5
 {% endcomment %}
 
 <div class="id-product-offers">
@@ -81,10 +82,49 @@
 
   </div>
 
+
+  <!-- OFFER 3 -->
+  <div class="id-product-offer">
+
+    <div class="id-product-offer-icon">
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        viewBox="0 0 24 24"
+        fill="none"
+        aria-hidden="true"
+      >
+        <path
+          d="M12 3L14.1 8.1L19.5 8.6L15.4 12.2L16.6 17.5L12 14.7L7.4 17.5L8.6 12.2L4.5 8.6L9.9 8.1L12 3Z"
+          fill="currentColor"
+        />
+        <path
+          d="M12 7.2V11.5"
+          stroke="#fff"
+          stroke-width="1.5"
+          stroke-linecap="round"
+        />
+        <circle
+          cx="12"
+          cy="14"
+          r="0.8"
+          fill="#fff"
+        />
+      </svg>
+    </div>
+
+    <div class="id-product-offer-content">
+      <strong>FIRST PURCHASE</strong>
+      <span>-</span>
+      <span>Get <strong>EXTRA 5% OFF</strong> using code <strong>WELCOME5</strong></span>
+    </div>
+
+  </div>
+
 </div>
 
 
 <style>
+
 /* =========================================================
    PRODUCT OFFERS
    ========================================================= */
@@ -99,7 +139,9 @@
 }
 
 
-/* INDIVIDUAL OFFER */
+/* =========================================================
+   INDIVIDUAL OFFER
+   ========================================================= */
 
 .id-product-offer {
   display: flex;
@@ -110,7 +152,9 @@
 }
 
 
-/* SEPARATOR */
+/* =========================================================
+   SEPARATOR
+   ========================================================= */
 
 .id-product-offer + .id-product-offer {
   margin-top: 12px;
@@ -119,7 +163,9 @@
 }
 
 
-/* RED OFFER ICON */
+/* =========================================================
+   OFFER ICON
+   ========================================================= */
 
 .id-product-offer-icon {
   width: 24px;
@@ -140,7 +186,9 @@
 }
 
 
-/* OFFER TEXT */
+/* =========================================================
+   OFFER TEXT
+   ========================================================= */
 
 .id-product-offer-content {
   display: flex;
@@ -159,7 +207,9 @@
 }
 
 
-/* MOBILE */
+/* =========================================================
+   MOBILE
+   ========================================================= */
 
 @media screen and (max-width: 749px) {
 
@@ -198,7 +248,9 @@
 }
 
 
-/* VERY SMALL PHONES */
+/* =========================================================
+   VERY SMALL PHONES
+   ========================================================= */
 
 @media screen and (max-width: 380px) {
 
@@ -211,4 +263,5 @@
   }
 
 }
+
 </style>
