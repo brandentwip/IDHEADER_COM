@@ -1084,6 +1084,14 @@
       "brand_story_categories_gf7CWn": {
         "type": "brand-story-categories",
         "blocks": {
+          "category_f4FTCQ": {
+            "type": "category",
+            "settings": {
+              "icon": "shopify://shop_images/Casuals.png",
+              "title": "Casuals",
+              "link": "https://idcult.com/collections/men-casuals-1"
+            }
+          },
           "category_D7wEGy": {
             "type": "category",
             "settings": {
@@ -1134,6 +1142,7 @@
           }
         },
         "block_order": [
+          "category_f4FTCQ",
           "category_D7wEGy",
           "category_BTtFwp",
           "category_rGDGjt",
