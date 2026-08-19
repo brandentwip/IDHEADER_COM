@@ -1512,6 +1512,7 @@
           },
           "slide_hNEHTR": {
             "type": "slide",
+            "disabled": true,
             "settings": {
               "desktop_image": "shopify://shop_images/Artboard_3_8ef7f5f3-2d7a-4dd0-b4bd-aa51ca3bfaa2.png",
               "mobile_image": "shopify://shop_images/Artboard_6.png",
