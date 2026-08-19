@@ -1151,7 +1151,7 @@
           "category_eYadFt"
         ],
         "custom_css": [
-          "@media only screen and (min-width:768px){#brand-story-brand_story_categories_gf7CWn {--heading-size: 54px; --body-size: 16px; --circle-size: 190px;}}"
+          "@media only screen and (min-width: 768px) {#brand-story-brand_story_categories_gf7CWn {--heading-size: 54px; --body-size: 16px; --circle-size: 190px; }}"
         ],
         "name": "Brand Story with Categories",
         "settings": {
@@ -1465,8 +1465,8 @@
           "slide_Cyamqc": {
             "type": "slide",
             "settings": {
-              "desktop_image": "shopify://shop_images/Artboard_1_6d290ecb-e8f2-4557-a31d-12d027e9d919.png",
-              "mobile_image": "shopify://shop_images/Artboard_4_00d5a635-12d5-4a9d-b68a-8119f3197528.png",
+              "desktop_image": "shopify://shop_images/Banner_ac7740f9-8d77-46e6-bf5a-34d95aa7fe06.png",
+              "mobile_image": "shopify://shop_images/Mobile_b1287347-6010-47a8-8373-e262cb66293d.png",
               "label": "",
               "heading": "New <br> Arrivals",
               "text": "",
