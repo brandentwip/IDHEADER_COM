@@ -1162,6 +1162,13 @@
       "collection_tabs_3fxzUa": {
         "type": "collection-tabs",
         "blocks": {
+          "collection_jVnafE": {
+            "type": "collection",
+            "settings": {
+              "collection": "new_sandals-slipper",
+              "label": "sandals/slipper"
+            }
+          },
           "collection_XKAbAJ": {
             "type": "collection",
             "settings": {
@@ -1178,6 +1185,7 @@
           }
         },
         "block_order": [
+          "collection_jVnafE",
           "collection_XKAbAJ",
           "collection_mcLKMt"
         ],
