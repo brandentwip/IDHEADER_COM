@@ -1,493 +1,487 @@
-{%- if section.settings.page_title_enable or section.settings.page_content_enable -%}
-  <div class="page-width page-width--narrow page-content{% if section.blocks.size > 0 %} page-content--with-blocks{% endif %}">
-    
-    {%- render 'breadcrumbs' -%}
+<div class="idcult-faq-section">
+  <div class="idcult-faq-container" itemscope itemtype="https://schema.org/FAQPage">
 
-    {%- if section.settings.page_title_enable -%}
-      <header class="section-header">
-        <h1 class="section-header__title">{{ page.title }}</h1>
-      </header>
-    {%- endif -%}
-
-    {%- if section.settings.page_content_enable -%}
-      <div class="rte text-spacing">
-        {{ page.content }}
-      </div>
-    {%- endif -%}
-
-  </div>
-{%- endif -%}
-
-
-{%- if section.blocks.size > 0 -%}
-
-  <div class="page-width page-content custom-faq-page">
-
-    <div
-      class="page-blocks page-blocks--flush custom-faq-list"
-      itemscope
-      itemtype="https://schema.org/FAQPage"
-    >
-
-      {%- for block in section.blocks -%}
-
-        <div
-          class="custom-faq-item"
-          {{ block.shopify_attributes }}
-        >
-
-          {%- case block.type -%}
-
-            {%- when 'rich-text' -%}
-
-              {%- render 'page-block-rich-text',
-                section_class: 'index-section--faq',
-                block: block
-              -%}
-
-
-            {%- when 'question' -%}
-
-              {%- render 'page-block-faq',
-                block: block
-              -%}
-
-          {%- endcase -%}
-
+    <div class="idcult-faq-item">
+      <button class="idcult-faq-question">
+        <span>Where does iDCult deliver?</span>
+        <span class="idcult-faq-icon"></span>
+      </button>
+      <div class="idcult-faq-answer">
+        <div class="idcult-faq-answer-inner">
+          <p>We currently deliver within India. International shipping is not available.</p>
         </div>
+      </div>
+    </div>
 
-      {%- endfor -%}
+    <div class="idcult-faq-item">
+      <button class="idcult-faq-question">
+        <span>How much does shipping cost?</span>
+        <span class="idcult-faq-icon"></span>
+      </button>
+      <div class="idcult-faq-answer">
+        <div class="idcult-faq-answer-inner">
+          <p>Prepaid orders are shipped free. A flat ₹100 COD fee applies to COD orders unless a specific offer says otherwise.</p>
+        </div>
+      </div>
+    </div>
 
+    <div class="idcult-faq-item">
+      <button class="idcult-faq-question">
+        <span>How long does delivery take?</span>
+        <span class="idcult-faq-icon"></span>
+      </button>
+      <div class="idcult-faq-answer">
+        <div class="idcult-faq-answer-inner">
+          <p>Orders are generally dispatched within 48 hours. Most orders arrive within 5–7 business days from dispatch; remote areas and peak periods may take longer.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="idcult-faq-item">
+      <button class="idcult-faq-question">
+        <span>How can I track my order?</span>
+        <span class="idcult-faq-icon"></span>
+      </button>
+      <div class="idcult-faq-answer">
+        <div class="idcult-faq-answer-inner">
+          <p>Tracking details are shared after dispatch through the contact information provided at checkout.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="idcult-faq-item">
+      <button class="idcult-faq-question">
+        <span>Can I cancel my order?</span>
+        <span class="idcult-faq-icon"></span>
+      </button>
+      <div class="idcult-faq-answer">
+        <div class="idcult-faq-answer-inner">
+          <p>Request cancellation as soon as possible. It depends on processing status; once dispatched, an order normally cannot be cancelled through Customer Care.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="idcult-faq-item">
+      <button class="idcult-faq-question">
+        <span>Can iDCult cancel my order?</span>
+        <span class="idcult-faq-icon"></span>
+      </button>
+      <div class="idcult-faq-answer">
+        <div class="idcult-faq-answer-inner">
+          <p>Yes, for reasons such as stock unavailability, pricing/listing errors, suspected fraud, technical issues or serviceability limitations. Eligible prepaid amounts are refunded.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="idcult-faq-item">
+      <button class="idcult-faq-question">
+        <span>What is the return period?</span>
+        <span class="idcult-faq-icon"></span>
+      </button>
+      <div class="idcult-faq-answer">
+        <div class="idcult-faq-answer-inner">
+          <p>Eligible products can be returned within 7 days from delivery, subject to the Return Policy.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="idcult-faq-item">
+      <button class="idcult-faq-question">
+        <span>What condition must a returned product be in?</span>
+        <span class="idcult-faq-icon"></span>
+      </button>
+      <div class="idcult-faq-answer">
+        <div class="idcult-faq-answer-inner">
+          <p>Unused and unworn, with original tags, packaging and accessories intact, and subject to a quality/condition check.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="idcult-faq-item">
+      <button class="idcult-faq-question">
+        <span>Can I exchange for another size?</span>
+        <span class="idcult-faq-icon"></span>
+      </button>
+      <div class="idcult-faq-answer">
+        <div class="idcult-faq-answer-inner">
+          <p>Yes, eligible products can generally be exchanged within 7 days of delivery, subject to stock availability and the exchange conditions.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="idcult-faq-item">
+      <button class="idcult-faq-question">
+        <span>Can I exchange for a different style?</span>
+        <span class="idcult-faq-icon"></span>
+      </button>
+      <div class="idcult-faq-answer">
+        <div class="idcult-faq-answer-inner">
+          <p>Not automatically. Where offered, Customer Care will advise the process; otherwise you may need to return the eligible item and place a new order.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="idcult-faq-item">
+      <button class="idcult-faq-question">
+        <span>Are Clearance Sale products returnable/exchangeable?</span>
+        <span class="idcult-faq-icon"></span>
+      </button>
+      <div class="idcult-faq-answer">
+        <div class="idcult-faq-answer-inner">
+          <p>Clearance Sale products are not eligible for a cash refund or a standard return without exchange. However, size exchange or product exchange is permitted within 7 days of delivery, subject to availability, quality/condition requirements, payment of any applicable product price difference, and payment by the customer of all courier costs for sending the original product to our warehouse and re-shipping the replacement product.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="idcult-faq-item">
+      <button class="idcult-faq-question">
+        <span>What if I receive the wrong product?</span>
+        <span class="idcult-faq-icon"></span>
+      </button>
+      <div class="idcult-faq-answer">
+        <div class="idcult-faq-answer-inner">
+          <p>Contact <a href="mailto:care@idcult.com">care@idcult.com</a> promptly with your order number and photographs. We will review and arrange the appropriate resolution.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="idcult-faq-item">
+      <button class="idcult-faq-question">
+        <span>What if my product is damaged on delivery?</span>
+        <span class="idcult-faq-icon"></span>
+      </button>
+      <div class="idcult-faq-answer">
+        <div class="idcult-faq-answer-inner">
+          <p>Report it to Customer Care as soon as possible, preferably with photographs of the package and product.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="idcult-faq-item">
+      <button class="idcult-faq-question">
+        <span>What if I find a manufacturing defect?</span>
+        <span class="idcult-faq-icon"></span>
+      </button>
+      <div class="idcult-faq-answer">
+        <div class="idcult-faq-answer-inner">
+          <p>Contact Customer Care with your order/invoice details and photographs. Claims should be raised within 3 months and are subject to assessment.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="idcult-faq-item">
+      <button class="idcult-faq-question">
+        <span>What does the claim policy cover?</span>
+        <span class="idcult-faq-icon"></span>
+      </button>
+      <div class="idcult-faq-answer">
+        <div class="idcult-faq-answer-inner">
+          <p>Genuine manufacturing defects. Normal wear, accidental damage, rough use, burns, cuts, punctures, animal damage and other external damage are generally not covered.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="idcult-faq-item">
+      <button class="idcult-faq-question">
+        <span>How will I receive my refund?</span>
+        <span class="idcult-faq-icon"></span>
+      </button>
+      <div class="idcult-faq-answer">
+        <div class="idcult-faq-answer-inner">
+          <p>Approved prepaid returns are generally refunded to the original payment method. The applicable refund method for COD orders will be communicated during the return process.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="idcult-faq-item">
+      <button class="idcult-faq-question">
+        <span>How long does a refund take?</span>
+        <span class="idcult-faq-icon"></span>
+      </button>
+      <div class="idcult-faq-answer">
+        <div class="idcult-faq-answer-inner">
+          <p>Processing begins after the returned product is received and approved. Bank/payment-provider timelines then apply.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="idcult-faq-item">
+      <button class="idcult-faq-question">
+        <span>Is the COD fee refundable?</span>
+        <span class="idcult-faq-icon"></span>
+      </button>
+      <div class="idcult-faq-answer">
+        <div class="idcult-faq-answer-inner">
+          <p>Generally no, subject to applicable law and the circumstances of the order.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="idcult-faq-item">
+      <button class="idcult-faq-question">
+        <span>What payment methods are available?</span>
+        <span class="idcult-faq-icon"></span>
+      </button>
+      <div class="idcult-faq-answer">
+        <div class="idcult-faq-answer-inner">
+          <p>The methods available to you are displayed at checkout and may vary by order/location.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="idcult-faq-item">
+      <button class="idcult-faq-question">
+        <span>Can I combine discount codes?</span>
+        <span class="idcult-faq-icon"></span>
+      </button>
+      <div class="idcult-faq-answer">
+        <div class="idcult-faq-answer-inner">
+          <p>Unless an offer expressly permits stacking, promotional codes generally cannot be combined.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="idcult-faq-item">
+      <button class="idcult-faq-question">
+        <span>Why was my apparently available product order cancelled?</span>
+        <span class="idcult-faq-icon"></span>
+      </button>
+      <div class="idcult-faq-answer">
+        <div class="idcult-faq-answer-inner">
+          <p>Inventory can change quickly. If stock is exhausted or a listing/technical error is identified, the order may be cancelled and eligible prepaid amounts refunded.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="idcult-faq-item">
+      <button class="idcult-faq-question">
+        <span>How do I contact iDCult?</span>
+        <span class="idcult-faq-icon"></span>
+      </button>
+      <div class="idcult-faq-answer">
+        <div class="idcult-faq-answer-inner">
+          <p>Email <a href="mailto:care@idcult.com">care@idcult.com</a> or call +91 9910433300, Monday to Saturday, 09:30 AM–06:00 PM.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="idcult-faq-item">
+      <button class="idcult-faq-question">
+        <span>How do I choose the right size?</span>
+        <span class="idcult-faq-icon"></span>
+      </button>
+      <div class="idcult-faq-answer">
+        <div class="idcult-faq-answer-inner">
+          <p>Use the size guide on the product page and compare it with your foot measurement. Contact Customer Care if you need help.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="idcult-faq-item">
+      <button class="idcult-faq-question">
+        <span>Can colours look different from the website?</span>
+        <span class="idcult-faq-icon"></span>
+      </button>
+      <div class="idcult-faq-answer">
+        <div class="idcult-faq-answer-inner">
+          <p>Yes. Screen settings, lighting and photography can cause minor differences.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="idcult-faq-item">
+      <button class="idcult-faq-question">
+        <span>Can I return without raising a return request first?</span>
+        <span class="idcult-faq-icon"></span>
+      </button>
+      <div class="idcult-faq-answer">
+        <div class="idcult-faq-answer-inner">
+          <p>No. Please contact Customer Care or use the website return facility before sending anything back.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="idcult-faq-item">
+      <button class="idcult-faq-question">
+        <span>What if my return fails the quality check?</span>
+        <span class="idcult-faq-icon"></span>
+      </button>
+      <div class="idcult-faq-answer">
+        <div class="idcult-faq-answer-inner">
+          <p>If it is used, damaged, missing tags/packaging or otherwise ineligible, the return may be rejected and the product may be sent back.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="idcult-faq-item">
+      <button class="idcult-faq-question">
+        <span>Do you accept international orders?</span>
+        <span class="idcult-faq-icon"></span>
+      </button>
+      <div class="idcult-faq-answer">
+        <div class="idcult-faq-answer-inner">
+          <p>No. iDCult currently ships within India only.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="idcult-faq-item">
+      <button class="idcult-faq-question">
+        <span>How do I report a website/payment problem?</span>
+        <span class="idcult-faq-icon"></span>
+      </button>
+      <div class="idcult-faq-answer">
+        <div class="idcult-faq-answer-inner">
+          <p>Email <a href="mailto:care@idcult.com">care@idcult.com</a> with your order number and a description/screenshot. Never send your full card number, CVV, password or OTP.</p>
+        </div>
+      </div>
     </div>
 
   </div>
-
-{%- endif -%}
-
+</div>
 
 <style>
-
-  /* ==============================
-     FAQ PAGE WIDTH
-  ============================== */
-
-  .custom-faq-page {
-    max-width: 100% !important;
-    padding-left: 40px;
-    padding-right: 40px;
+  .idcult-faq-section {
+    width: 100%;
+    padding: 20px 40px;
   }
 
+  .idcult-faq-container {
+    width: 100%;
+  }
 
-  /* ==============================
-     FAQ ITEM
-  ============================== */
-
-  .custom-faq-item {
+  .idcult-faq-item {
     background: #d1d1d1;
     margin-bottom: 10px;
+    overflow: hidden;
   }
 
-
-  /* Remove unwanted spacing */
-
-  .custom-faq-item .index-section,
-  .custom-faq-item .page-block,
-  .custom-faq-item .page-block--faq {
-    margin: 0 !important;
-    padding: 0 !important;
-  }
-
-
-  /* ==============================
-     FAQ QUESTION
-  ============================== */
-
-  .custom-faq-item button,
-  .custom-faq-item .collapsible-trigger,
-  .custom-faq-item .collapsible-trigger-btn {
+  .idcult-faq-question {
+    width: 100%;
     min-height: 90px;
-    padding: 25px 55px !important;
+    border: 0;
+    background: transparent;
+    cursor: pointer;
+    padding: 25px 56px;
 
-    font-size: 20px !important;
-    font-weight: 400 !important;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    color: #172534;
+    font-size: 20px;
+    font-family: inherit;
+    font-weight: 400;
     letter-spacing: 0.5px;
-
-    color: #172534 !important;
-
-    background: transparent !important;
+    text-align: left;
   }
 
-
-  /* ==============================
-     FAQ ANSWER
-  ============================== */
-
-  .custom-faq-item .collapsible-content,
-  .custom-faq-item .collapsible-content__inner {
-    background: transparent !important;
+  .idcult-faq-icon {
+    width: 17px;
+    height: 17px;
+    border-right: 2px solid #172534;
+    border-bottom: 2px solid #172534;
+    transform: rotate(45deg);
+    transition: transform 0.3s ease;
+    flex-shrink: 0;
+    margin-left: 25px;
+    margin-top: -8px;
   }
 
+  .idcult-faq-item.active .idcult-faq-icon {
+    transform: rotate(225deg);
+    margin-top: 8px;
+  }
 
-  .custom-faq-item .rte,
-  .custom-faq-item .enlarge-text {
-    padding-left: 55px;
-    padding-right: 55px;
-    padding-bottom: 35px;
+  .idcult-faq-answer {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.4s ease;
+  }
 
+  .idcult-faq-answer-inner {
+    padding: 0 56px 35px;
+  }
+
+  .idcult-faq-answer p {
+    margin: 0;
     font-size: 16px;
     line-height: 1.7;
+    color: #172534;
   }
 
-
-  .custom-faq-item .rte p {
-    margin-bottom: 15px;
-  }
-
-
-  /* ==============================
-     FAQ ARROW
-  ============================== */
-
-  .custom-faq-item .collapsible-trigger__icon,
-  .custom-faq-item .icon-chevron-down {
-    margin-right: 10px;
-  }
-
-
-  /* ==============================
-     LINKS
-  ============================== */
-
-  .custom-faq-item a {
+  .idcult-faq-answer a {
     color: inherit;
     text-decoration: underline;
   }
 
-
-  /* ==============================
-     MOBILE
-  ============================== */
-
   @media screen and (max-width: 767px) {
-
-    .custom-faq-page {
-      padding-left: 15px;
-      padding-right: 15px;
+    .idcult-faq-section {
+      padding: 10px 15px;
     }
 
-    .custom-faq-item {
+    .idcult-faq-item {
       margin-bottom: 8px;
     }
 
-    .custom-faq-item button,
-    .custom-faq-item .collapsible-trigger,
-    .custom-faq-item .collapsible-trigger-btn {
+    .idcult-faq-question {
       min-height: 70px;
-      padding: 18px 20px !important;
-
-      font-size: 16px !important;
+      padding: 18px 20px;
+      font-size: 16px;
       line-height: 1.4;
     }
 
-    .custom-faq-item .rte,
-    .custom-faq-item .enlarge-text {
-      padding-left: 20px;
-      padding-right: 20px;
-      padding-bottom: 25px;
+    .idcult-faq-answer-inner {
+      padding: 0 20px 25px;
+    }
 
+    .idcult-faq-answer p {
       font-size: 14px;
       line-height: 1.6;
     }
 
+    .idcult-faq-icon {
+      width: 13px;
+      height: 13px;
+      margin-left: 15px;
+    }
   }
-
 </style>
 
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+
+    const faqItems = document.querySelectorAll('.idcult-faq-item');
+
+    faqItems.forEach(function(item) {
+
+      const button = item.querySelector('.idcult-faq-question');
+      const answer = item.querySelector('.idcult-faq-answer');
+
+      button.addEventListener('click', function() {
+
+        const isOpen = item.classList.contains('active');
+
+        faqItems.forEach(function(otherItem) {
+          otherItem.classList.remove('active');
+          otherItem.querySelector('.idcult-faq-answer').style.maxHeight = null;
+        });
+
+        if (!isOpen) {
+          item.classList.add('active');
+          answer.style.maxHeight = answer.scrollHeight + 'px';
+        }
+
+      });
+
+    });
+
+  });
+</script>
 
 {% schema %}
-
 {
   "name": "iDCult FAQ Page",
-
-  "settings": [
-
-    {
-      "type": "checkbox",
-      "id": "page_title_enable",
-      "label": "Show page title",
-      "default": false
-    },
-
-    {
-      "type": "checkbox",
-      "id": "page_content_enable",
-      "label": "Show page content",
-      "default": false
-    }
-
-  ],
-
-
-  "default": {
-
-    "blocks": [
-
-      {
-        "type": "question",
-        "settings": {
-          "title": "Where does iDCult deliver?",
-          "text": "<p>We currently deliver within India. International shipping is not available.</p>"
-        }
-      },
-
-      {
-        "type": "question",
-        "settings": {
-          "title": "How much does shipping cost?",
-          "text": "<p>Prepaid orders are shipped free. A flat ₹100 COD fee applies to COD orders unless a specific offer says otherwise.</p>"
-        }
-      },
-
-      {
-        "type": "question",
-        "settings": {
-          "title": "How long does delivery take?",
-          "text": "<p>Orders are generally dispatched within 48 hours. Most orders arrive within 5–7 business days from dispatch; remote areas and peak periods may take longer.</p>"
-        }
-      },
-
-      {
-        "type": "question",
-        "settings": {
-          "title": "How can I track my order?",
-          "text": "<p>Tracking details are shared after dispatch through the contact information provided at checkout.</p>"
-        }
-      },
-
-      {
-        "type": "question",
-        "settings": {
-          "title": "Can I cancel my order?",
-          "text": "<p>Request cancellation as soon as possible. It depends on processing status; once dispatched, an order normally cannot be cancelled through Customer Care.</p>"
-        }
-      },
-
-      {
-        "type": "question",
-        "settings": {
-          "title": "Can iDCult cancel my order?",
-          "text": "<p>Yes, for reasons such as stock unavailability, pricing/listing errors, suspected fraud, technical issues or serviceability limitations. Eligible prepaid amounts are refunded.</p>"
-        }
-      },
-
-      {
-        "type": "question",
-        "settings": {
-          "title": "What is the return period?",
-          "text": "<p>Eligible products can be returned within 7 days from delivery, subject to the Return Policy.</p>"
-        }
-      },
-
-      {
-        "type": "question",
-        "settings": {
-          "title": "What condition must a returned product be in?",
-          "text": "<p>Unused and unworn, with original tags, packaging and accessories intact, and subject to a quality/condition check.</p>"
-        }
-      },
-
-      {
-        "type": "question",
-        "settings": {
-          "title": "Can I exchange for another size?",
-          "text": "<p>Yes, eligible products can generally be exchanged within 7 days of delivery, subject to stock availability and the exchange conditions.</p>"
-        }
-      },
-
-      {
-        "type": "question",
-        "settings": {
-          "title": "Can I exchange for a different style?",
-          "text": "<p>Not automatically. Where offered, Customer Care will advise the process; otherwise you may need to return the eligible item and place a new order.</p>"
-        }
-      },
-
-      {
-        "type": "question",
-        "settings": {
-          "title": "Are Clearance Sale products returnable/exchangeable?",
-          "text": "<p>Clearance Sale products are not eligible for a cash refund or a standard return without exchange. However, size exchange or product exchange is permitted within 7 days of delivery, subject to availability, quality/condition requirements, payment of any applicable product price difference, and payment by the customer of all courier costs for sending the original product to our warehouse and re-shipping the replacement product.</p>"
-        }
-      },
-
-      {
-        "type": "question",
-        "settings": {
-          "title": "What if I receive the wrong product?",
-          "text": "<p>Contact <a href=\"mailto:care@idcult.com\">care@idcult.com</a> promptly with your order number and photographs. We will review and arrange the appropriate resolution.</p>"
-        }
-      },
-
-      {
-        "type": "question",
-        "settings": {
-          "title": "What if my product is damaged on delivery?",
-          "text": "<p>Report it to Customer Care as soon as possible, preferably with photographs of the package and product.</p>"
-        }
-      },
-
-      {
-        "type": "question",
-        "settings": {
-          "title": "What if I find a manufacturing defect?",
-          "text": "<p>Contact Customer Care with your order/invoice details and photographs. Claims should be raised within 3 months and are subject to assessment.</p>"
-        }
-      },
-
-      {
-        "type": "question",
-        "settings": {
-          "title": "What does the claim policy cover?",
-          "text": "<p>Genuine manufacturing defects. Normal wear, accidental damage, rough use, burns, cuts, punctures, animal damage and other external damage are generally not covered.</p>"
-        }
-      },
-
-      {
-        "type": "question",
-        "settings": {
-          "title": "How will I receive my refund?",
-          "text": "<p>Approved prepaid returns are generally refunded to the original payment method. The applicable refund method for COD orders will be communicated during the return process.</p>"
-        }
-      },
-
-      {
-        "type": "question",
-        "settings": {
-          "title": "How long does a refund take?",
-          "text": "<p>Processing begins after the returned product is received and approved. Bank/payment-provider timelines then apply.</p>"
-        }
-      },
-
-      {
-        "type": "question",
-        "settings": {
-          "title": "Is the COD fee refundable?",
-          "text": "<p>Generally no, subject to applicable law and the circumstances of the order.</p>"
-        }
-      },
-
-      {
-        "type": "question",
-        "settings": {
-          "title": "What payment methods are available?",
-          "text": "<p>The methods available to you are displayed at checkout and may vary by order/location.</p>"
-        }
-      },
-
-      {
-        "type": "question",
-        "settings": {
-          "title": "Can I combine discount codes?",
-          "text": "<p>Unless an offer expressly permits stacking, promotional codes generally cannot be combined.</p>"
-        }
-      },
-
-      {
-        "type": "question",
-        "settings": {
-          "title": "Why was my apparently available product order cancelled?",
-          "text": "<p>Inventory can change quickly. If stock is exhausted or a listing/technical error is identified, the order may be cancelled and eligible prepaid amounts refunded.</p>"
-        }
-      },
-
-      {
-        "type": "question",
-        "settings": {
-          "title": "How do I contact iDCult?",
-          "text": "<p>Email <a href=\"mailto:care@idcult.com\">care@idcult.com</a> or call +91 9910433300, Monday to Saturday, 09:30 AM–06:00 PM.</p>"
-        }
-      },
-
-      {
-        "type": "question",
-        "settings": {
-          "title": "How do I choose the right size?",
-          "text": "<p>Use the size guide on the product page and compare it with your foot measurement. Contact Customer Care if you need help.</p>"
-        }
-      },
-
-      {
-        "type": "question",
-        "settings": {
-          "title": "Can colours look different from the website?",
-          "text": "<p>Yes. Screen settings, lighting and photography can cause minor differences.</p>"
-        }
-      },
-
-      {
-        "type": "question",
-        "settings": {
-          "title": "Can I return without raising a return request first?",
-          "text": "<p>No. Please contact Customer Care or use the website return facility before sending anything back.</p>"
-        }
-      },
-
-      {
-        "type": "question",
-        "settings": {
-          "title": "What if my return fails the quality check?",
-          "text": "<p>If it is used, damaged, missing tags/packaging or otherwise ineligible, the return may be rejected and the product may be sent back.</p>"
-        }
-      },
-
-      {
-        "type": "question",
-        "settings": {
-          "title": "Do you accept international orders?",
-          "text": "<p>No. iDCult currently ships within India only.</p>"
-        }
-      },
-
-      {
-        "type": "question",
-        "settings": {
-          "title": "How do I report a website/payment problem?",
-          "text": "<p>Email <a href=\"mailto:care@idcult.com\">care@idcult.com</a> with your order number and a description/screenshot. Never send your full card number, CVV, password or OTP.</p>"
-        }
-      }
-
-    ]
-
-  },
-
-
-  "blocks": [
-
-    {
-      "type": "question",
-      "name": "Question",
-
-      "settings": [
-
-        {
-          "type": "text",
-          "id": "title",
-          "label": "Question",
-          "default": "Frequently asked question"
-        },
-
-        {
-          "type": "richtext",
-          "id": "text",
-          "label": "Answer",
-          "default": "<p>Use this text to answer questions in as much detail as possible for your customers.</p>"
-        }
-
-      ]
-    }
-
-  ]
-
+  "settings": []
 }
-
 {% endschema %}
