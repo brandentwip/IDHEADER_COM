@@ -1392,9 +1392,9 @@
             "settings": {
               "desktop_image": "shopify://shop_images/Banner_ac7740f9-8d77-46e6-bf5a-34d95aa7fe06.png",
               "mobile_image": "shopify://shop_images/Mobile_b1287347-6010-47a8-8373-e262cb66293d.png",
-              "label": "",
+              "label": "THE LATEST DROPS",
               "heading": "New <br> Arrivals",
-              "text": "",
+              "text": "<p>New styles, same standard - genuine leather, made in-house.</p>",
               "button_label": "SHOP NOW",
               "button_link": "shopify://collections/new-arrivals-1",
               "text_position": "bottom-left",
