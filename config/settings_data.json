@@ -847,72 +847,11 @@
       },
       "page-faq-template": {
         "type": "page-faq-template",
-        "blocks": {
-          "question_XKENPz": {
-            "type": "question",
-            "disabled": true,
-            "settings": {
-              "title": "Having Problem Accessing Websites?",
-              "text": "<h3>Technical Issues</h3><p>We suggest that you have the latest version of your operating system (e.g., Windows, macOS, etc.).</p><p>If you're still experiencing problems, please contact our Customer Care Team and include the following details:</p><ul><li>As much detail as possible about the issue</li><li>Screenshots of any error messages you receive</li><li>The web browser you are using (e.g., Internet Explorer, Firefox, Chrome, Safari, etc.)</li><li>Steps you have already taken to try and resolve the issue</li></ul>"
-            }
-          },
-          "page-faq-template-1": {
-            "type": "question",
-            "disabled": true,
-            "settings": {
-              "title": "If My Article Is Out Of Stock Will That Article Be Replenished Again?",
-              "text": "<ul><li>We don't currently have the facility to let you know if or when an item is due back in stock. As we like to offer you new and exciting products regularly we don't tend to restock a lot of our items again.</li><li>We are always looking at improving your shopping experience so if this changes, we'll let you know.</li><li>You could also look for something similar – all you need to do is type a product description into the search box on our website. You can narrow down the selection by using our 'Search' section on the right-hand side of the screen. Our New Arrivals section includes all our latest items, so it's always worth a look!</li></ul>"
-            }
-          },
-          "page-faq-template-2": {
-            "type": "question",
-            "disabled": true,
-            "settings": {
-              "title": "What Is Your Shipping Policy?",
-              "text": "<ul><li>We cater to customers located within India only. At present we do not accept orders for international shipping.</li><li>We undertake to ship your orders anywhere in India. We are committed to delivering your order accurately, in good condition, and on time.</li><li>We do not charge you for Shipping. However, we charge a flat fee of Rs. 49 on COD orders.</li><li>We ship on all week days (Monday to Saturday), excluding public holidays.</li><li>We generally ship out orders from our warehouse within 48 hours of orders receipt and the orders should reach you within 5 - 7 days.</li><li>We have tied up with several logistics partners for smooth deliveries across India. All your shipment related queries would be addressed directly by our customer support team.</li></ul>"
-            }
-          },
-          "page-faq-template-4": {
-            "type": "question",
-            "disabled": true,
-            "settings": {
-              "title": "What Is Your Exchange Policy?",
-              "text": "<ul><li>You can exchange the product bought from our website within 7 days from order delivery date, for any reason including SIZE Change, no questions asked, as long as it is returned to us in its original packaging, in unused condition with all Tags and Labels intact, and is accompanied with its Original bill.</li><li>We provide reverse pick up facility for most of the locations in India however, for locations where the reverse pick up facility is still not available for return/exchange, the customer needs to send the package to our warehouse address. Kindly get in touch with the Customer Care team for any assistance.</li><li>If you want to exchange your bought product with a different product, having a different selling price, then you should cancel your original order by booking a return on our website and place a new order.</li></ul>"
-            }
-          },
-          "question_aeURN7": {
-            "type": "question",
-            "disabled": true,
-            "settings": {
-              "title": "What Is Your Claim Policy?",
-              "text": "<ul><li>100% claim is allowed if there is any manufacturing defect in the product within 1 month of purchase with the copy of the bill.</li><li>Product older than 1 month & under 3 months has to be sent to us with Original bill, please ensure that the defect claimed is genuine i.e. no external defect has been caused intentionally or un-intentionally especially by Rough usage, Dog bites, Silencer burns, Usage of Razor / Blunt object etc.</li><li>An approval will be provided by us based on the genuineness, usage & repair-ability. If unrepairable the claim value may vary from 50 to 100% of the product's price.</li><li>No Claims will be entertained under any circumstances of product more than 3 months old.</li></ul>"
-            }
-          },
-          "question_e7tkbR": {
-            "type": "question",
-            "disabled": true,
-            "settings": {
-              "title": "What Is Your Refund Policy?",
-              "text": "<ul><li>In case of Order cancellations and Returns related to Prepaid orders, we will refund the money the same way as the payment was made. If the payment was made by Credit Card/Debit Card or Net-Banking, we will refund the amount within 7 to 12 working days only after receipt of product in its original condition (for Returns only)</li><li>In case of Returns related to COD Orders, we will refund the money, in form of <strong>Credit Points only</strong> in your account, only after receipt of product in its original condition. These credit points can be used for purchases on our website.</li><li>In case of Claims, we will provide <strong>Credit Points</strong> in your account, as per our Claims policy. These credit points can be used for purchases on our website.</li></ul>"
-            }
-          }
-        },
-        "block_order": [
-          "question_XKENPz",
-          "page-faq-template-1",
-          "page-faq-template-2",
-          "page-faq-template-4",
-          "question_aeURN7",
-          "question_e7tkbR"
-        ],
         "custom_css": [
           ".id-shoes-faqs-answers-to-common-questions .collapsible-trigger--inline {padding: 20px 0 31px 40px; width: 100%; margin: 5px 0; background: #eaeaea; color: #030303; /* color: #fcd757; */ font-size: 15px;}",
           ".collapsible-content__inner.collapsible-content__inner--faq.rte {padding: 2%;}"
         ],
-        "settings": {
-          "page_title_enable": false,
-          "page_content_enable": false
-        }
+        "settings": {}
       },
       "background_video_text_YbNqkx": {
         "type": "background-video-text",
@@ -1469,9 +1408,9 @@
             "settings": {
               "desktop_image": "shopify://shop_images/bestseller.png",
               "mobile_image": "shopify://shop_images/Mobile_3.png",
-              "label": "",
+              "label": "THE ONES EVERYONE'S WEARING",
               "heading": "tOP <br> Sellers",
-              "text": "",
+              "text": "<p>Proven favourites, worn and re-worn by thousands.</p>",
               "button_label": "SHOP NOW",
               "button_link": "https://idcult.com/collections/bestseller_nb",
               "text_position": "bottom-left",
