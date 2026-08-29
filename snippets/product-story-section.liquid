@@ -1,104 +1,282 @@
 {% comment %}
   Product Story / Feature Section
-  Uses the first 3 images from the current product
+
+  Metafields expected:
+
+  custom.story_image_1
+  custom.story_heading_1
+  custom.story_description_1
+
+  custom.story_image_2
+  custom.story_heading_2
+  custom.story_description_2
+
+  custom.story_image_3
+  custom.story_heading_3
+  custom.story_description_3
+
+  Metafields are used first.
+  If empty, the default fallback values are used.
 {% endcomment %}
 
+
 <div class="product-story-section">
-<h2 class="product-story-heading">IT'S ALL IN THE DETAILS</h2>
+
+  <h2 class="product-story-heading">
+    IT'S ALL IN THE DETAILS
+  </h2>
+
   <div class="product-story-grid">
 
-    <!-- CARD 01 -->
-    {% if product.images[0] %}
-      <div class="product-story-card">
 
-        <div class="product-story-image">
-          {{
-            product.images[0]
-            | image_url: width: 1400
-            | image_tag:
-              loading: 'lazy',
-              widths: '500, 700, 900, 1100, 1400',
-              sizes: '(min-width: 750px) 33vw, 100vw',
-              alt: product.title
-          }}
-        </div>
+    <!-- =====================================================
+         CARD 01
+    ====================================================== -->
 
-        <div class="product-story-content">
-          <div class="product-story-text">
-            <h3>Made for Everyday</h3>
+    {% assign story_image_1 = product.metafields.custom.story_image_1.value %}
+    {% assign story_heading_1 = product.metafields.custom.story_heading_1.value %}
+    {% assign story_description_1 = product.metafields.custom.story_description_1.value %}
 
-            <p>
-              Designed to keep you comfortable and confident from your everyday routines to wherever the day takes you.
-            </p>
-          </div>
-        </div>
+    {% comment %}
+      Fallback values
+    {% endcomment %}
 
-      </div>
+    {% if story_image_1 == blank %}
+      {% assign story_image_1 = product.images[0] %}
+    {% endif %}
+
+    {% if story_heading_1 == blank %}
+      {% assign story_heading_1 = 'Made for Everyday' %}
+    {% endif %}
+
+    {% if story_description_1 == blank %}
+      {% assign story_description_1 = 'Designed to keep you comfortable and confident from your everyday routines to wherever the day takes you.' %}
     {% endif %}
 
 
-    <!-- CARD 02 -->
-    {% if product.images[1] %}
+    {% if story_image_1 != blank %}
+
       <div class="product-story-card">
 
         <div class="product-story-image">
-          {{
-            product.images[1]
-            | image_url: width: 1400
-            | image_tag:
-              loading: 'lazy',
-              widths: '500, 700, 900, 1100, 1400',
-              sizes: '(min-width: 750px) 33vw, 100vw',
-              alt: product.title
-          }}
+
+          {% if story_image_1.preview_image != blank %}
+
+            {{
+              story_image_1.preview_image
+              | image_url: width: 1400
+              | image_tag:
+                loading: 'lazy',
+                widths: '500, 700, 900, 1100, 1400',
+                sizes: '(min-width: 750px) 33vw, 100vw',
+                alt: story_heading_1
+            }}
+
+          {% else %}
+
+            {{
+              story_image_1
+              | image_url: width: 1400
+              | image_tag:
+                loading: 'lazy',
+                widths: '500, 700, 900, 1100, 1400',
+                sizes: '(min-width: 750px) 33vw, 100vw',
+                alt: story_heading_1
+            }}
+
+          {% endif %}
+
         </div>
 
+
         <div class="product-story-content">
+
           <div class="product-story-text">
-            <h3>Comfort That Lasts</h3>
+
+            <h3>
+              {{ story_heading_1 }}
+            </h3>
 
             <p>
-              Thoughtfully designed for a comfortable fit, giving your feet the support they need throughout the day.
+              {{ story_description_1 }}
             </p>
+
           </div>
+
         </div>
 
       </div>
+
     {% endif %}
 
 
-    <!-- CARD 03 -->
-    {% if product.images[2] %}
+
+    <!-- =====================================================
+         CARD 02
+    ====================================================== -->
+
+    {% assign story_image_2 = product.metafields.custom.story_image_2.value %}
+    {% assign story_heading_2 = product.metafields.custom.story_heading_2.value %}
+    {% assign story_description_2 = product.metafields.custom.story_description_2.value %}
+
+    {% comment %}
+      Fallback values
+    {% endcomment %}
+
+    {% if story_image_2 == blank %}
+      {% assign story_image_2 = product.images[1] %}
+    {% endif %}
+
+    {% if story_heading_2 == blank %}
+      {% assign story_heading_2 = 'Comfort That Lasts' %}
+    {% endif %}
+
+    {% if story_description_2 == blank %}
+      {% assign story_description_2 = 'Thoughtfully designed for a comfortable fit, giving your feet the support they need throughout the day.' %}
+    {% endif %}
+
+
+    {% if story_image_2 != blank %}
+
       <div class="product-story-card">
 
         <div class="product-story-image">
-          {{
-            product.images[2]
-            | image_url: width: 1400
-            | image_tag:
-              loading: 'lazy',
-              widths: '500, 700, 900, 1100, 1400',
-              sizes: '(min-width: 750px) 33vw, 100vw',
-              alt: product.title
-          }}
+
+          {% if story_image_2.preview_image != blank %}
+
+            {{
+              story_image_2.preview_image
+              | image_url: width: 1400
+              | image_tag:
+                loading: 'lazy',
+                widths: '500, 700, 900, 1100, 1400',
+                sizes: '(min-width: 750px) 33vw, 100vw',
+                alt: story_heading_2
+            }}
+
+          {% else %}
+
+            {{
+              story_image_2
+              | image_url: width: 1400
+              | image_tag:
+                loading: 'lazy',
+                widths: '500, 700, 900, 1100, 1400',
+                sizes: '(min-width: 750px) 33vw, 100vw',
+                alt: story_heading_2
+            }}
+
+          {% endif %}
+
         </div>
 
+
         <div class="product-story-content">
+
           <div class="product-story-text">
-            <h3>Style Meets Craft</h3>
+
+            <h3>
+              {{ story_heading_2 }}
+            </h3>
 
             <p>
-              Clean detailing, timeless style and quality craftsmanship come together to create a pair made to stand out.
+              {{ story_description_2 }}
             </p>
+
           </div>
+
         </div>
 
       </div>
+
+    {% endif %}
+
+
+
+    <!-- =====================================================
+         CARD 03
+    ====================================================== -->
+
+    {% assign story_image_3 = product.metafields.custom.story_image_3.value %}
+    {% assign story_heading_3 = product.metafields.custom.story_heading_3.value %}
+    {% assign story_description_3 = product.metafields.custom.story_description_3.value %}
+
+    {% comment %}
+      Fallback values
+    {% endcomment %}
+
+    {% if story_image_3 == blank %}
+      {% assign story_image_3 = product.images[2] %}
+    {% endif %}
+
+    {% if story_heading_3 == blank %}
+      {% assign story_heading_3 = 'Style Meets Craft' %}
+    {% endif %}
+
+    {% if story_description_3 == blank %}
+      {% assign story_description_3 = 'Clean detailing, timeless style and quality craftsmanship come together to create a pair made to stand out.' %}
+    {% endif %}
+
+
+    {% if story_image_3 != blank %}
+
+      <div class="product-story-card">
+
+        <div class="product-story-image">
+
+          {% if story_image_3.preview_image != blank %}
+
+            {{
+              story_image_3.preview_image
+              | image_url: width: 1400
+              | image_tag:
+                loading: 'lazy',
+                widths: '500, 700, 900, 1100, 1400',
+                sizes: '(min-width: 750px) 33vw, 100vw',
+                alt: story_heading_3
+            }}
+
+          {% else %}
+
+            {{
+              story_image_3
+              | image_url: width: 1400
+              | image_tag:
+                loading: 'lazy',
+                widths: '500, 700, 900, 1100, 1400',
+                sizes: '(min-width: 750px) 33vw, 100vw',
+                alt: story_heading_3
+            }}
+
+          {% endif %}
+
+        </div>
+
+
+        <div class="product-story-content">
+
+          <div class="product-story-text">
+
+            <h3>
+              {{ story_heading_3 }}
+            </h3>
+
+            <p>
+              {{ story_description_3 }}
+            </p>
+
+          </div>
+
+        </div>
+
+      </div>
+
     {% endif %}
 
   </div>
 
 </div>
+
 
 
 <style>
@@ -139,14 +317,15 @@
 
   object-fit: cover;
 
-  /* Slight zoom */
   transform: scale(1.08);
 
   transition: transform 0.5s ease;
 }
 
 
-/* Optional subtle zoom on hover */
+/* =========================================
+   HOVER
+   ========================================= */
 
 .product-story-card:hover .product-story-image img {
   transform: scale(1.12);
@@ -166,7 +345,9 @@
 
   font-size: 17px;
   line-height: 1.2;
-  padding-left:2%;
+
+  padding-left: 2%;
+
   font-weight: 800;
   text-transform: none;
 
@@ -177,13 +358,39 @@
 
 .product-story-text p {
   margin: 0;
-padding-left:2%;
+
+  padding-left: 2%;
+
   font-size: 15px;
   line-height: 1.5;
 
   font-weight: 400;
 
   color: #777;
+}
+
+
+/* =========================================
+   HEADING
+   ========================================= */
+
+.product-story-heading {
+  margin: -100px 0 28px;
+
+  padding-left: 2% !important;
+
+  font-size: 34px;
+  line-height: 1.1;
+
+  font-weight: 800;
+
+  text-transform: uppercase;
+
+  color: #111;
+
+  text-align: left;
+
+  letter-spacing: -0.02em;
 }
 
 
@@ -207,6 +414,11 @@ padding-left:2%;
 
   .product-story-text p {
     font-size: 14px;
+  }
+
+  .product-story-heading {
+    font-size: 28px;
+    margin-bottom: 22px;
   }
 
 }
@@ -246,9 +458,12 @@ padding-left:2%;
 
   .product-story-text h3 {
     font-size: 16px;
+
     margin-bottom: 6px;
+
     text-transform: none !important;
-    padding-left:1% !important;
+
+    padding-left: 1% !important;
   }
 
   .product-story-text p {
@@ -256,40 +471,12 @@ padding-left:2%;
     line-height: 1.45;
   }
 
-}
-/* =========================================
-   HEADING
-   ========================================= */
-
-.product-story-heading {
-  margin: -100px 0 28px;
-  padding-left: 2% !important;
-  font-size: 34px;
-  line-height: 1.1;
-  font-weight: 800;
-  text-transform: uppercase;
-  color: #111;
-  text-align: left;
-  letter-spacing: -0.02em;
-}
-
-@media screen and (max-width: 989px) {
-  .product-story-heading {
-    font-size: 28px;
-    margin-bottom: 22px;
-  }
-}
-
-@media screen and (max-width: 749px) {
   .product-story-heading {
     font-size: 22px;
     margin-bottom: 18px;
     line-height: 1.15;
   }
-  .product-story-heading {
-  margin: -10  px 0 28px;
-  
-}
+
 }
 
 </style>
