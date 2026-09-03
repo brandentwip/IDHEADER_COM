@@ -15,8 +15,8 @@
   custom.story_heading_3
   custom.story_description_3
 
-  CARD 02 TEXT IS CURRENTLY HARD-CODED.
-  This can be changed back to metafields later.
+  Metafields are used first.
+  If empty, the default fallback values are used.
 {% endcomment %}
 
 
@@ -35,7 +35,7 @@
 
     {% assign story_image_1 = product.metafields.custom.story_image_1.value %}
     {% assign story_heading_1 = product.metafields.custom.story_heading_1.value %}
-    {% assign story_description_1 = product.metafields.custom.story_description_1.value %}
+    {% assign story_description_1 = product.metafields.custom.story_desciption_1%}
 
     {% comment %}
       Fallback values
@@ -113,33 +113,26 @@
 
     <!-- =====================================================
          CARD 02
-         TEXT HARD-CODED TEMPORARILY
     ====================================================== -->
 
     {% assign story_image_2 = product.metafields.custom.story_image_2.value %}
+    {% assign story_heading_2 = product.metafields.custom.story_heading_2.value %}
+    {% assign story_description_2 = product.metafields.custom.story_description_2 %}
 
     {% comment %}
-      CARD 02 TEXT
-
-      Temporarily hard-coded because the product metafields
-      are not yet completed.
-
-      When all product metafields are ready, replace these
-      two assignments with the metafield code.
-
-    {% endcomment %}
-
-    {% assign story_heading_2 = 'Comfort That Lasts' %}
-
-    {% assign story_description_2 = 'Thoughtfully designed for a comfortable fit, giving your feet the support they need throughout the day.' %}
-
-
-    {% comment %}
-      Fallback image
+      Fallback values
     {% endcomment %}
 
     {% if story_image_2 == blank %}
       {% assign story_image_2 = product.images[1] %}
+    {% endif %}
+
+    {% if story_heading_2 == blank %}
+      {% assign story_heading_2 = 'Comfort That Lasts' %}
+    {% endif %}
+
+    {% if story_description_2 == blank %}
+      {% assign story_description_2 = 'Thoughtfully designed for a comfortable fit, giving your feet the support they need throughout the day.' %}
     {% endif %}
 
 
@@ -206,7 +199,7 @@
 
     {% assign story_image_3 = product.metafields.custom.story_image_3.value %}
     {% assign story_heading_3 = product.metafields.custom.story_heading_3.value %}
-    {% assign story_description_3 = product.metafields.custom.story_description_3.value %}
+    {% assign story_description_3 = product.metafields.custom.story_description_3 %}
 
     {% comment %}
       Fallback values
