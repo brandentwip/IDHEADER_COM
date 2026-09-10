@@ -15,6 +15,10 @@
   custom.story_heading_3
   custom.story_description_3
 
+  IMAGE PRIORITY LOGIC (per card):
+    1. If the metafield image is populated -> use it
+    2. If the metafield image is empty      -> fall back to product.images[n]
+
   Metafields are used first.
   If empty, the default fallback values are used.
 {% endcomment %}
@@ -35,7 +39,7 @@
 
     {% assign story_image_1 = product.metafields.custom.story_image_1.value %}
     {% assign story_heading_1 = product.metafields.custom.story_heading_1.value %}
-    {% assign story_description_1 = product.metafields.custom.story_desciption_1%}
+    {% assign story_description_1 = product.metafields.custom.story_description_1.value %}
 
     {% comment %}
       Fallback values
@@ -117,7 +121,7 @@
 
     {% assign story_image_2 = product.metafields.custom.story_image_2.value %}
     {% assign story_heading_2 = product.metafields.custom.story_heading_2.value %}
-    {% assign story_description_2 = product.metafields.custom.story_description_2 %}
+    {% assign story_description_2 = product.metafields.custom.story_description_2.value %}
 
     {% comment %}
       Fallback values
@@ -199,7 +203,7 @@
 
     {% assign story_image_3 = product.metafields.custom.story_image_3.value %}
     {% assign story_heading_3 = product.metafields.custom.story_heading_3.value %}
-    {% assign story_description_3 = product.metafields.custom.story_description_3 %}
+    {% assign story_description_3 = product.metafields.custom.story_description_3.value %}
 
     {% comment %}
       Fallback values
@@ -304,7 +308,7 @@
 
 .product-story-image {
   width: 100%;
-  aspect-ratio: 1 / 0.88;
+  aspect-ratio: 1 / 1;
   overflow: hidden;
   border-radius: 8px;
   background: #f5f5f5;
@@ -317,7 +321,7 @@
 
   object-fit: cover;
 
-  transform: scale(1.08);
+  transform: scale(1);
 
   transition: transform 0.5s ease;
 }
@@ -440,12 +444,12 @@
   }
 
   .product-story-image {
-    aspect-ratio: 1 / 0.72;
+    aspect-ratio: 1 / 1;
     border-radius: 6px;
   }
 
   .product-story-image img {
-    transform: scale(1.06);
+    transform: scale(1);
   }
 
   .product-story-card:hover .product-story-image img {
