@@ -800,6 +800,16 @@
   /* =========================================================
      IDCULT × DROPINBLOG
      PRODUCT CAROUSEL — EDITORIAL REDESIGN
+
+     Every property below is locked with !important. That's
+     unusual for hand-written CSS, but this component lives
+     inside a theme.liquid that already has its own global
+     styles for headings, links, buttons and "article" elements
+     (blog cards) — those were overriding the widget (solid
+     black buttons, rounded card shadows behind the images,
+     forced uppercase headings). !important is the reliable
+     way to guarantee this always renders the same regardless
+     of what else is in the theme's stylesheet.
   ========================================================= */
 
   .dib-product-carousel {
@@ -809,20 +819,61 @@
     --dib-paper: #faf8f4;
     --dib-accent: #8a6a45;
 
-    width: 100%;
-    max-width: 1180px;
-    margin: 76px auto;
-    padding: 0 0 44px;
-    color: var(--dib-ink);
-    box-sizing: border-box;
-    position: relative;
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+    all: initial !important;
+    display: block !important;
+    width: 100% !important;
+    max-width: 1180px !important;
+    margin: 76px auto !important;
+    padding: 0 0 44px !important;
+    color: var(--dib-ink) !important;
+    box-sizing: border-box !important;
+    position: relative !important;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif !important;
+    text-align: left !important;
   }
 
   .dib-product-carousel *,
   .dib-product-carousel *::before,
   .dib-product-carousel *::after {
-    box-sizing: border-box;
+    box-sizing: border-box !important;
+  }
+
+  /* Blanket reset — strips every bit of decoration the theme's own
+     CSS puts on headings, links, buttons and "article" elements
+     (background, border, shadow, radius, spacing, caps, etc). Every
+     property here is intentionally re-declared further down for the
+     specific elements that need it. */
+  .dib-product-carousel * {
+    all: revert !important;
+    box-sizing: border-box !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    background: none !important;
+    border: 0 !important;
+    box-shadow: none !important;
+    border-radius: 0 !important;
+    text-transform: none !important;
+    letter-spacing: normal !important;
+    font-style: normal !important;
+    text-shadow: none !important;
+    font-family: inherit !important;
+    color: inherit !important;
+    text-decoration: none !important;
+    -webkit-tap-highlight-color: transparent !important;
+  }
+
+  .dib-product-carousel a,
+  .dib-product-carousel button {
+    cursor: pointer !important;
+  }
+
+  .dib-product-carousel img {
+    display: block !important;
+    width: 100% !important;
+    height: 100% !important;
+    max-width: none !important;
+    object-fit: cover !important;
+    border: 0 !important;
   }
 
   /* Serif display face, used only for the heading and product names.
@@ -830,197 +881,231 @@
   @import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,420;0,9..144,500;1,9..144,420&display=swap');
 
   .dib-product-carousel__serif {
-    font-family: "Fraunces", Georgia, "Times New Roman", serif;
+    font-family: "Fraunces", Georgia, "Times New Roman", serif !important;
   }
 
   /* Heading
   --------------------------------------------------------- */
 
   .dib-product-carousel__heading-wrap {
-    display: flex;
-    align-items: flex-end;
-    justify-content: space-between;
-    gap: 24px;
-    padding-bottom: 22px;
-    margin-bottom: 30px;
-    border-bottom: 1px solid var(--dib-line);
+    display: flex !important;
+    align-items: flex-end !important;
+    justify-content: space-between !important;
+    gap: 24px !important;
+    padding-bottom: 22px !important;
+    margin-bottom: 30px !important;
+    border-bottom: 1px solid var(--dib-line) !important;
   }
 
   .dib-product-carousel__tagline {
-    margin: 0 0 6px;
-    font-size: 14px;
-    font-style: italic;
-    font-weight: 420;
-    color: var(--dib-muted);
+    display: block !important;
+    margin: 0 0 6px !important;
+    font-size: 14px !important;
+    font-style: italic !important;
+    font-weight: 420 !important;
+    color: var(--dib-muted) !important;
   }
 
   .dib-product-carousel__heading {
-    margin: 0;
-    font-size: 30px;
-    line-height: 1.2;
-    font-weight: 500;
-    letter-spacing: -.01em;
-    color: var(--dib-ink);
+    display: block !important;
+    margin: 0 !important;
+    font-size: 30px !important;
+    line-height: 1.2 !important;
+    font-weight: 500 !important;
+    letter-spacing: -.01em !important;
+    color: var(--dib-ink) !important;
+    text-transform: none !important;
   }
 
   .dib-product-carousel__meta {
-    display: flex;
-    align-items: center;
-    gap: 22px;
-    flex-shrink: 0;
+    display: flex !important;
+    align-items: center !important;
+    gap: 22px !important;
+    flex-shrink: 0 !important;
   }
 
   .dib-product-carousel__counter {
-    font-size: 12px;
-    color: var(--dib-muted);
-    white-space: nowrap;
+    display: block !important;
+    font-size: 12px !important;
+    color: var(--dib-muted) !important;
+    white-space: nowrap !important;
   }
 
   /* Carousel
   --------------------------------------------------------- */
 
+  .dib-product-carousel__wrapper {
+    display: block !important;
+    position: relative !important;
+  }
+
   .dib-product-carousel__track {
-    display: flex;
-    gap: 34px;
-    width: 100%;
-    overflow-x: auto;
-    padding: 0 1px 6px;
-    margin: 0;
-    scroll-behavior: smooth;
-    scrollbar-width: none;
-    scroll-snap-type: x mandatory;
-    -webkit-overflow-scrolling: touch;
+    display: flex !important;
+    gap: 34px !important;
+    width: 100% !important;
+    overflow-x: auto !important;
+    padding: 0 1px 6px !important;
+    margin: 0 !important;
+    scroll-behavior: smooth !important;
+    scrollbar-width: none !important;
+    scroll-snap-type: x mandatory !important;
+    -webkit-overflow-scrolling: touch !important;
   }
 
   .dib-product-carousel__track::-webkit-scrollbar {
-    display: none;
+    display: none !important;
   }
 
   /* Product Card
   --------------------------------------------------------- */
 
   .dib-product-card {
-    flex: 0 0 calc(25% - 25.5px);
-    min-width: 0;
-    scroll-snap-align: start;
+    display: block !important;
+    flex: 0 0 calc(25% - 25.5px) !important;
+    min-width: 0 !important;
+    scroll-snap-align: start !important;
+    background: none !important;
+    box-shadow: none !important;
+    border-radius: 0 !important;
+    padding: 0 !important;
   }
 
   .dib-product-card__image {
-    display: block;
-    width: 100%;
-    aspect-ratio: 4 / 5;
-    overflow: hidden;
-    background: var(--dib-paper);
-    position: relative;
+    display: block !important;
+    width: 100% !important;
+    aspect-ratio: 4 / 5 !important;
+    overflow: hidden !important;
+    background: var(--dib-paper) !important;
+    position: relative !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
   }
 
   .dib-product-card__image img {
-    display: block;
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    transition: transform .8s cubic-bezier(.16,.6,.22,1);
+    display: block !important;
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: cover !important;
+    transition: transform .8s cubic-bezier(.16,.6,.22,1) !important;
   }
 
   .dib-product-card:hover .dib-product-card__image img {
-    transform: scale(1.045);
+    transform: scale(1.045) !important;
   }
 
   .dib-product-card__info {
-    padding: 18px 1px 0;
-    border-top: 1px solid var(--dib-line);
-    margin-top: 16px;
+    display: block !important;
+    padding: 18px 1px 0 !important;
+    border-top: 1px solid var(--dib-line) !important;
+    margin-top: 16px !important;
   }
 
   .dib-product-card__title {
-    margin: 0 0 8px;
-    font-size: 16px;
-    line-height: 1.35;
-    font-weight: 500;
-    letter-spacing: -.005em;
+    display: block !important;
+    margin: 0 0 8px !important;
+    font-size: 16px !important;
+    line-height: 1.35 !important;
+    font-weight: 500 !important;
+    letter-spacing: -.005em !important;
+    text-transform: none !important;
   }
 
   .dib-product-card__title a {
-    color: var(--dib-ink);
-    text-decoration: none;
-    background-image: linear-gradient(var(--dib-ink), var(--dib-ink));
-    background-position: 0 100%;
-    background-repeat: no-repeat;
-    background-size: 0 1px;
-    transition: background-size .3s ease;
+    display: inline !important;
+    color: var(--dib-ink) !important;
+    text-decoration: none !important;
+    background-image: linear-gradient(var(--dib-ink), var(--dib-ink)) !important;
+    background-position: 0 100% !important;
+    background-repeat: no-repeat !important;
+    background-size: 0 1px !important;
+    background-color: transparent !important;
+    transition: background-size .3s ease !important;
+    padding: 0 !important;
+    border: 0 !important;
   }
 
   .dib-product-card__title a:hover {
-    background-size: 100% 1px;
+    background-size: 100% 1px !important;
   }
 
   .dib-product-card__price {
-    font-size: 13px;
-    color: var(--dib-muted);
-    font-variant-numeric: tabular-nums;
+    display: block !important;
+    font-size: 13px !important;
+    color: var(--dib-muted) !important;
+    font-variant-numeric: tabular-nums !important;
   }
 
   /* CTA */
 
   .dib-product-card__button {
-    display: inline-block;
-    margin-top: 14px;
-    padding-bottom: 3px;
-    color: var(--dib-accent);
-    text-decoration: none;
-    font-size: 12.5px;
-    line-height: 1;
-    border-bottom: 1px solid transparent;
-    transition: border-color .2s ease, color .2s ease;
+    display: inline-block !important;
+    margin-top: 14px !important;
+    padding: 0 0 3px !important;
+    background: none !important;
+    background-color: transparent !important;
+    color: var(--dib-accent) !important;
+    text-decoration: none !important;
+    font-size: 12.5px !important;
+    line-height: 1 !important;
+    border: 0 !important;
+    border-bottom: 1px solid transparent !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+    text-transform: none !important;
+    transition: border-color .2s ease, color .2s ease !important;
   }
 
   .dib-product-card__button:hover {
-    border-color: currentColor;
+    border-bottom-color: currentColor !important;
+    background: none !important;
+    color: var(--dib-accent) !important;
   }
 
   /* Navigation
   --------------------------------------------------------- */
 
   .dib-product-carousel__nav {
-    display: flex;
-    gap: 4px;
+    display: flex !important;
+    gap: 4px !important;
   }
 
   .dib-product-carousel__button {
-    width: 34px;
-    height: 34px;
-    padding: 0;
-    border: 1px solid var(--dib-line);
-    background: transparent;
-    color: var(--dib-ink);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    transition: background .2s ease, color .2s ease, border-color .2s ease;
+    width: 34px !important;
+    height: 34px !important;
+    padding: 0 !important;
+    border: 1px solid var(--dib-line) !important;
+    border-radius: 0 !important;
+    background: transparent !important;
+    color: var(--dib-ink) !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    cursor: pointer !important;
+    box-shadow: none !important;
+    transition: background .2s ease, color .2s ease, border-color .2s ease !important;
   }
 
   .dib-product-carousel__button + .dib-product-carousel__button {
-    margin-left: -1px;
+    margin-left: -1px !important;
   }
 
   .dib-product-carousel__button span {
-    display: block;
-    font-size: 15px;
-    line-height: 1;
-    font-family: "Fraunces", Georgia, serif;
-    transform: translateY(-1px);
+    display: block !important;
+    font-size: 15px !important;
+    line-height: 1 !important;
+    font-family: "Fraunces", Georgia, serif !important;
+    transform: translateY(-1px) !important;
   }
 
   .dib-product-carousel__button:hover:not(:disabled) {
-    background: var(--dib-ink);
-    border-color: var(--dib-ink);
-    color: #fff;
+    background: var(--dib-ink) !important;
+    border-color: var(--dib-ink) !important;
+    color: #fff !important;
   }
 
   .dib-product-carousel__button:disabled {
-    opacity: .3;
-    cursor: default;
+    opacity: .3 !important;
+    cursor: default !important;
   }
 
   /* Loading / Empty
@@ -1028,11 +1113,12 @@
 
   .dib-product-carousel__loading,
   .dib-product-carousel__empty {
-    width: 100%;
-    padding: 20px 0;
-    font-size: 13px;
-    font-style: italic;
-    color: var(--dib-muted);
+    display: block !important;
+    width: 100% !important;
+    padding: 20px 0 !important;
+    font-size: 13px !important;
+    font-style: italic !important;
+    color: var(--dib-muted) !important;
   }
 
   /* Tablet
@@ -1041,11 +1127,11 @@
   @media screen and (max-width: 989px) {
 
     .dib-product-carousel {
-      margin: 60px auto;
+      margin: 60px auto !important;
     }
 
     .dib-product-card {
-      flex: 0 0 calc(33.333% - 22.67px);
+      flex: 0 0 calc(33.333% - 22.67px) !important;
     }
 
   }
@@ -1056,51 +1142,51 @@
   @media screen and (max-width: 749px) {
 
     .dib-product-carousel {
-      margin: 46px 0;
-      padding: 0 0 34px;
+      margin: 46px 0 !important;
+      padding: 0 0 34px !important;
     }
 
     .dib-product-carousel__heading-wrap {
-      align-items: flex-start;
-      flex-direction: column;
-      gap: 14px;
-      padding-bottom: 18px;
-      margin-bottom: 22px;
+      align-items: flex-start !important;
+      flex-direction: column !important;
+      gap: 14px !important;
+      padding-bottom: 18px !important;
+      margin-bottom: 22px !important;
     }
 
     .dib-product-carousel__heading {
-      font-size: 23px;
+      font-size: 23px !important;
     }
 
     .dib-product-carousel__meta {
-      width: 100%;
-      justify-content: space-between;
+      width: 100% !important;
+      justify-content: space-between !important;
     }
 
     .dib-product-carousel__nav {
-      display: none;
+      display: none !important;
     }
 
     .dib-product-carousel__track {
-      gap: 16px;
-      padding-bottom: 4px;
+      gap: 16px !important;
+      padding-bottom: 4px !important;
     }
 
     .dib-product-card {
-      flex: 0 0 72%;
+      flex: 0 0 72% !important;
     }
 
     .dib-product-card__info {
-      margin-top: 14px;
-      padding-top: 14px;
+      margin-top: 14px !important;
+      padding-top: 14px !important;
     }
 
     .dib-product-card__title {
-      font-size: 15px;
+      font-size: 15px !important;
     }
 
     .dib-product-card__button {
-      margin-top: 12px;
+      margin-top: 12px !important;
     }
 
   }
