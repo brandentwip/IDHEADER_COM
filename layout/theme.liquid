@@ -787,26 +787,50 @@
   }
 </style>
 
-```html
+<!--
+  IDCULT × DROPINBLOG — PRODUCT CAROUSEL
+  Paste this whole block into theme.liquid, just before </body>.
+  DropInBlog will look for elements with class "dib-product-carousel"
+  and a "data-products" attribute (comma-separated product URLs) and
+  a "data-title" attribute, exactly as before — nothing about the
+  markup contract changed, only the presentation.
+-->
+
 <style>
   /* =========================================================
      IDCULT × DROPINBLOG
-     PREMIUM PRODUCT CAROUSEL
+     PRODUCT CAROUSEL — EDITORIAL REDESIGN
   ========================================================= */
 
   .dib-product-carousel {
-    --dib-ink: #20180f;
-    --dib-muted: #746d66;
-    --dib-border: #e7e2dc;
-    --dib-paper: #fbfaf7;
+    --dib-ink: #1c1a17;
+    --dib-muted: #8c8272;
+    --dib-line: #e3ddd1;
+    --dib-paper: #faf8f4;
+    --dib-accent: #8a6a45;
 
     width: 100%;
     max-width: 1180px;
-    margin: 58px auto;
-    padding: 32px 0 38px;
+    margin: 76px auto;
+    padding: 0 0 44px;
     color: var(--dib-ink);
     box-sizing: border-box;
     position: relative;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+  }
+
+  .dib-product-carousel *,
+  .dib-product-carousel *::before,
+  .dib-product-carousel *::after {
+    box-sizing: border-box;
+  }
+
+  /* Serif display face, used only for the heading and product names.
+     Loaded once per page; harmless if it loads more than once. */
+  @import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,420;0,9..144,500;1,9..144,420&display=swap');
+
+  .dib-product-carousel__serif {
+    font-family: "Fraunces", Georgia, "Times New Roman", serif;
   }
 
   /* Heading
@@ -816,48 +840,51 @@
     display: flex;
     align-items: flex-end;
     justify-content: space-between;
-    gap: 20px;
-    margin-bottom: 24px;
+    gap: 24px;
+    padding-bottom: 22px;
+    margin-bottom: 30px;
+    border-bottom: 1px solid var(--dib-line);
   }
 
-  .dib-product-carousel__eyebrow {
-    margin: 0 0 7px;
-    font-size: 10px;
-    line-height: 1;
-    letter-spacing: .18em;
-    text-transform: uppercase;
+  .dib-product-carousel__tagline {
+    margin: 0 0 6px;
+    font-size: 14px;
+    font-style: italic;
+    font-weight: 420;
     color: var(--dib-muted);
   }
 
   .dib-product-carousel__heading {
     margin: 0;
-    font-size: 25px;
-    line-height: 1.15;
+    font-size: 30px;
+    line-height: 1.2;
     font-weight: 500;
-    letter-spacing: -.025em;
+    letter-spacing: -.01em;
     color: var(--dib-ink);
   }
 
-  .dib-product-carousel__counter {
+  .dib-product-carousel__meta {
+    display: flex;
+    align-items: center;
+    gap: 22px;
     flex-shrink: 0;
-    font-size: 11px;
-    letter-spacing: .08em;
+  }
+
+  .dib-product-carousel__counter {
+    font-size: 12px;
     color: var(--dib-muted);
+    white-space: nowrap;
   }
 
   /* Carousel
   --------------------------------------------------------- */
 
-  .dib-product-carousel__wrapper {
-    position: relative;
-  }
-
   .dib-product-carousel__track {
     display: flex;
-    gap: 18px;
+    gap: 34px;
     width: 100%;
     overflow-x: auto;
-    padding: 0 1px 12px;
+    padding: 0 1px 6px;
     margin: 0;
     scroll-behavior: smooth;
     scrollbar-width: none;
@@ -873,13 +900,10 @@
   --------------------------------------------------------- */
 
   .dib-product-card {
-    flex: 0 0 calc(25% - 14px);
+    flex: 0 0 calc(25% - 25.5px);
     min-width: 0;
     scroll-snap-align: start;
-    box-sizing: border-box;
   }
-
-  /* Image */
 
   .dib-product-card__image {
     display: block;
@@ -895,25 +919,23 @@
     width: 100%;
     height: 100%;
     object-fit: cover;
-    transition:
-      transform .55s cubic-bezier(.2,.65,.25,1),
-      opacity .25s ease;
+    transition: transform .8s cubic-bezier(.16,.6,.22,1);
   }
 
   .dib-product-card:hover .dib-product-card__image img {
-    transform: scale(1.035);
+    transform: scale(1.045);
   }
 
-  /* Information */
-
   .dib-product-card__info {
-    padding: 14px 2px 0;
+    padding: 18px 1px 0;
+    border-top: 1px solid var(--dib-line);
+    margin-top: 16px;
   }
 
   .dib-product-card__title {
-    margin: 0 0 7px;
-    font-size: 14px;
-    line-height: 1.4;
+    margin: 0 0 8px;
+    font-size: 16px;
+    line-height: 1.35;
     font-weight: 500;
     letter-spacing: -.005em;
   }
@@ -921,43 +943,39 @@
   .dib-product-card__title a {
     color: var(--dib-ink);
     text-decoration: none;
+    background-image: linear-gradient(var(--dib-ink), var(--dib-ink));
+    background-position: 0 100%;
+    background-repeat: no-repeat;
+    background-size: 0 1px;
+    transition: background-size .3s ease;
+  }
+
+  .dib-product-card__title a:hover {
+    background-size: 100% 1px;
   }
 
   .dib-product-card__price {
     font-size: 13px;
-    line-height: 1.4;
     color: var(--dib-muted);
+    font-variant-numeric: tabular-nums;
   }
 
   /* CTA */
 
   .dib-product-card__button {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    margin-top: 13px;
-    padding: 0 0 4px;
-    border-bottom: 1px solid var(--dib-ink);
-    color: var(--dib-ink);
+    display: inline-block;
+    margin-top: 14px;
+    padding-bottom: 3px;
+    color: var(--dib-accent);
     text-decoration: none;
-    font-size: 10px;
+    font-size: 12.5px;
     line-height: 1;
-    letter-spacing: .13em;
-    text-transform: uppercase;
-    transition:
-      opacity .2s ease,
-      gap .2s ease;
-  }
-
-  .dib-product-card__button::after {
-    content: "→";
-    font-size: 13px;
-    line-height: 1;
+    border-bottom: 1px solid transparent;
+    transition: border-color .2s ease, color .2s ease;
   }
 
   .dib-product-card__button:hover {
-    opacity: .65;
-    gap: 11px;
+    border-color: currentColor;
   }
 
   /* Navigation
@@ -965,62 +983,44 @@
 
   .dib-product-carousel__nav {
     display: flex;
-    gap: 7px;
+    gap: 4px;
   }
 
   .dib-product-carousel__button {
-    width: 38px;
-    height: 38px;
+    width: 34px;
+    height: 34px;
     padding: 0;
-    border: 1px solid var(--dib-border);
-    border-radius: 50%;
+    border: 1px solid var(--dib-line);
     background: transparent;
     color: var(--dib-ink);
     display: flex;
     align-items: center;
     justify-content: center;
     cursor: pointer;
-    transition:
-      background .2s ease,
-      color .2s ease,
-      border-color .2s ease;
+    transition: background .2s ease, color .2s ease, border-color .2s ease;
+  }
+
+  .dib-product-carousel__button + .dib-product-carousel__button {
+    margin-left: -1px;
   }
 
   .dib-product-carousel__button span {
     display: block;
-    font-size: 17px;
+    font-size: 15px;
     line-height: 1;
+    font-family: "Fraunces", Georgia, serif;
     transform: translateY(-1px);
   }
 
-  .dib-product-carousel__button:hover {
+  .dib-product-carousel__button:hover:not(:disabled) {
     background: var(--dib-ink);
     border-color: var(--dib-ink);
     color: #fff;
   }
 
   .dib-product-carousel__button:disabled {
-    opacity: .35;
+    opacity: .3;
     cursor: default;
-  }
-
-  .dib-product-carousel__button:disabled:hover {
-    background: transparent;
-    border-color: var(--dib-border);
-    color: var(--dib-ink);
-  }
-
-  /* Bottom rule
-  --------------------------------------------------------- */
-
-  .dib-product-carousel::after {
-    content: "";
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    height: 1px;
-    background: var(--dib-border);
   }
 
   /* Loading / Empty
@@ -1029,8 +1029,9 @@
   .dib-product-carousel__loading,
   .dib-product-carousel__empty {
     width: 100%;
-    padding: 25px 0;
+    padding: 20px 0;
     font-size: 13px;
+    font-style: italic;
     color: var(--dib-muted);
   }
 
@@ -1040,12 +1041,11 @@
   @media screen and (max-width: 989px) {
 
     .dib-product-carousel {
-      margin: 48px auto;
-      padding: 28px 0 34px;
+      margin: 60px auto;
     }
 
     .dib-product-card {
-      flex: 0 0 calc(33.333% - 12px);
+      flex: 0 0 calc(33.333% - 22.67px);
     }
 
   }
@@ -1056,26 +1056,25 @@
   @media screen and (max-width: 749px) {
 
     .dib-product-carousel {
-      margin: 38px 0;
-      padding: 24px 0 30px;
+      margin: 46px 0;
+      padding: 0 0 34px;
     }
 
     .dib-product-carousel__heading-wrap {
-      align-items: center;
-      margin-bottom: 18px;
+      align-items: flex-start;
+      flex-direction: column;
+      gap: 14px;
+      padding-bottom: 18px;
+      margin-bottom: 22px;
     }
 
     .dib-product-carousel__heading {
-      font-size: 21px;
+      font-size: 23px;
     }
 
-    .dib-product-carousel__eyebrow {
-      font-size: 9px;
-      margin-bottom: 6px;
-    }
-
-    .dib-product-carousel__counter {
-      display: none;
+    .dib-product-carousel__meta {
+      width: 100%;
+      justify-content: space-between;
     }
 
     .dib-product-carousel__nav {
@@ -1083,34 +1082,25 @@
     }
 
     .dib-product-carousel__track {
-      gap: 12px;
-      padding-bottom: 8px;
-      scroll-snap-type: x mandatory;
+      gap: 16px;
+      padding-bottom: 4px;
     }
 
     .dib-product-card {
-      flex: 0 0 68%;
-    }
-
-    .dib-product-card__image {
-      aspect-ratio: 4 / 5;
+      flex: 0 0 72%;
     }
 
     .dib-product-card__info {
-      padding-top: 12px;
+      margin-top: 14px;
+      padding-top: 14px;
     }
 
     .dib-product-card__title {
-      font-size: 14px;
-    }
-
-    .dib-product-card__price {
-      font-size: 12px;
+      font-size: 15px;
     }
 
     .dib-product-card__button {
-      margin-top: 11px;
-      font-size: 9px;
+      margin-top: 12px;
     }
 
   }
@@ -1161,7 +1151,7 @@
 
       var title =
         carousel.getAttribute('data-title') ||
-        'Shop The Article';
+        'Shop the story';
 
       /*
        * Build heading
@@ -1178,29 +1168,35 @@
       var headingContent =
         document.createElement('div');
 
-      var eyebrow =
+      var tagline =
         document.createElement('p');
 
-      eyebrow.className =
-        'dib-product-carousel__eyebrow';
+      tagline.className =
+        'dib-product-carousel__tagline dib-product-carousel__serif';
 
-      eyebrow.textContent =
-        'Selected for you';
+      tagline.textContent =
+        'From this piece';
 
       var heading =
         document.createElement('h3');
 
       heading.className =
-        'dib-product-carousel__heading';
+        'dib-product-carousel__heading dib-product-carousel__serif';
 
       heading.textContent = title;
 
-      headingContent.appendChild(eyebrow);
+      headingContent.appendChild(tagline);
       headingContent.appendChild(heading);
 
       /*
-       * Counter
+       * Meta (counter + nav)
        */
+
+      var meta =
+        document.createElement('div');
+
+      meta.className =
+        'dib-product-carousel__meta';
 
       var counter =
         document.createElement('div');
@@ -1209,11 +1205,7 @@
         'dib-product-carousel__counter';
 
       counter.textContent =
-        productUrls.length + ' PRODUCTS';
-
-      /*
-       * Navigation
-       */
+        productUrls.length + (productUrls.length === 1 ? ' piece' : ' pieces');
 
       var nav =
         document.createElement('div');
@@ -1256,21 +1248,13 @@
       nav.appendChild(prevButton);
       nav.appendChild(nextButton);
 
-      headingWrap.appendChild(
-        headingContent
-      );
+      meta.appendChild(counter);
+      meta.appendChild(nav);
 
-      headingWrap.appendChild(
-        counter
-      );
+      headingWrap.appendChild(headingContent);
+      headingWrap.appendChild(meta);
 
-      headingWrap.appendChild(
-        nav
-      );
-
-      carousel.appendChild(
-        headingWrap
-      );
+      carousel.appendChild(headingWrap);
 
       /*
        * Track
@@ -1303,7 +1287,7 @@
         'dib-product-carousel__loading';
 
       loading.textContent =
-        'Loading products...';
+        'Loading products…';
 
       track.appendChild(loading);
 
@@ -1481,7 +1465,7 @@
                 document.createElement('h4');
 
               titleElement.className =
-                'dib-product-card__title';
+                'dib-product-card__title dib-product-carousel__serif';
 
               var titleLink =
                 document.createElement('a');
@@ -1688,9 +1672,7 @@
   );
 
 })();
-</script>
-```
-
+</script> 
 </body>
 </html>
 {% include 'change-image-onhover' %}
