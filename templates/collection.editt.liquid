@@ -213,6 +213,50 @@
     </select>
   </form>
 
+  {% comment %} ---------- DYNAMIC PRICE BUDGET BUCKETS (rounded, based on collection price range) ---------- {% endcomment %}
+  {% assign price_range_max = price_filter.range_max | default: 0 %}
+
+  {% if price_range_max > 0 %}
+    {% assign ceil_max = price_range_max | ceil %}
+
+    {% comment %} Pick a rounding increment based on magnitude of the top price {% endcomment %}
+    {% if ceil_max >= 20000 %}
+      {% assign round_to = 2000 %}
+    {% elsif ceil_max >= 10000 %}
+      {% assign round_to = 1000 %}
+    {% elsif ceil_max >= 5000 %}
+      {% assign round_to = 500 %}
+    {% elsif ceil_max >= 1000 %}
+      {% assign round_to = 100 %}
+    {% else %}
+      {% assign round_to = 50 %}
+    {% endif %}
+
+    {% comment %} Round the collection's top price UP to the nearest increment {% endcomment %}
+    {% assign remainder = ceil_max | modulo: round_to %}
+    {% if remainder == 0 %}
+      {% assign rounded_max = ceil_max %}
+    {% else %}
+      {% assign rounded_max = ceil_max | minus: remainder | plus: round_to %}
+    {% endif %}
+
+    {% comment %} Split into 4 even, rounded buckets {% endcomment %}
+    {% assign raw_step = rounded_max | divided_by: 4 %}
+    {% assign step_remainder = raw_step | modulo: round_to %}
+    {% if step_remainder == 0 %}
+      {% assign step = raw_step %}
+    {% else %}
+      {% assign step = raw_step | minus: step_remainder | plus: round_to %}
+    {% endif %}
+    {% if step <= 0 %}
+      {% assign step = round_to %}
+    {% endif %}
+
+    {% assign breakpoint_1 = step %}
+    {% assign breakpoint_2 = step | times: 2 %}
+    {% assign breakpoint_3 = step | times: 3 %}
+  {% endif %}
+
   <!-- PRICE DROPDOWN -->
   <div class="price-filter-wrapper">
     <label
@@ -227,12 +271,28 @@
         ALL PRICES
       </option>
 
-      {% assign exact_price_filters = '799,899,999,1099' | split: ',' %}
-      {% for exact_price in exact_price_filters %}
-        <option value="{{ exact_price }}-{{ exact_price }}">
-          &#8377;{{ exact_price }}
+      {% if price_range_max > 0 %}
+        <option value="0-{{ breakpoint_1 }}">
+          UNDER &#8377;{{ breakpoint_1 }}
         </option>
-      {% endfor %}
+        <option value="{{ breakpoint_1 | plus: 1 }}-{{ breakpoint_2 }}">
+          &#8377;{{ breakpoint_1 }} &ndash; &#8377;{{ breakpoint_2 }}
+        </option>
+        <option value="{{ breakpoint_2 | plus: 1 }}-{{ breakpoint_3 }}">
+          &#8377;{{ breakpoint_2 }} &ndash; &#8377;{{ breakpoint_3 }}
+        </option>
+        <option value="{{ breakpoint_3 | plus: 1 }}-{{ rounded_max }}">
+          &#8377;{{ breakpoint_3 }} &amp; ABOVE
+        </option>
+      {% else %}
+        {% comment %} Fallback if the price_range filter isn't available on this collection {% endcomment %}
+        {% assign exact_price_filters = '799,899,999,1099' | split: ',' %}
+        {% for exact_price in exact_price_filters %}
+          <option value="{{ exact_price }}-{{ exact_price }}">
+            &#8377;{{ exact_price }}
+          </option>
+        {% endfor %}
+      {% endif %}
     </select>
   </div>
 
