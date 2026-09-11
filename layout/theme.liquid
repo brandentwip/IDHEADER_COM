@@ -790,21 +790,6 @@
 <script>
 (function () {
 
-  /*
-   * =========================================================
-   * DROPINBLOG PRODUCT CAROUSEL
-   *
-   * Usage inside DropInBlog:
-   *
-   * <div
-   *   class="dib-product-carousel"
-   *   data-products="product-handle-1,product-handle-2,product-handle-3"
-   *   data-title="Shop The Article">
-   * </div>
-   *
-   * =========================================================
-   */
-
   function initDibProductCarousels() {
 
     var carousels = document.querySelectorAll(
@@ -823,10 +808,10 @@
         return;
       }
 
-      var handles = productString
+      var productUrls = productString
         .split(',')
-        .map(function (handle) {
-          return handle.trim();
+        .map(function (url) {
+          return url.trim();
         })
         .filter(Boolean);
 
@@ -836,27 +821,20 @@
 
       if (title) {
         var heading = document.createElement('h3');
-
         heading.className = 'dib-product-carousel__heading';
         heading.textContent = title;
-
         carousel.appendChild(heading);
       }
 
       var wrapper = document.createElement('div');
-
       wrapper.className = 'dib-product-carousel__wrapper';
 
       var track = document.createElement('div');
-
       track.className = 'dib-product-carousel__track';
 
       wrapper.appendChild(track);
       carousel.appendChild(wrapper);
 
-      /*
-       * Previous button
-       */
       var prevButton = document.createElement('button');
 
       prevButton.type = 'button';
@@ -866,9 +844,6 @@
       prevButton.setAttribute('aria-label', 'Previous products');
       prevButton.innerHTML = '&#10094;';
 
-      /*
-       * Next button
-       */
       var nextButton = document.createElement('button');
 
       nextButton.type = 'button';
@@ -881,9 +856,6 @@
       wrapper.appendChild(prevButton);
       wrapper.appendChild(nextButton);
 
-      /*
-       * Loading message
-       */
       var loading = document.createElement('div');
 
       loading.className = 'dib-product-carousel__loading';
@@ -892,28 +864,71 @@
       track.appendChild(loading);
 
       /*
-       * Load products
+       * Extract product handles from URLs
+       */
+      var handles = productUrls.map(function (url) {
+
+        try {
+
+          var parsedUrl = new URL(url);
+
+          var parts = parsedUrl.pathname
+            .split('/')
+            .filter(Boolean);
+
+          var productsIndex = parts.indexOf('products');
+
+          if (productsIndex !== -1 &&
+              parts[productsIndex + 1]) {
+
+            return parts[productsIndex + 1];
+
+          }
+
+        } catch (error) {
+
+          console.warn(
+            'Invalid product URL:',
+            url
+          );
+
+        }
+
+        return null;
+
+      }).filter(Boolean);
+
+      /*
+       * Fetch product JSON
        */
       var requests = handles.map(function (handle) {
 
-        return fetch('/products/' + encodeURIComponent(handle) + '.js')
-          .then(function (response) {
+        return fetch(
+          '/products/' +
+          encodeURIComponent(handle) +
+          '.js'
+        )
+        .then(function (response) {
 
-            if (!response.ok) {
-              throw new Error('Product not found: ' + handle);
-            }
-
-            return response.json();
-          })
-          .catch(function (error) {
-
-            console.warn(
-              'DropInBlog carousel:',
-              error.message
+          if (!response.ok) {
+            throw new Error(
+              'Product not found: ' + handle
             );
+          }
 
-            return null;
-          });
+          return response.json();
+
+        })
+        .catch(function (error) {
+
+          console.warn(
+            'DropInBlog product:',
+            error.message
+          );
+
+          return null;
+
+        });
 
       });
 
@@ -933,6 +948,7 @@
             '</div>';
 
           return;
+
         }
 
         validProducts.forEach(function (product) {
@@ -941,14 +957,19 @@
 
           card.className = 'dib-product-card';
 
+          /*
+           * Product URL
+           */
           var productUrl = product.url;
 
           /*
-           * Product image
+           * Image
            */
           var imageLink = document.createElement('a');
 
-          imageLink.className = 'dib-product-card__image';
+          imageLink.className =
+            'dib-product-card__image';
+
           imageLink.href = productUrl;
 
           if (product.featured_image) {
@@ -960,21 +981,24 @@
             image.loading = 'lazy';
 
             imageLink.appendChild(image);
+
           }
 
           /*
-           * Product information
+           * Information
            */
           var info = document.createElement('div');
 
-          info.className = 'dib-product-card__info';
+          info.className =
+            'dib-product-card__info';
 
           /*
            * Title
            */
           var titleElement = document.createElement('h4');
 
-          titleElement.className = 'dib-product-card__title';
+          titleElement.className =
+            'dib-product-card__title';
 
           var titleLink = document.createElement('a');
 
@@ -988,18 +1012,20 @@
            */
           var price = document.createElement('div');
 
-          price.className = 'dib-product-card__price';
+          price.className =
+            'dib-product-card__price';
 
-          price.textContent = formatMoney(
-            product.price
-          );
+          price.textContent =
+            formatMoney(product.price);
 
           /*
-           * View product button
+           * Button
            */
           var button = document.createElement('a');
 
-          button.className = 'dib-product-card__button';
+          button.className =
+            'dib-product-card__button';
+
           button.href = productUrl;
           button.textContent = 'View Product';
 
@@ -1017,32 +1043,41 @@
       });
 
       /*
-       * Carousel navigation
+       * Previous
        */
-      prevButton.addEventListener('click', function () {
+      prevButton.addEventListener(
+        'click',
+        function () {
 
-        track.scrollBy({
-          left: -track.clientWidth * 0.8,
-          behavior: 'smooth'
-        });
+          track.scrollBy({
+            left: -track.clientWidth * 0.8,
+            behavior: 'smooth'
+          });
 
-      });
+        }
+      );
 
-      nextButton.addEventListener('click', function () {
+      /*
+       * Next
+       */
+      nextButton.addEventListener(
+        'click',
+        function () {
 
-        track.scrollBy({
-          left: track.clientWidth * 0.8,
-          behavior: 'smooth'
-        });
+          track.scrollBy({
+            left: track.clientWidth * 0.8,
+            behavior: 'smooth'
+          });
 
-      });
+        }
+      );
 
     });
 
   }
 
   /*
-   * Shopify returns money in cents.
+   * Currency formatting
    */
   function formatMoney(cents) {
 
@@ -1061,9 +1096,7 @@
    * Initial load
    */
   function start() {
-
     initDibProductCarousels();
-
   }
 
   if (document.readyState === 'loading') {
@@ -1080,14 +1113,14 @@
   }
 
   /*
-   * DropInBlog can dynamically render content,
-   * so check again when the DOM changes.
+   * DropInBlog can dynamically inject content,
+   * so watch for changes.
    */
-  var observer = new MutationObserver(function () {
-
-    initDibProductCarousels();
-
-  });
+  var observer = new MutationObserver(
+    function () {
+      initDibProductCarousels();
+    }
+  );
 
   observer.observe(
     document.documentElement,
@@ -1098,7 +1131,7 @@
   );
 
 })();
-</script>  
+</script> 
 </body>
 </html>
 {% include 'change-image-onhover' %}
