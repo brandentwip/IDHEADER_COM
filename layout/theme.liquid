@@ -597,6 +597,508 @@
 {%- capture searchTemplate -%}{% render 'globo.filter.search' %}{%- endcapture -%}{%- unless searchTemplate contains 'Liquid error' -%}<script id="gspfSearchResult" type="template/html">{{- searchTemplate | replace: "script>", "scripttag>" -}}</script>{%- endunless -%} 
 {%- capture paginationTemplate -%}{% render 'globo.filter.pagination' %}{%- endcapture -%}{%- unless paginationTemplate contains 'Liquid error' -%}<script id="gspfPagination" type="template/html">{{- paginationTemplate | replace: "script>", "scripttag>" -}}</script>{%- endunless -%} 
 {%- capture YMMTemplate -%}{% render 'globo.filter.form' %}{%- endcapture -%}{%- unless YMMTemplate contains 'Liquid error' -%}<script id="gspfForm" type="template/html">{{- YMMTemplate | replace: "script>", "scripttag>" -}}</script>{%- endunless -%}
-  </body>
+<style>
+  /* =========================================================
+     DROPINBLOG PRODUCT CAROUSEL
+  ========================================================= */
+
+  .dib-product-carousel {
+    width: 100%;
+    margin: 40px 0;
+    position: relative;
+    box-sizing: border-box;
+  }
+
+  .dib-product-carousel__heading {
+    margin: 0 0 20px;
+    font-size: 24px;
+    line-height: 1.2;
+    font-weight: 600;
+  }
+
+  .dib-product-carousel__wrapper {
+    position: relative;
+  }
+
+  .dib-product-carousel__track {
+    display: flex;
+    gap: 18px;
+    overflow-x: auto;
+    scroll-behavior: smooth;
+    scrollbar-width: none;
+    padding: 2px 2px 10px;
+    scroll-snap-type: x mandatory;
+  }
+
+  .dib-product-carousel__track::-webkit-scrollbar {
+    display: none;
+  }
+
+  .dib-product-card {
+    flex: 0 0 calc(25% - 14px);
+    min-width: 220px;
+    scroll-snap-align: start;
+    box-sizing: border-box;
+  }
+
+  .dib-product-card__image {
+    display: block;
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    overflow: hidden;
+    background: #f6f6f6;
+    text-decoration: none;
+  }
+
+  .dib-product-card__image img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform .35s ease;
+  }
+
+  .dib-product-card__image:hover img {
+    transform: scale(1.04);
+  }
+
+  .dib-product-card__info {
+    padding-top: 12px;
+  }
+
+  .dib-product-card__title {
+    margin: 0 0 7px;
+    font-size: 16px;
+    line-height: 1.35;
+    font-weight: 500;
+  }
+
+  .dib-product-card__title a {
+    color: inherit;
+    text-decoration: none;
+  }
+
+  .dib-product-card__price {
+    font-size: 15px;
+    line-height: 1.4;
+  }
+
+  .dib-product-carousel__button {
+    position: absolute;
+    top: 42%;
+    transform: translateY(-50%);
+    width: 40px;
+    height: 40px;
+    border: 1px solid #ddd;
+    border-radius: 50%;
+    background: #fff;
+    color: #111;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    z-index: 3;
+    box-shadow: 0 2px 8px rgba(0,0,0,.08);
+    font-size: 20px;
+    line-height: 1;
+  }
+
+  .dib-product-carousel__button:hover {
+    background: #111;
+    color: #fff;
+  }
+
+  .dib-product-carousel__button--prev {
+    left: -20px;
+  }
+
+  .dib-product-carousel__button--next {
+    right: -20px;
+  }
+
+  .dib-product-card__button {
+    display: inline-block;
+    margin-top: 12px;
+    padding: 10px 18px;
+    background: #111;
+    color: #fff;
+    text-decoration: none;
+    font-size: 13px;
+    line-height: 1;
+    border-radius: 2px;
+    transition: opacity .2s ease;
+  }
+
+  .dib-product-card__button:hover {
+    opacity: .8;
+  }
+
+  .dib-product-carousel__loading {
+    font-size: 14px;
+    opacity: .6;
+  }
+
+  .dib-product-carousel__empty {
+    font-size: 14px;
+    opacity: .6;
+  }
+
+  @media screen and (max-width: 989px) {
+    .dib-product-card {
+      flex: 0 0 calc(33.333% - 12px);
+    }
+
+    .dib-product-carousel__button--prev {
+      left: 5px;
+    }
+
+    .dib-product-carousel__button--next {
+      right: 5px;
+    }
+  }
+
+  @media screen and (max-width: 749px) {
+    .dib-product-carousel {
+      margin: 30px 0;
+    }
+
+    .dib-product-carousel__heading {
+      font-size: 20px;
+      margin-bottom: 15px;
+    }
+
+    .dib-product-carousel__track {
+      gap: 12px;
+      scroll-snap-type: x mandatory;
+    }
+
+    .dib-product-card {
+      flex: 0 0 72%;
+      min-width: 0;
+    }
+
+    .dib-product-carousel__button {
+      display: none;
+    }
+
+    .dib-product-card__title {
+      font-size: 15px;
+    }
+  }
+</style>
+
+<script>
+(function () {
+
+  /*
+   * =========================================================
+   * DROPINBLOG PRODUCT CAROUSEL
+   *
+   * Usage inside DropInBlog:
+   *
+   * <div
+   *   class="dib-product-carousel"
+   *   data-products="product-handle-1,product-handle-2,product-handle-3"
+   *   data-title="Shop The Article">
+   * </div>
+   *
+   * =========================================================
+   */
+
+  function initDibProductCarousels() {
+
+    var carousels = document.querySelectorAll(
+      '.dib-product-carousel:not([data-dib-initialized])'
+    );
+
+    carousels.forEach(function (carousel) {
+
+      carousel.setAttribute('data-dib-initialized', 'true');
+
+      var productString = carousel.getAttribute('data-products');
+
+      if (!productString) {
+        carousel.innerHTML =
+          '<div class="dib-product-carousel__empty">No products selected.</div>';
+        return;
+      }
+
+      var handles = productString
+        .split(',')
+        .map(function (handle) {
+          return handle.trim();
+        })
+        .filter(Boolean);
+
+      var title = carousel.getAttribute('data-title');
+
+      carousel.innerHTML = '';
+
+      if (title) {
+        var heading = document.createElement('h3');
+
+        heading.className = 'dib-product-carousel__heading';
+        heading.textContent = title;
+
+        carousel.appendChild(heading);
+      }
+
+      var wrapper = document.createElement('div');
+
+      wrapper.className = 'dib-product-carousel__wrapper';
+
+      var track = document.createElement('div');
+
+      track.className = 'dib-product-carousel__track';
+
+      wrapper.appendChild(track);
+      carousel.appendChild(wrapper);
+
+      /*
+       * Previous button
+       */
+      var prevButton = document.createElement('button');
+
+      prevButton.type = 'button';
+      prevButton.className =
+        'dib-product-carousel__button dib-product-carousel__button--prev';
+
+      prevButton.setAttribute('aria-label', 'Previous products');
+      prevButton.innerHTML = '&#10094;';
+
+      /*
+       * Next button
+       */
+      var nextButton = document.createElement('button');
+
+      nextButton.type = 'button';
+      nextButton.className =
+        'dib-product-carousel__button dib-product-carousel__button--next';
+
+      nextButton.setAttribute('aria-label', 'Next products');
+      nextButton.innerHTML = '&#10095;';
+
+      wrapper.appendChild(prevButton);
+      wrapper.appendChild(nextButton);
+
+      /*
+       * Loading message
+       */
+      var loading = document.createElement('div');
+
+      loading.className = 'dib-product-carousel__loading';
+      loading.textContent = 'Loading products...';
+
+      track.appendChild(loading);
+
+      /*
+       * Load products
+       */
+      var requests = handles.map(function (handle) {
+
+        return fetch('/products/' + encodeURIComponent(handle) + '.js')
+          .then(function (response) {
+
+            if (!response.ok) {
+              throw new Error('Product not found: ' + handle);
+            }
+
+            return response.json();
+          })
+          .catch(function (error) {
+
+            console.warn(
+              'DropInBlog carousel:',
+              error.message
+            );
+
+            return null;
+          });
+
+      });
+
+      Promise.all(requests).then(function (products) {
+
+        track.innerHTML = '';
+
+        var validProducts = products.filter(function (product) {
+          return product !== null;
+        });
+
+        if (!validProducts.length) {
+
+          track.innerHTML =
+            '<div class="dib-product-carousel__empty">' +
+            'No products found.' +
+            '</div>';
+
+          return;
+        }
+
+        validProducts.forEach(function (product) {
+
+          var card = document.createElement('article');
+
+          card.className = 'dib-product-card';
+
+          var productUrl = product.url;
+
+          /*
+           * Product image
+           */
+          var imageLink = document.createElement('a');
+
+          imageLink.className = 'dib-product-card__image';
+          imageLink.href = productUrl;
+
+          if (product.featured_image) {
+
+            var image = document.createElement('img');
+
+            image.src = product.featured_image;
+            image.alt = product.title || '';
+            image.loading = 'lazy';
+
+            imageLink.appendChild(image);
+          }
+
+          /*
+           * Product information
+           */
+          var info = document.createElement('div');
+
+          info.className = 'dib-product-card__info';
+
+          /*
+           * Title
+           */
+          var titleElement = document.createElement('h4');
+
+          titleElement.className = 'dib-product-card__title';
+
+          var titleLink = document.createElement('a');
+
+          titleLink.href = productUrl;
+          titleLink.textContent = product.title;
+
+          titleElement.appendChild(titleLink);
+
+          /*
+           * Price
+           */
+          var price = document.createElement('div');
+
+          price.className = 'dib-product-card__price';
+
+          price.textContent = formatMoney(
+            product.price
+          );
+
+          /*
+           * View product button
+           */
+          var button = document.createElement('a');
+
+          button.className = 'dib-product-card__button';
+          button.href = productUrl;
+          button.textContent = 'View Product';
+
+          info.appendChild(titleElement);
+          info.appendChild(price);
+          info.appendChild(button);
+
+          card.appendChild(imageLink);
+          card.appendChild(info);
+
+          track.appendChild(card);
+
+        });
+
+      });
+
+      /*
+       * Carousel navigation
+       */
+      prevButton.addEventListener('click', function () {
+
+        track.scrollBy({
+          left: -track.clientWidth * 0.8,
+          behavior: 'smooth'
+        });
+
+      });
+
+      nextButton.addEventListener('click', function () {
+
+        track.scrollBy({
+          left: track.clientWidth * 0.8,
+          behavior: 'smooth'
+        });
+
+      });
+
+    });
+
+  }
+
+  /*
+   * Shopify returns money in cents.
+   */
+  function formatMoney(cents) {
+
+    return new Intl.NumberFormat(
+      document.documentElement.lang || 'en-IN',
+      {
+        style: 'currency',
+        currency: 'INR',
+        maximumFractionDigits: 0
+      }
+    ).format(cents / 100);
+
+  }
+
+  /*
+   * Initial load
+   */
+  function start() {
+
+    initDibProductCarousels();
+
+  }
+
+  if (document.readyState === 'loading') {
+
+    document.addEventListener(
+      'DOMContentLoaded',
+      start
+    );
+
+  } else {
+
+    start();
+
+  }
+
+  /*
+   * DropInBlog can dynamically render content,
+   * so check again when the DOM changes.
+   */
+  var observer = new MutationObserver(function () {
+
+    initDibProductCarousels();
+
+  });
+
+  observer.observe(
+    document.documentElement,
+    {
+      childList: true,
+      subtree: true
+    }
+  );
+
+})();
+</script>  
+</body>
 </html>
 {% include 'change-image-onhover' %}
