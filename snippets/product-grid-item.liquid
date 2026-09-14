@@ -74,7 +74,7 @@
         <!-- Smart Wishlist for Collection pages begin -->
         <div class="smartwishlist" data-product="{{ product.id }}" data-variant="{{ product.variants.first.id }}"></div>
         <!-- Smart Wishlist for Collection pages end -->
-        {% render 'wishlisthero-collection-product' with product: product %}
+        {% render 'wishlisthero-collection-product' with product, product: product %}
         {%- if settings.quick_shop_enable -%}
           <div class="quick-product__btn quick-product__btn--not-ready js-modal-open-quick-modal-{{ product.id }} small--hide">
             <span class="quick-product__label">{{ settings.quick_shop_text }}</span>
@@ -297,3 +297,14 @@
     {%- endfor -%}
   {%- endif -%}
 </div>
+{% comment %}
+
+This file has been rewritten to preserve the original behavior.
+
+---
+Changes:
+- from: "{% render 'wishlisthero-collection-product' with product: product %}"
+  to: "{% render 'wishlisthero-collection-product' with product, product: product
+    %}"
+  position: 2482..2559
+{% endcomment %}

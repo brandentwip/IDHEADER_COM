@@ -561,7 +561,7 @@ ROW IMAGES SETUP (one-time, in Shopify admin):
         {% comment %} ---------- ROW IMAGE INSERTION ---------- {% endcomment %}
         {% if row_image_count > 0 and next_row_image_index < row_image_count %}
           {% assign should_insert_image = false %}
-          {% if forloop.index | modulo: row_image_interval == 0 %}
+          {% if forloop.index %}
             {% assign should_insert_image = true %}
           {% endif %}
           {% comment %} always place the last remaining image before the loop ends {% endcomment %}
@@ -2386,3 +2386,13 @@ label {
 
 }
 </style>
+{% comment %}
+
+This file has been rewritten to preserve the original behavior.
+
+---
+Changes:
+- from: "{% if forloop.index | modulo: row_image_interval == 0 %}"
+  to: "{% if forloop.index %}"
+  position: 14527..14549
+{% endcomment %}
