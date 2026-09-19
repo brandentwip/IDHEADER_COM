@@ -1374,6 +1374,22 @@
           "slide_3BDMMr": {
             "type": "slide",
             "settings": {
+              "desktop_image": "shopify://shop_images/ID_Website_Banner_1.png",
+              "mobile_image": "shopify://shop_images/ID_Website_Banner_1_1.png",
+              "label": "Claim Your Free Gifts",
+              "heading": "",
+              "text": "",
+              "button_label": "",
+              "button_link": "shopify://collections/leather-sneakers-1",
+              "text_position": "bottom-left",
+              "text_color": "#ffffff",
+              "overlay_color": "#000000",
+              "overlay_opacity": 20
+            }
+          },
+          "slide_KTGxdq": {
+            "type": "slide",
+            "settings": {
               "desktop_image": "shopify://shop_images/Artboard_2.png",
               "mobile_image": "shopify://shop_images/Artboard_5.png",
               "label": "NEW COLLECTION",
@@ -1455,6 +1471,7 @@
         },
         "block_order": [
           "slide_3BDMMr",
+          "slide_KTGxdq",
           "slide_Cyamqc",
           "slide_KXYFxT",
           "slide_4CtQY4",
