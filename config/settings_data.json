@@ -173,7 +173,7 @@
           "a.comet-drawer-header__btn {display: none;}"
         ],
         "settings": {
-          "main_menu_link_list": "new-main-menu-v2",
+          "main_menu_link_list": "new-main-menu-v2-copy",
           "mega_menu_images": true,
           "main_menu_alignment": "center-left",
           "header_style": "sticky",
