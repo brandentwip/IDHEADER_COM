@@ -81,6 +81,9 @@
   <div class="arigato-header-inner">
     <div class="arigato-header-col arigato-header-title-col">
       <h1 class="arigato-collection-title">{{ collection.title | upcase }}</h1>
+      <span class="arigato-product-count">
+        {{ collection.products_count }} PRODUCTS
+      </span>
     </div>
     
    {% unless collection.handle == 'slide-n-go' %}
@@ -1140,6 +1143,16 @@ document.addEventListener('DOMContentLoaded', function() {
   line-height: 1.2;
 }
 
+.arigato-product-count {
+  display: block;
+  margin-top: 8px;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #666;
+}
+
 .arigato-subcat-links {
   list-style: none;
   margin: 0;
@@ -1379,6 +1392,11 @@ document.addEventListener('DOMContentLoaded', function() {
   }
   .product-price {
     margin-top: 2px;
+  }
+
+  .arigato-product-count {
+    margin-top: 6px;
+    font-size: 9px;
   }
 
   .arigato-subcat-links {
