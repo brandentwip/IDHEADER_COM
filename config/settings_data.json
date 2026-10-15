@@ -168,7 +168,7 @@
           "802073a3-8b09-43ed-9e31-bd635392ffb2"
         ],
         "custom_css": [
-          "li.site-nav__item.site-nav__expanded-item a {font-size: 14px; letter-spacing: 1px; font-weight: 400;}",
+          "li.site-nav__item.site-nav__expanded-item a {font-size: 10px; letter-spacing: 1px; font-weight: 400;}",
           ".comet-menu-icon {display: none;}",
           "a.comet-drawer-header__btn {display: none;}"
         ],
@@ -1804,11 +1804,6 @@
       },
       "10746902591489815047": {
         "type": "shopify://apps/font-picker/blocks/app-embed/2caf2c68-0038-455e-b0b9-066a7c2ad923",
-        "disabled": true,
-        "settings": {}
-      },
-      "14060646107696862457": {
-        "type": "shopify://apps/judge-me-reviews/blocks/judgeme_core/61ccd3b1-a9f2-4160-9fe9-4fec8413e5d8",
         "disabled": true,
         "settings": {}
       },
