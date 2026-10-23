@@ -171,7 +171,7 @@
           "li.site-nav__item.site-nav__expanded-item a {font-size: 10px; letter-spacing: 1px; font-weight: 400;}",
           ".comet-menu-icon {display: none;}",
           "a.comet-drawer-header__btn {display: none;}",
-          ".site-nav__link {padding: 7.5px 6px ;}"
+          ".site-nav__link {padding: 7.5px 6px;}"
         ],
         "settings": {
           "main_menu_link_list": "new-main-menu-v2-copy",
@@ -1372,6 +1372,22 @@
       "editorial_slideshow_qb9C7k": {
         "type": "editorial-slideshow",
         "blocks": {
+          "slide_KdctHa": {
+            "type": "slide",
+            "settings": {
+              "desktop_image": "shopify://shop_images/1_5e8498da-999e-45ab-959c-5f90f12bbab6.png",
+              "mobile_image": "shopify://shop_images/2_e7165c27-876e-4446-b360-b193641f0e20.png",
+              "label": "",
+              "heading": "",
+              "text": "",
+              "button_label": "Shop Now",
+              "button_link": "shopify://collections/festive-collection",
+              "text_position": "bottom-right",
+              "text_color": "#ffffff",
+              "overlay_color": "#000000",
+              "overlay_opacity": 20
+            }
+          },
           "slide_KTGxdq": {
             "type": "slide",
             "settings": {
@@ -1471,6 +1487,7 @@
           }
         },
         "block_order": [
+          "slide_KdctHa",
           "slide_KTGxdq",
           "slide_Cyamqc",
           "slide_KXYFxT",
@@ -1784,7 +1801,6 @@
         "settings": {
           "productGridSelector": "",
           "useCustomQuickviewTemplate": false,
-          "customJs": "",
           "customCss": "#gf-products .product-card,\n.spf-has-filter #collection-loading,\n.spf-has-filter .collection-controls{\ndisplay: none !important;\n}\n.spf-has-filter #gf-products {\nmargin: 0 !important;\n}\n#gf-products .spf-col-xl-2{\n    padding-left: 7px;\n    padding-right: 7px;\n}",
           "customProductTemplateLoader": "{%- capture productTemplate -%}{% render 'globo.filter.product', themeTranslation: shop.metafields.globoFilter.themeTranslation.value[request.locale.iso_code] %}{%- endcapture -%}{%- unless productTemplate contains 'Liquid error' -%}<script id=\"gspfProduct\" type=\"template/html\">{{- productTemplate | replace: \"script>\", \"scripttag>\" -}}</script>{%- endunless -%}",
           "customTreeTemplateLoader": "{%- capture treeTemplate -%}{% render 'globo.filter.tree' %}{%- endcapture -%}{%- unless treeTemplate contains 'Liquid error' -%}<script id=\"gspfFilterTree\" type=\"template/html\">{{- treeTemplate | replace: \"script>\", \"scripttag>\" -}}</script>{%- endunless -%}",
