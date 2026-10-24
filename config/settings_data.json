@@ -1372,6 +1372,54 @@
       "editorial_slideshow_qb9C7k": {
         "type": "editorial-slideshow",
         "blocks": {
+          "slide_aYA7x7": {
+            "type": "slide",
+            "settings": {
+              "desktop_image": "shopify://shop_images/5_b0198a57-fdb2-48c4-8aa8-eea021364255.png",
+              "mobile_image": "shopify://shop_images/6_c4538845-653b-4340-ae57-28b0ed10ea7d.png",
+              "label": "",
+              "heading": "",
+              "text": "",
+              "button_label": "Shop Now",
+              "button_link": "shopify://products/mens-black-formal-hurache-sandal-id2347",
+              "text_position": "bottom-left",
+              "text_color": "#ffffff",
+              "overlay_color": "#000000",
+              "overlay_opacity": 0
+            }
+          },
+          "slide_rEeydk": {
+            "type": "slide",
+            "settings": {
+              "desktop_image": "shopify://shop_images/3_c52aa52c-cefc-4b14-8c3d-5927bb5cf6ac.png",
+              "mobile_image": "shopify://shop_images/4_6ff0b30c-1929-4d53-8f21-9ef3670e16aa.png",
+              "label": "",
+              "heading": "",
+              "text": "",
+              "button_label": "",
+              "button_link": "shopify://products/mens-brown-slide-n-go-huarache-slip-on-sandal-id4323",
+              "text_position": "bottom-left",
+              "text_color": "#ffffff",
+              "overlay_color": "#000000",
+              "overlay_opacity": 0
+            }
+          },
+          "slide_yzKnCU": {
+            "type": "slide",
+            "settings": {
+              "desktop_image": "shopify://shop_images/7_4de2dfeb-53c9-4c3e-96ae-ebcf14accfba.png",
+              "mobile_image": "shopify://shop_images/8.png",
+              "label": "NEW COLLECTION",
+              "heading": "",
+              "text": "",
+              "button_label": "Shop Now",
+              "button_link": "shopify://products/id4231-black",
+              "text_position": "bottom-left",
+              "text_color": "#ffffff",
+              "overlay_color": "#000000",
+              "overlay_opacity": 20
+            }
+          },
           "slide_KdctHa": {
             "type": "slide",
             "settings": {
@@ -1390,6 +1438,7 @@
           },
           "slide_KTGxdq": {
             "type": "slide",
+            "disabled": true,
             "settings": {
               "desktop_image": "shopify://shop_images/Artboard_2.png",
               "mobile_image": "shopify://shop_images/Artboard_5.png",
@@ -1406,6 +1455,7 @@
           },
           "slide_Cyamqc": {
             "type": "slide",
+            "disabled": true,
             "settings": {
               "desktop_image": "shopify://shop_images/Banner_ac7740f9-8d77-46e6-bf5a-34d95aa7fe06.png",
               "mobile_image": "shopify://shop_images/Mobile_b1287347-6010-47a8-8373-e262cb66293d.png",
@@ -1422,6 +1472,7 @@
           },
           "slide_KXYFxT": {
             "type": "slide",
+            "disabled": true,
             "settings": {
               "desktop_image": "shopify://shop_images/bestseller.png",
               "mobile_image": "shopify://shop_images/Mobile_3.png",
@@ -1438,6 +1489,7 @@
           },
           "slide_4CtQY4": {
             "type": "slide",
+            "disabled": true,
             "settings": {
               "desktop_image": "shopify://shop_images/banner_desktop_1_-_xompressed.png",
               "mobile_image": "shopify://shop_images/Banner_2_2f5171f6-c7e6-426a-83e4-da4bdd9f87f0.png",
@@ -1471,6 +1523,7 @@
           },
           "slide_3BDMMr": {
             "type": "slide",
+            "disabled": true,
             "settings": {
               "desktop_image": "shopify://shop_images/ID_Website_Banner_1.png",
               "mobile_image": "shopify://shop_images/ID_Website_Banner_1_1.png",
@@ -1487,6 +1540,9 @@
           }
         },
         "block_order": [
+          "slide_aYA7x7",
+          "slide_rEeydk",
+          "slide_yzKnCU",
           "slide_KdctHa",
           "slide_KTGxdq",
           "slide_Cyamqc",
