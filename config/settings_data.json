@@ -1436,6 +1436,38 @@
               "overlay_opacity": 0
             }
           },
+          "slide_MhwC8k": {
+            "type": "slide",
+            "settings": {
+              "desktop_image": "shopify://shop_images/11.png",
+              "mobile_image": "shopify://shop_images/12.png",
+              "label": "",
+              "heading": "",
+              "text": "",
+              "button_label": "Shop Now",
+              "button_link": "shopify://products/id1077-black",
+              "text_position": "bottom-left",
+              "text_color": "#ffffff",
+              "overlay_color": "#000000",
+              "overlay_opacity": 0
+            }
+          },
+          "slide_6kY9fC": {
+            "type": "slide",
+            "settings": {
+              "desktop_image": "shopify://shop_images/9_a28aa1e7-b2c7-4e98-9560-921a8fb18f4f.png",
+              "mobile_image": "shopify://shop_images/10_4c263d98-b0b8-496c-9856-faa56348c5c4.png",
+              "label": "",
+              "heading": "",
+              "text": "",
+              "button_label": "Shop Now",
+              "button_link": "shopify://products/mens-comfort-tan-woven-slip-on-sandal-id4324",
+              "text_position": "bottom-left",
+              "text_color": "#ffffff",
+              "overlay_color": "#000000",
+              "overlay_opacity": 20
+            }
+          },
           "slide_KTGxdq": {
             "type": "slide",
             "disabled": true,
@@ -1544,6 +1576,8 @@
           "slide_rEeydk",
           "slide_yzKnCU",
           "slide_KdctHa",
+          "slide_MhwC8k",
+          "slide_6kY9fC",
           "slide_KTGxdq",
           "slide_Cyamqc",
           "slide_KXYFxT",
