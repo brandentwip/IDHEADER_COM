@@ -11,6 +11,15 @@
 
 {%- assign looks = product.metafields.custom.styled_looks.value -%}
 
+{%- comment -%} Demo mode: shows sample cards when the metafield is empty {%- endcomment -%}
+{%- assign is_demo = false -%}
+{%- if looks == blank and section.settings.show_demo -%}
+  {%- assign is_demo = true -%}
+  {%- assign looks = '1,2,3,4' | split: ',' -%}
+{%- endif -%}
+{%- assign demo_titles = 'The Bandra Brunch|The Bookstore Fit|The Weekend Casual|The Park Street Fit' | split: '|' -%}
+{%- assign demo_items = 'Wide-leg denim, Cotton tee, Canvas tote|Linen shorts, Open shirt, Ribbed socks|Relaxed cargos, Oversized tee, Flannel overshirt|Cropped trousers, Plain tee, Boxy jacket' | split: '|' -%}
+
 {%- if looks != blank -%}
 <section
   class="sl-section"
@@ -46,23 +55,34 @@
 
     <ul class="sl-grid" role="list">
       {%- for look in looks limit: section.settings.max_looks -%}
-        {%- assign img = look.image.value -%}
-        {%- assign look_title = look.title.value -%}
-        {%- assign look_items = look.items.value | split: ',' -%}
+        {%- if is_demo -%}
+          {%- assign demo_key = 'demo_image_' | append: forloop.index -%}
+          {%- assign img = section.settings[demo_key] -%}
+          {%- assign look_title = demo_titles[forloop.index0] -%}
+          {%- assign look_items = demo_items[forloop.index0] | split: ',' -%}
+        {%- else -%}
+          {%- assign img = look.image.value -%}
+          {%- assign look_title = look.title.value -%}
+          {%- assign look_items = look.items.value | split: ',' -%}
+        {%- endif -%}
 
-        {%- if img != blank -%}
+        {%- if img != blank or is_demo -%}
           <li class="sl-card">
             <div class="sl-card__media">
-              {{
-                img
-                | image_url: width: 800
-                | image_tag:
-                  widths: '400, 600, 800',
-                  sizes: '(min-width: 990px) 25vw, 70vw',
-                  loading: 'lazy',
-                  alt: look_title | default: product.title,
-                  class: 'sl-card__img'
-              }}
+              {%- if img != blank -%}
+                {{
+                  img
+                  | image_url: width: 800
+                  | image_tag:
+                    widths: '400, 600, 800',
+                    sizes: '(min-width: 990px) 25vw, 70vw',
+                    loading: 'lazy',
+                    alt: look_title | default: product.title,
+                    class: 'sl-card__img'
+                }}
+              {%- else -%}
+                {{ 'lifestyle-1' | placeholder_svg_tag: 'sl-card__img' }}
+              {%- endif -%}
               <span class="sl-card__tag">
                 {{ forloop.index | prepend: '0' | slice: -2, 2 }} / {{ section.settings.label }}
               </span>
@@ -218,6 +238,19 @@
     { "type": "text", "id": "subtext", "label": "Show subtext? (leave empty to hide)", "default": "yes" },
     { "type": "text", "id": "subtext_before", "label": "Subtext before label", "default": "Looks" },
     { "type": "text", "id": "subtext_after", "label": "Subtext after label", "default": "are styling this season." },
+
+    { "type": "header", "content": "Demo mode" },
+    {
+      "type": "checkbox",
+      "id": "show_demo",
+      "label": "Show demo cards when product has no looks",
+      "info": "Turn off before going live.",
+      "default": false
+    },
+    { "type": "image_picker", "id": "demo_image_1", "label": "Demo image 1" },
+    { "type": "image_picker", "id": "demo_image_2", "label": "Demo image 2" },
+    { "type": "image_picker", "id": "demo_image_3", "label": "Demo image 3" },
+    { "type": "image_picker", "id": "demo_image_4", "label": "Demo image 4" },
 
     { "type": "header", "content": "Layout" },
     { "type": "range", "id": "max_looks", "label": "Max looks", "min": 1, "max": 8, "step": 1, "default": 4 },
