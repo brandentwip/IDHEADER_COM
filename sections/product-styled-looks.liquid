@@ -1,26 +1,10 @@
 {% comment %}
-  Section: Product Styled Looks ("How he wears it")
-  Place in: sections/product-styled-looks.liquid
-  Data source: product metafield  custom.styled_looks
-               (type: List of metaobject references -> definition "styled_look")
-  Metaobject "styled_look" fields:
-    - image  (File > Image)            required
-    - title  (Single line text)        e.g. The Bandra Brunch
-    - items  (Single line text)        e.g. Wide-leg denim, Cotton tee, Canvas tote
+  Section: Styled Looks (STATIC / CLIENT DEMO)
+  Place in: sections/styled-looks-static.liquid
+  No metafields. Each look is a block: upload image + edit title/items in the theme editor.
+  Once the design is approved, switch to product-styled-looks.liquid (metafield version).
 {% endcomment %}
 
-{%- assign looks = product.metafields.custom.styled_looks.value -%}
-
-{%- comment -%} Demo mode: shows sample cards when the metafield is empty {%- endcomment -%}
-{%- assign is_demo = false -%}
-{%- if looks == blank and section.settings.show_demo -%}
-  {%- assign is_demo = true -%}
-  {%- assign looks = '1,2,3,4' | split: ',' -%}
-{%- endif -%}
-{%- assign demo_titles = 'The Bandra Brunch|The Bookstore Fit|The Weekend Casual|The Park Street Fit' | split: '|' -%}
-{%- assign demo_items = 'Wide-leg denim, Cotton tee, Canvas tote|Linen shorts, Open shirt, Ribbed socks|Relaxed cargos, Oversized tee, Flannel overshirt|Cropped trousers, Plain tee, Boxy jacket' | split: '|' -%}
-
-{%- if looks != blank -%}
 <section
   class="sl-section"
   id="sl-{{ section.id }}"
@@ -44,7 +28,7 @@
         <span class="sl-heading__line2">{{ section.settings.heading_line_2 }}</span>
       </h2>
 
-      {%- if section.settings.subtext != blank -%}
+      {%- if section.settings.subtext_before != blank or section.settings.subtext_after != blank -%}
         <p class="sl-subtext">
           {{ section.settings.subtext_before }}
           <strong>{{ section.settings.label | downcase }}</strong>
@@ -54,54 +38,42 @@
     </header>
 
     <ul class="sl-grid" role="list">
-      {%- for look in looks limit: section.settings.max_looks -%}
-        {%- if is_demo -%}
-          {%- assign demo_key = 'demo_image_' | append: forloop.index -%}
-          {%- assign img = section.settings[demo_key] -%}
-          {%- assign look_title = demo_titles[forloop.index0] -%}
-          {%- assign look_items = demo_items[forloop.index0] | split: ',' -%}
-        {%- else -%}
-          {%- assign img = look.image.value -%}
-          {%- assign look_title = look.title.value -%}
-          {%- assign look_items = look.items.value | split: ',' -%}
-        {%- endif -%}
+      {%- for block in section.blocks -%}
+        {%- assign look_items = block.settings.items | split: ',' -%}
+        <li class="sl-card" {{ block.shopify_attributes }}>
+          <div class="sl-card__media">
+            {%- if block.settings.image != blank -%}
+              {{
+                block.settings.image
+                | image_url: width: 800
+                | image_tag:
+                  widths: '400, 600, 800',
+                  sizes: '(min-width: 990px) 25vw, 70vw',
+                  loading: 'lazy',
+                  alt: block.settings.title,
+                  class: 'sl-card__img'
+              }}
+            {%- else -%}
+              {{ 'lifestyle-1' | placeholder_svg_tag: 'sl-card__img' }}
+            {%- endif -%}
+            <span class="sl-card__tag">
+              {{ forloop.index | prepend: '0' | slice: -2, 2 }} / {{ section.settings.label }}
+            </span>
+          </div>
 
-        {%- if img != blank or is_demo -%}
-          <li class="sl-card">
-            <div class="sl-card__media">
-              {%- if img != blank -%}
-                {{
-                  img
-                  | image_url: width: 800
-                  | image_tag:
-                    widths: '400, 600, 800',
-                    sizes: '(min-width: 990px) 25vw, 70vw',
-                    loading: 'lazy',
-                    alt: look_title | default: product.title,
-                    class: 'sl-card__img'
-                }}
-              {%- else -%}
-                {{ 'lifestyle-1' | placeholder_svg_tag: 'sl-card__img' }}
-              {%- endif -%}
-              <span class="sl-card__tag">
-                {{ forloop.index | prepend: '0' | slice: -2, 2 }} / {{ section.settings.label }}
-              </span>
-            </div>
-
-            <div class="sl-card__body">
-              {%- if look_title != blank -%}
-                <h3 class="sl-card__title">{{ look_title }}</h3>
-              {%- endif -%}
-              {%- if look_items.size > 0 -%}
-                <p class="sl-card__items">
-                  {%- for item in look_items -%}
-                    {{ item | strip }}{% unless forloop.last %} &middot; {% endunless %}
-                  {%- endfor -%}
-                </p>
-              {%- endif -%}
-            </div>
-          </li>
-        {%- endif -%}
+          <div class="sl-card__body">
+            {%- if block.settings.title != blank -%}
+              <h3 class="sl-card__title">{{ block.settings.title }}</h3>
+            {%- endif -%}
+            {%- if look_items.size > 0 -%}
+              <p class="sl-card__items">
+                {%- for item in look_items -%}
+                  {{ item | strip }}{% unless forloop.last %} &middot; {% endunless %}
+                {%- endfor -%}
+              </p>
+            {%- endif -%}
+          </div>
+        </li>
       {%- endfor -%}
     </ul>
   </div>
@@ -153,7 +125,7 @@
     color: var(--sl-text);
     opacity: 0.85;
   }
-  #sl-{{ section.id }} .sl-subtext strong { font-weight: 700; opacity: 1; }
+  #sl-{{ section.id }} .sl-subtext strong { font-weight: 700; }
 
   #sl-{{ section.id }} .sl-grid {
     list-style: none;
@@ -202,7 +174,6 @@
     line-height: 1.4;
   }
 
-  /* Tablet + mobile: horizontal swipe carousel */
   @media (max-width: 989px) {
     #sl-{{ section.id }} .sl-grid {
       display: flex;
@@ -221,39 +192,23 @@
     }
   }
 </style>
-{%- endif -%}
 
 {% schema %}
 {
-  "name": "Styled Looks",
+  "name": "Styled Looks (Static)",
   "tag": "div",
   "class": "section-styled-looks",
-  "enabled_on": { "templates": ["product"] },
+  "max_blocks": 8,
   "settings": [
     { "type": "header", "content": "Heading" },
     { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "WORN BY THE COMMUNITY" },
     { "type": "text", "id": "heading_line_1", "label": "Heading line 1", "default": "How he" },
     { "type": "text", "id": "heading_line_2", "label": "Heading line 2 (muted)", "default": "wears it." },
-    { "type": "text", "id": "label", "label": "Label (shown on cards and subtext)", "default": "Men" },
-    { "type": "text", "id": "subtext", "label": "Show subtext? (leave empty to hide)", "default": "yes" },
+    { "type": "text", "id": "label", "label": "Label", "default": "Men" },
     { "type": "text", "id": "subtext_before", "label": "Subtext before label", "default": "Looks" },
     { "type": "text", "id": "subtext_after", "label": "Subtext after label", "default": "are styling this season." },
 
-    { "type": "header", "content": "Demo mode" },
-    {
-      "type": "checkbox",
-      "id": "show_demo",
-      "label": "Show demo cards when product has no looks",
-      "info": "Turn off before going live.",
-      "default": false
-    },
-    { "type": "image_picker", "id": "demo_image_1", "label": "Demo image 1" },
-    { "type": "image_picker", "id": "demo_image_2", "label": "Demo image 2" },
-    { "type": "image_picker", "id": "demo_image_3", "label": "Demo image 3" },
-    { "type": "image_picker", "id": "demo_image_4", "label": "Demo image 4" },
-
     { "type": "header", "content": "Layout" },
-    { "type": "range", "id": "max_looks", "label": "Max looks", "min": 1, "max": 8, "step": 1, "default": 4 },
     { "type": "range", "id": "card_radius", "label": "Image corner radius", "min": 0, "max": 32, "step": 2, "default": 12, "unit": "px" },
     { "type": "range", "id": "padding_top", "label": "Padding top", "min": 0, "max": 120, "step": 4, "default": 40, "unit": "px" },
     { "type": "range", "id": "padding_bottom", "label": "Padding bottom", "min": 0, "max": 120, "step": 4, "default": 48, "unit": "px" },
@@ -263,8 +218,24 @@
     { "type": "color", "id": "text_color", "label": "Text", "default": "#ffffff" },
     { "type": "color", "id": "muted_color", "label": "Muted text", "default": "#6b6b6b" }
   ],
-  "presets": [
-    { "name": "Styled Looks" }
-  ]
+  "blocks": [
+    {
+      "type": "look",
+      "name": "Look",
+      "settings": [
+        { "type": "image_picker", "id": "image", "label": "Image" },
+        { "type": "text", "id": "title", "label": "Title", "default": "The Bandra Brunch" },
+        { "type": "text", "id": "items", "label": "Items (comma separated)", "default": "Wide-leg denim, Cotton tee, Canvas tote" }
+      ]
+    }
+  ],
+  "default": {
+    "blocks": [
+      { "type": "look", "settings": { "title": "The Bandra Brunch", "items": "Wide-leg denim, Cotton tee, Canvas tote" } },
+      { "type": "look", "settings": { "title": "The Bookstore Fit", "items": "Linen shorts, Open shirt, Ribbed socks" } },
+      { "type": "look", "settings": { "title": "The Weekend Casual", "items": "Relaxed cargos, Oversized tee, Flannel overshirt" } },
+      { "type": "look", "settings": { "title": "The Park Street Fit", "items": "Cropped trousers, Plain tee, Boxy jacket" } }
+    ]
+  }
 }
 {% endschema %}
