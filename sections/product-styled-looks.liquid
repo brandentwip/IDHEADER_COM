@@ -1,0 +1,237 @@
+{% comment %}
+  Section: Product Styled Looks ("How he wears it")
+  Place in: sections/product-styled-looks.liquid
+  Data source: product metafield  custom.styled_looks
+               (type: List of metaobject references -> definition "styled_look")
+  Metaobject "styled_look" fields:
+    - image  (File > Image)            required
+    - title  (Single line text)        e.g. The Bandra Brunch
+    - items  (Single line text)        e.g. Wide-leg denim, Cotton tee, Canvas tote
+{% endcomment %}
+
+{%- assign looks = product.metafields.custom.styled_looks.value -%}
+
+{%- if looks != blank -%}
+<section
+  class="sl-section"
+  id="sl-{{ section.id }}"
+  style="
+    --sl-bg: {{ section.settings.bg_color }};
+    --sl-text: {{ section.settings.text_color }};
+    --sl-muted: {{ section.settings.muted_color }};
+    --sl-radius: {{ section.settings.card_radius }}px;
+    --sl-pt: {{ section.settings.padding_top }}px;
+    --sl-pb: {{ section.settings.padding_bottom }}px;
+  "
+>
+  <div class="sl-inner">
+    <header class="sl-header">
+      {%- if section.settings.eyebrow != blank -%}
+        <p class="sl-eyebrow">{{ section.settings.eyebrow }}</p>
+      {%- endif -%}
+
+      <h2 class="sl-heading">
+        <span class="sl-heading__line1">{{ section.settings.heading_line_1 }}</span>
+        <span class="sl-heading__line2">{{ section.settings.heading_line_2 }}</span>
+      </h2>
+
+      {%- if section.settings.subtext != blank -%}
+        <p class="sl-subtext">
+          {{ section.settings.subtext_before }}
+          <strong>{{ section.settings.label | downcase }}</strong>
+          {{ section.settings.subtext_after }}
+        </p>
+      {%- endif -%}
+    </header>
+
+    <ul class="sl-grid" role="list">
+      {%- for look in looks limit: section.settings.max_looks -%}
+        {%- assign img = look.image.value -%}
+        {%- assign look_title = look.title.value -%}
+        {%- assign look_items = look.items.value | split: ',' -%}
+
+        {%- if img != blank -%}
+          <li class="sl-card">
+            <div class="sl-card__media">
+              {{
+                img
+                | image_url: width: 800
+                | image_tag:
+                  widths: '400, 600, 800',
+                  sizes: '(min-width: 990px) 25vw, 70vw',
+                  loading: 'lazy',
+                  alt: look_title | default: product.title,
+                  class: 'sl-card__img'
+              }}
+              <span class="sl-card__tag">
+                {{ forloop.index | prepend: '0' | slice: -2, 2 }} / {{ section.settings.label }}
+              </span>
+            </div>
+
+            <div class="sl-card__body">
+              {%- if look_title != blank -%}
+                <h3 class="sl-card__title">{{ look_title }}</h3>
+              {%- endif -%}
+              {%- if look_items.size > 0 -%}
+                <p class="sl-card__items">
+                  {%- for item in look_items -%}
+                    {{ item | strip }}{% unless forloop.last %} &middot; {% endunless %}
+                  {%- endfor -%}
+                </p>
+              {%- endif -%}
+            </div>
+          </li>
+        {%- endif -%}
+      {%- endfor -%}
+    </ul>
+  </div>
+</section>
+
+<style>
+  #sl-{{ section.id }} {
+    background: var(--sl-bg);
+    color: var(--sl-text);
+    padding: var(--sl-pt) 0 var(--sl-pb);
+    border-radius: 28px;
+    overflow: hidden;
+  }
+  #sl-{{ section.id }} .sl-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+  }
+  #sl-{{ section.id }} .sl-eyebrow {
+    margin: 0 0 14px;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.28em;
+    text-transform: uppercase;
+    color: var(--sl-text);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  #sl-{{ section.id }} .sl-eyebrow::before {
+    content: '';
+    width: 12px;
+    height: 1px;
+    background: currentColor;
+  }
+  #sl-{{ section.id }} .sl-heading {
+    margin: 0;
+    font-size: clamp(40px, 6vw, 56px);
+    line-height: 0.95;
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    text-transform: uppercase;
+  }
+  #sl-{{ section.id }} .sl-heading span { display: block; }
+  #sl-{{ section.id }} .sl-heading__line2 { color: var(--sl-muted); }
+  #sl-{{ section.id }} .sl-subtext {
+    margin: 18px 0 0;
+    font-size: 14px;
+    color: var(--sl-text);
+    opacity: 0.85;
+  }
+  #sl-{{ section.id }} .sl-subtext strong { font-weight: 700; opacity: 1; }
+
+  #sl-{{ section.id }} .sl-grid {
+    list-style: none;
+    margin: 28px 0 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 12px;
+  }
+  #sl-{{ section.id }} .sl-card__media {
+    position: relative;
+    aspect-ratio: 4 / 5;
+    border-radius: var(--sl-radius);
+    overflow: hidden;
+    background: #1a1a1a;
+  }
+  #sl-{{ section.id }} .sl-card__img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.6s ease;
+  }
+  #sl-{{ section.id }} .sl-card:hover .sl-card__img { transform: scale(1.04); }
+  #sl-{{ section.id }} .sl-card__tag {
+    position: absolute;
+    top: 14px;
+    left: 12px;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    color: #fff;
+    text-shadow: 0 1px 4px rgba(0, 0, 0, 0.6);
+  }
+  #sl-{{ section.id }} .sl-card__body { padding: 12px 4px 0; }
+  #sl-{{ section.id }} .sl-card__title {
+    margin: 0;
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--sl-text);
+  }
+  #sl-{{ section.id }} .sl-card__items {
+    margin: 4px 0 0;
+    font-size: 11px;
+    color: var(--sl-muted);
+    line-height: 1.4;
+  }
+
+  /* Tablet + mobile: horizontal swipe carousel */
+  @media (max-width: 989px) {
+    #sl-{{ section.id }} .sl-grid {
+      display: flex;
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+      margin-right: -20px;
+      padding-right: 20px;
+    }
+    #sl-{{ section.id }} .sl-grid::-webkit-scrollbar { display: none; }
+    #sl-{{ section.id }} .sl-card {
+      flex: 0 0 68%;
+      max-width: 300px;
+      scroll-snap-align: start;
+    }
+  }
+</style>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Styled Looks",
+  "tag": "div",
+  "class": "section-styled-looks",
+  "enabled_on": { "templates": ["product"] },
+  "settings": [
+    { "type": "header", "content": "Heading" },
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "WORN BY THE COMMUNITY" },
+    { "type": "text", "id": "heading_line_1", "label": "Heading line 1", "default": "How he" },
+    { "type": "text", "id": "heading_line_2", "label": "Heading line 2 (muted)", "default": "wears it." },
+    { "type": "text", "id": "label", "label": "Label (shown on cards and subtext)", "default": "Men" },
+    { "type": "text", "id": "subtext", "label": "Show subtext? (leave empty to hide)", "default": "yes" },
+    { "type": "text", "id": "subtext_before", "label": "Subtext before label", "default": "Looks" },
+    { "type": "text", "id": "subtext_after", "label": "Subtext after label", "default": "are styling this season." },
+
+    { "type": "header", "content": "Layout" },
+    { "type": "range", "id": "max_looks", "label": "Max looks", "min": 1, "max": 8, "step": 1, "default": 4 },
+    { "type": "range", "id": "card_radius", "label": "Image corner radius", "min": 0, "max": 32, "step": 2, "default": 12, "unit": "px" },
+    { "type": "range", "id": "padding_top", "label": "Padding top", "min": 0, "max": 120, "step": 4, "default": 40, "unit": "px" },
+    { "type": "range", "id": "padding_bottom", "label": "Padding bottom", "min": 0, "max": 120, "step": 4, "default": 48, "unit": "px" },
+
+    { "type": "header", "content": "Colors" },
+    { "type": "color", "id": "bg_color", "label": "Background", "default": "#0a0a0a" },
+    { "type": "color", "id": "text_color", "label": "Text", "default": "#ffffff" },
+    { "type": "color", "id": "muted_color", "label": "Muted text", "default": "#6b6b6b" }
+  ],
+  "presets": [
+    { "name": "Styled Looks" }
+  ]
+}
+{% endschema %}
