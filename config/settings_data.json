@@ -4480,7 +4480,8 @@
       ".product-single__meta .product__price {color: #000; font-weight: 700; font-size: 18px;}",
       ".product-feature-highlights .feature-item {display: flex; align-items: center; gap: 8px; font-size: 11px; font-weight: 600; color: #111; letter-spacing: 0.2px;}",
       ".add-to-cart {background-color: #ffd747 !important; color: #000 !important; border-color: #ffd747 !important;}",
-      ".add-to-cart:hover {background-color: #e6c03b !important; border-color: #e6c03b !important; color: #000 !important;}"
+      ".add-to-cart:hover {background-color: #e6c03b !important; border-color: #e6c03b !important; color: #000 !important;}",
+      "div#swatch-option2 {display: none;}"
     ]
   }
 }
