@@ -192,64 +192,32 @@
      No layout changes (no flex), so the logo does not move. */
   @media screen and (min-width: 769px) {
     ul.site-nav.site-navigation > .site-nav__item > .site-nav__link {
-      white-space: nowrap;
+      white-space: nowrap !important;
     }
     html[data-site-gender="men"] ul.site-nav.site-navigation > .site-nav__item > .site-nav__link:not(.site-nav__gender-select) {
-      font-size: 12px;
-      letter-spacing: 0.08em;
-      padding-left: 8px;
-      padding-right: 8px;
+      font-size: 11px !important;
+      letter-spacing: 0.03em !important;
+      padding-left: 5px !important;
+      padding-right: 5px !important;
+    }
+    html[data-site-gender="men"] ul.site-nav.site-navigation > .site-nav__item > .site-nav__gender-select {
+      font-size: 11px !important;
+      letter-spacing: 0.03em !important;
+      padding: 4px 9px !important;
     }
   }
   @media screen and (min-width: 769px) and (max-width: 1199px) {
     html[data-site-gender="men"] ul.site-nav.site-navigation > .site-nav__item > .site-nav__link:not(.site-nav__gender-select) {
-      font-size: 11px;
-      letter-spacing: 0.04em;
-      padding-left: 6px;
-      padding-right: 6px;
+      font-size: 10px !important;
+      letter-spacing: 0.02em !important;
+      padding-left: 4px !important;
+      padding-right: 4px !important;
     }
   }
 
-  /* Gender gate shown on first visit */
-  #gender-gate {
-    position: fixed;
-    inset: 0;
-    z-index: 100000;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: rgba(0, 0, 0, 0.6);
-  }
-  .gender-gate__box {
-    background: #fff;
-    padding: 40px 48px;
-    text-align: center;
-    max-width: 90%;
-  }
-  .gender-gate__title {
-    margin: 0 0 24px;
-    font-size: 18px;
-    letter-spacing: 0.2em;
-    text-transform: uppercase;
-  }
-  .gender-gate__actions {
-    display: flex;
-    gap: 16px;
-    justify-content: center;
-  }
-  .gender-gate__actions button {
-    min-width: 130px;
-    padding: 14px 24px;
-    border: 1px solid #000;
-    background: #000;
-    color: #fff;
-    font-size: 14px;
-    letter-spacing: 0.15em;
-    text-transform: uppercase;
-    cursor: pointer;
-  }
-  .gender-gate__actions button:hover {
-    background: #fff;
+  /* Highlight the currently chosen option inside the Gender dropdown */
+  .site-nav__dropdown a.is-active-gender {
+    font-weight: 700;
     color: #000;
   }
 </style>
@@ -550,49 +518,22 @@
       }
       // items with no scope (e.g. the Gender item itself) are always visible
     });
-    var label = document.querySelector('.gender-select-current');
-    if (label) {
-      label.textContent = gender ? gender.charAt(0).toUpperCase() + gender.slice(1) : 'Gender';
-    }
-  }
-
-  function showGate() {
-    if (document.getElementById('gender-gate')) return;
-    var gate = document.createElement('div');
-    gate.id = 'gender-gate';
-    gate.setAttribute('role', 'dialog');
-    gate.setAttribute('aria-modal', 'true');
-    gate.setAttribute('aria-label', 'Choose what you are shopping for');
-    gate.innerHTML =
-      '<div class="gender-gate__box">' +
-        '<p class="gender-gate__title">Choose Gender</p>' +
-        '<div class="gender-gate__actions">' +
-          '<button type="button" data-gender="men">Men</button>' +
-          '<button type="button" data-gender="women">Women</button>' +
-        '</div>' +
-      '</div>';
-    document.body.appendChild(gate);
-    document.documentElement.style.overflow = 'hidden';
-
-    gate.addEventListener('click', function (e) {
-      var btn = e.target.closest('[data-gender]');
-      if (!btn) return;
-      setGender(btn.getAttribute('data-gender'));
-      applyGenderMenu();
-      gate.remove();
-      document.documentElement.style.overflow = '';
+    // The pill always reads "Gender"; mark the chosen option inside its dropdown instead
+    document.querySelectorAll('.site-nav__item[data-menu-handle="gender"] .site-nav__dropdown a').forEach(function (a) {
+      a.classList.toggle('is-active-gender', a.getAttribute('data-menu-handle') === gender);
     });
   }
 
-  // Run immediately (the nav is already parsed above) to avoid a flash of the wrong menu
-  applyGenderMenu();
-  if (!getGender()) {
-    if (document.body) {
-      showGate();
-    } else {
-      document.addEventListener('DOMContentLoaded', showGate);
-    }
+  // Make sure the Gender pill is the first item in the nav
+  function moveGenderFirst() {
+    var gi = document.querySelector('.site-nav__item[data-menu-handle="gender"]');
+    var list = gi && gi.parentNode;
+    if (list && list.firstElementChild !== gi) list.insertBefore(gi, list.firstElementChild);
   }
+
+  // Run immediately (the nav is already parsed above) to avoid a flash of the wrong menu
+  moveGenderFirst();
+  applyGenderMenu();
 
   document.addEventListener('DOMContentLoaded', function () {
     document.querySelectorAll('a[data-menu-handle="men"], a[data-menu-handle="women"]').forEach(function (link) {
