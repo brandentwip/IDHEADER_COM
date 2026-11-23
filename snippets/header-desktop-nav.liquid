@@ -187,6 +187,75 @@
     border-color: rgba(0, 0, 0, 0.4);
     background-color: rgba(0, 0, 0, 0.04);
   }
+
+  /* Keep the top-level nav on a single row */
+  @media screen and (min-width: 769px) {
+    ul.site-nav.site-navigation {
+      display: flex;
+      flex-wrap: nowrap;
+      align-items: center;
+      white-space: nowrap;
+    }
+    ul.site-nav.site-navigation > .site-nav__item {
+      flex: 0 0 auto;
+    }
+    ul.site-nav.site-navigation > .site-nav__item > .site-nav__link {
+      letter-spacing: 0.12em;
+      padding-left: 12px;
+      padding-right: 12px;
+    }
+  }
+  @media screen and (min-width: 769px) and (max-width: 1199px) {
+    ul.site-nav.site-navigation > .site-nav__item > .site-nav__link {
+      font-size: 12px;
+      letter-spacing: 0.06em;
+      padding-left: 8px;
+      padding-right: 8px;
+    }
+  }
+
+  /* Gender gate shown on first visit */
+  #gender-gate {
+    position: fixed;
+    inset: 0;
+    z-index: 100000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0, 0, 0, 0.6);
+  }
+  .gender-gate__box {
+    background: #fff;
+    padding: 40px 48px;
+    text-align: center;
+    max-width: 90%;
+  }
+  .gender-gate__title {
+    margin: 0 0 24px;
+    font-size: 18px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+  }
+  .gender-gate__actions {
+    display: flex;
+    gap: 16px;
+    justify-content: center;
+  }
+  .gender-gate__actions button {
+    min-width: 130px;
+    padding: 14px 24px;
+    border: 1px solid #000;
+    background: #000;
+    color: #fff;
+    font-size: 14px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    cursor: pointer;
+  }
+  .gender-gate__actions button:hover {
+    background: #fff;
+    color: #000;
+  }
 </style>
 
 <ul
@@ -252,7 +321,7 @@
 
       {%- if is_gender_menu -%}
         <a href="{{ link.url }}" class="site-nav__link site-nav__link--underline site-nav__gender-select{% if has_dropdown %} site-nav__link--has-dropdown{% endif %}">
-          <span class="gender-select-current">Men</span>
+          <span class="gender-select-current">Select</span>
           <svg class="gender-select-caret" aria-hidden="true" focusable="false" viewBox="0 0 28 16"><path d="M1.57 1.59l12.76 12.77L27.1 1.59" stroke-width="2" stroke="currentColor" fill="none" fill-rule="evenodd"/></svg>
         </a>
       {%- else -%}
@@ -458,9 +527,14 @@
 <script>
 (function () {
   var GENDER_KEY = 'site_gender_pref';
+  var inEditor = !!(window.Shopify && Shopify.designMode);
 
   function getGender() {
-    try { return localStorage.getItem(GENDER_KEY) || 'men'; } catch (e) { return 'men'; }
+    try {
+      var g = localStorage.getItem(GENDER_KEY);
+      if (g === 'men' || g === 'women') return g;
+    } catch (e) {}
+    return inEditor ? 'men' : null; // theme editor: skip the gate
   }
   function setGender(g) {
     try { localStorage.setItem(GENDER_KEY, g); } catch (e) {}
@@ -470,23 +544,56 @@
     var gender = getGender();
     document.querySelectorAll('.site-nav__item[data-gender-scope]').forEach(function (item) {
       var scope = item.getAttribute('data-gender-scope');
-      if (scope === 'men') {
-        item.style.display = (gender === 'men') ? '' : 'none';
-      } else if (scope === 'women') {
-        item.style.display = (gender === 'women') ? '' : 'none';
+      if (scope === 'men' || scope === 'women') {
+        item.style.display = (gender && scope === gender) ? '' : 'none';
       }
       // items with no scope (e.g. the Gender item itself) are always visible
     });
-
     var label = document.querySelector('.gender-select-current');
     if (label) {
-      label.textContent = gender.charAt(0).toUpperCase() + gender.slice(1);
+      label.textContent = gender ? gender.charAt(0).toUpperCase() + gender.slice(1) : 'Select';
+    }
+  }
+
+  function showGate() {
+    if (document.getElementById('gender-gate')) return;
+    var gate = document.createElement('div');
+    gate.id = 'gender-gate';
+    gate.setAttribute('role', 'dialog');
+    gate.setAttribute('aria-modal', 'true');
+    gate.setAttribute('aria-label', 'Choose what you are shopping for');
+    gate.innerHTML =
+      '<div class="gender-gate__box">' +
+        '<p class="gender-gate__title">Shop for</p>' +
+        '<div class="gender-gate__actions">' +
+          '<button type="button" data-gender="men">Men</button>' +
+          '<button type="button" data-gender="women">Women</button>' +
+        '</div>' +
+      '</div>';
+    document.body.appendChild(gate);
+    document.documentElement.style.overflow = 'hidden';
+
+    gate.addEventListener('click', function (e) {
+      var btn = e.target.closest('[data-gender]');
+      if (!btn) return;
+      setGender(btn.getAttribute('data-gender'));
+      applyGenderMenu();
+      gate.remove();
+      document.documentElement.style.overflow = '';
+    });
+  }
+
+  // Run immediately (the nav is already parsed above) to avoid a flash of the wrong menu
+  applyGenderMenu();
+  if (!getGender()) {
+    if (document.body) {
+      showGate();
+    } else {
+      document.addEventListener('DOMContentLoaded', showGate);
     }
   }
 
   document.addEventListener('DOMContentLoaded', function () {
-    applyGenderMenu();
-
     document.querySelectorAll('a[data-menu-handle="men"], a[data-menu-handle="women"]').forEach(function (link) {
       link.addEventListener('click', function () {
         setGender(link.getAttribute('data-menu-handle'));
