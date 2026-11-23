@@ -191,6 +191,9 @@
   /* Men has more menu items than Women, so shrink the text only for Men.
      No layout changes (no flex), so the logo does not move. */
   @media screen and (min-width: 769px) {
+    ul.site-nav.site-navigation {
+      white-space: nowrap !important;
+    }
     ul.site-nav.site-navigation > .site-nav__item > .site-nav__link {
       white-space: nowrap !important;
     }
@@ -530,17 +533,40 @@
       a.classList.toggle('is-active-gender', a.getAttribute('data-menu-handle') === gender);
     });
 
-    // Shrink top-level nav text inline so the whole menu fits on one row
-    var compact = window.innerWidth < 1200 ? '10px' : '11px';
-    document.querySelectorAll('ul.site-nav.site-navigation > .site-nav__item > .site-nav__link').forEach(function (a) {
-      a.style.setProperty('white-space', 'nowrap', 'important');
-      a.style.setProperty('font-size', compact, 'important');
-      a.style.setProperty('letter-spacing', '0.03em', 'important');
-      if (!a.classList.contains('site-nav__gender-select')) {
-        a.style.setProperty('padding-left', '5px', 'important');
-        a.style.setProperty('padding-right', '5px', 'important');
-      }
-    });
+    // Force the top-level nav onto one row (shrinks text until it fits)
+    fitNav(window.innerWidth < 1200 ? 10 : 11);
+  }
+
+  function fitNav(startSize) {
+    var links = document.querySelectorAll('ul.site-nav.site-navigation > .site-nav__item > .site-nav__link');
+    var items = Array.prototype.filter.call(
+      document.querySelectorAll('ul.site-nav.site-navigation > .site-nav__item'),
+      function (li) { return li.offsetParent !== null; }
+    );
+    function style(size) {
+      links.forEach(function (a) {
+        a.style.setProperty('white-space', 'nowrap', 'important');
+        a.style.setProperty('font-size', size + 'px', 'important');
+        a.style.setProperty('letter-spacing', '0.03em', 'important');
+        if (!a.classList.contains('site-nav__gender-select')) {
+          a.style.setProperty('padding-left', '5px', 'important');
+          a.style.setProperty('padding-right', '5px', 'important');
+        }
+      });
+    }
+    function wrapped() {
+      if (items.length < 2) return false;
+      var top = items[0].getBoundingClientRect().top;
+      return items.some(function (li) {
+        return Math.abs(li.getBoundingClientRect().top - top) > 15;
+      });
+    }
+    var size = startSize;
+    style(size);
+    while (wrapped() && size > 8) {
+      size -= 0.5;
+      style(size);
+    }
   }
 
   // Make sure the Gender pill is the first item in the nav
@@ -554,6 +580,7 @@
   moveGenderFirst();
   applyGenderMenu();
   window.addEventListener('resize', applyGenderMenu);
+  window.addEventListener('load', applyGenderMenu);
 
   document.addEventListener('DOMContentLoaded', function () {
     document.querySelectorAll('a[data-menu-handle="men"], a[data-menu-handle="women"]').forEach(function (link) {
