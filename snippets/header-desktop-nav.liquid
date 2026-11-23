@@ -495,14 +495,16 @@
 
   function getGender() {
     try {
-      var g = localStorage.getItem(GENDER_KEY);
+      var g = sessionStorage.getItem(GENDER_KEY);
       if (g === 'men' || g === 'women') return g;
     } catch (e) {}
-    return inEditor ? 'men' : null; // theme editor: skip the gate
+    return null; // nothing chosen yet: the pill says "Gender"
   }
   function setGender(g) {
-    try { localStorage.setItem(GENDER_KEY, g); } catch (e) {}
+    try { sessionStorage.setItem(GENDER_KEY, g); } catch (e) {}
   }
+  // Clear the old saved choice from earlier versions of this code
+  try { localStorage.removeItem(GENDER_KEY); } catch (e) {}
 
   function applyGenderMenu() {
     var gender = getGender();
@@ -518,9 +520,26 @@
       }
       // items with no scope (e.g. the Gender item itself) are always visible
     });
-    // The pill always reads "Gender"; mark the chosen option inside its dropdown instead
+    // Pill reads "Gender" until a choice is made, then shows "Men" or "Women"
+    var label = document.querySelector('.gender-select-current');
+    if (label) {
+      label.textContent = gender ? gender.charAt(0).toUpperCase() + gender.slice(1) : 'Gender';
+    }
+    // Mark the chosen option inside the dropdown
     document.querySelectorAll('.site-nav__item[data-menu-handle="gender"] .site-nav__dropdown a').forEach(function (a) {
       a.classList.toggle('is-active-gender', a.getAttribute('data-menu-handle') === gender);
+    });
+
+    // Shrink top-level nav text inline so the whole menu fits on one row
+    var compact = window.innerWidth < 1200 ? '10px' : '11px';
+    document.querySelectorAll('ul.site-nav.site-navigation > .site-nav__item > .site-nav__link').forEach(function (a) {
+      a.style.setProperty('white-space', 'nowrap', 'important');
+      a.style.setProperty('font-size', compact, 'important');
+      a.style.setProperty('letter-spacing', '0.03em', 'important');
+      if (!a.classList.contains('site-nav__gender-select')) {
+        a.style.setProperty('padding-left', '5px', 'important');
+        a.style.setProperty('padding-right', '5px', 'important');
+      }
     });
   }
 
@@ -534,6 +553,7 @@
   // Run immediately (the nav is already parsed above) to avoid a flash of the wrong menu
   moveGenderFirst();
   applyGenderMenu();
+  window.addEventListener('resize', applyGenderMenu);
 
   document.addEventListener('DOMContentLoaded', function () {
     document.querySelectorAll('a[data-menu-handle="men"], a[data-menu-handle="women"]').forEach(function (link) {
