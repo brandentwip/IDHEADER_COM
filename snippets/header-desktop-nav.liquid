@@ -188,29 +188,25 @@
     background-color: rgba(0, 0, 0, 0.04);
   }
 
-  /* Keep the top-level nav on a single row */
+  /* Men has more menu items than Women, so shrink the text only for Men.
+     No layout changes (no flex), so the logo does not move. */
   @media screen and (min-width: 769px) {
-    ul.site-nav.site-navigation {
-      display: flex;
-      flex-wrap: nowrap;
-      align-items: center;
+    ul.site-nav.site-navigation > .site-nav__item > .site-nav__link {
       white-space: nowrap;
     }
-    ul.site-nav.site-navigation > .site-nav__item {
-      flex: 0 0 auto;
-    }
-    ul.site-nav.site-navigation > .site-nav__item > .site-nav__link {
-      letter-spacing: 0.12em;
-      padding-left: 12px;
-      padding-right: 12px;
+    html[data-site-gender="men"] ul.site-nav.site-navigation > .site-nav__item > .site-nav__link:not(.site-nav__gender-select) {
+      font-size: 12px;
+      letter-spacing: 0.08em;
+      padding-left: 8px;
+      padding-right: 8px;
     }
   }
   @media screen and (min-width: 769px) and (max-width: 1199px) {
-    ul.site-nav.site-navigation > .site-nav__item > .site-nav__link {
-      font-size: 12px;
-      letter-spacing: 0.06em;
-      padding-left: 8px;
-      padding-right: 8px;
+    html[data-site-gender="men"] ul.site-nav.site-navigation > .site-nav__item > .site-nav__link:not(.site-nav__gender-select) {
+      font-size: 11px;
+      letter-spacing: 0.04em;
+      padding-left: 6px;
+      padding-right: 6px;
     }
   }
 
@@ -321,7 +317,7 @@
 
       {%- if is_gender_menu -%}
         <a href="{{ link.url }}" class="site-nav__link site-nav__link--underline site-nav__gender-select{% if has_dropdown %} site-nav__link--has-dropdown{% endif %}">
-          <span class="gender-select-current">Select</span>
+          <span class="gender-select-current">Gender</span>
           <svg class="gender-select-caret" aria-hidden="true" focusable="false" viewBox="0 0 28 16"><path d="M1.57 1.59l12.76 12.77L27.1 1.59" stroke-width="2" stroke="currentColor" fill="none" fill-rule="evenodd"/></svg>
         </a>
       {%- else -%}
@@ -542,6 +538,11 @@
 
   function applyGenderMenu() {
     var gender = getGender();
+    if (gender) {
+      document.documentElement.setAttribute('data-site-gender', gender);
+    } else {
+      document.documentElement.removeAttribute('data-site-gender');
+    }
     document.querySelectorAll('.site-nav__item[data-gender-scope]').forEach(function (item) {
       var scope = item.getAttribute('data-gender-scope');
       if (scope === 'men' || scope === 'women') {
@@ -551,7 +552,7 @@
     });
     var label = document.querySelector('.gender-select-current');
     if (label) {
-      label.textContent = gender ? gender.charAt(0).toUpperCase() + gender.slice(1) : 'Select';
+      label.textContent = gender ? gender.charAt(0).toUpperCase() + gender.slice(1) : 'Gender';
     }
   }
 
@@ -564,7 +565,7 @@
     gate.setAttribute('aria-label', 'Choose what you are shopping for');
     gate.innerHTML =
       '<div class="gender-gate__box">' +
-        '<p class="gender-gate__title">Shop for</p>' +
+        '<p class="gender-gate__title">Choose Gender</p>' +
         '<div class="gender-gate__actions">' +
           '<button type="button" data-gender="men">Men</button>' +
           '<button type="button" data-gender="women">Women</button>' +
