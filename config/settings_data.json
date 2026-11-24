@@ -1375,6 +1375,22 @@
           "slide_KdctHa": {
             "type": "slide",
             "settings": {
+              "desktop_image": "shopify://shop_images/51.jpg",
+              "mobile_image": "shopify://shop_images/53.jpg",
+              "label": "",
+              "heading": "",
+              "text": "",
+              "button_label": "",
+              "button_link": "shopify://collections/festive-collection-1",
+              "text_position": "bottom-right",
+              "text_color": "#ffffff",
+              "overlay_color": "#000000",
+              "overlay_opacity": 0
+            }
+          },
+          "slide_Ywnx3d": {
+            "type": "slide",
+            "settings": {
               "desktop_image": "shopify://shop_images/1_822c9a6e-d1ef-4947-9c74-2f465e10de86.png",
               "mobile_image": "shopify://shop_images/2_8518ad02-3ad4-4c32-8d6f-e7afcd9be3cf.png",
               "label": "",
@@ -1573,6 +1589,7 @@
         },
         "block_order": [
           "slide_KdctHa",
+          "slide_Ywnx3d",
           "slide_aYA7x7",
           "slide_rEeydk",
           "slide_yzKnCU",
