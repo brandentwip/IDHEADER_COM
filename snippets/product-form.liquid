@@ -152,52 +152,78 @@
 {% comment %} <a href="/pages/return-policy" class="return-refund">Return/Refund Policy +</a> {% endcomment %}
  
  <div class="idc-return-wrapper">
-  <button class="idc-return-header">
+  {%- assign is_clearance_product = false -%}
+  {%- assign is_bfs_product = false -%}
+
+  {%- if product.collections contains collections['clearance-men-nb']
+    or product.collections contains collections['womenclearance'] -%}
+    {%- assign is_clearance_product = true -%}
+  {%- endif -%}
+
+  {%- if product.tags contains 'bfsmen' or product.tags contains 'bfswomen' -%}
+    {%- assign is_bfs_product = true -%}
+  {%- endif -%}
+
+  {%- assign show_no_return_policy = false -%}
+  {%- if is_clearance_product or is_bfs_product -%}
+    {%- assign show_no_return_policy = true -%}
+  {%- endif -%}
+
+  <button class="idc-return-header" type="button" aria-expanded="false">
     Return Policy
-    {% if product.collections contains collections['clearance-men-nb']
-   or product.collections contains collections['womenclearance'] %}
-      <span class="idc-clearance-badge">NO EXCHANGE / NO RETURN ON CLEARANCE SALE ITEMS</span>
+    {% if show_no_return_policy %}
+      <span class="idc-clearance-badge">
+        {% if is_clearance_product %}
+          NO EXCHANGE / NO RETURN ON CLEARANCE SALE ITEMS
+        {% else %}
+          NO RETURN / EXCHANGE ON SALE ITEMS
+        {% endif %}
+      </span>
     {% endif %}
   </button>
 
   <div class="idc-return-body">
-    {% if product.collections contains collections['clearance-men-nb']
-   or product.collections contains collections['womenclearance'] %}
-      <p class="idc-clearance-alert">
-        <strong>Note:</strong> This item is part of our <strong>Clearance Sale</strong>.
-        Therefore, it is <strong>not eligible for return or exchange</strong>.
-        Please confirm your selection before completing your purchase.
-        Please also note that  Clearance Sale items are <strong>not eligible for any other schemes / promotions on our website.</strong>
+    {% if show_no_return_policy %}
+      {% if is_clearance_product %}
+        <p class="idc-clearance-alert">
+          <strong>Note:</strong> This item is part of our <strong>Clearance Sale</strong>.
+          Therefore, it is <strong>not eligible for return or exchange</strong>.
+          Please confirm your selection before completing your purchase.
+          Please also note that Clearance Sale items are <strong>not eligible for any other schemes / promotions on our website.</strong>
+        </p>
+      {% else %}
+        <p class="idc-clearance-alert">
+          <strong>Note:</strong> This item is part of our sale collection and is
+          <strong>not eligible for return or exchange</strong>. Please confirm your
+          selection before completing your purchase.
+        </p>
+      {% endif %}
+    {% else %}
+      <p>
+        Return and Exchange Policy offer you the option to return or exchange items purchased on
+        <strong>IDCult.com</strong> within 7 days of receipt. If you choose to exchange the item for reason of mismatch,
+        size, or receipt of a defective item, you will be provided with a replacement of the item, free of cost. However,
+        an exchange is subject to the availability of the item in our stock.
+      </p>
+
+      <p>
+        Please make sure that products are returned with the tags and the packaging intact, in an unwashed and undamaged
+        condition. Refund/replacement shall be issued after a thorough quality check of the product(s).
+      </p>
+
+      <p>
+        Please note that any product along with a gift/ combo must be returned in its entirety.
+      </p>
+
+      <p>
+        In case you want to return or exchange the product for any reason, within 7 days of delivery, please contact our
+        customer care department through email at
+        <a href="mailto:care@idcult.com">care@idcult.com</a> or call
+        <a href="tel:+919910433300">+91-9910433300</a> (9:30 AM till 6:00 PM; Mon-Sat).
       </p>
     {% endif %}
-
-    <p>
-      Return and Exchange Policy offer you the option to return or exchange items purchased on
-      <strong>IDCult.com</strong> within 7 days of receipt. If you choose to exchange the item for reason of mismatch,
-      size, or receipt of a defective item, you will be provided with a replacement of the item, free of cost. However,
-      an exchange is subject to the availability of the item in our stock.
-    </p>
-
-    <p>
-      Please make sure that products are returned with the tags and the packaging intact, in an unwashed and undamaged
-      condition. Refund/replacement shall be issued after a thorough quality check of the product(s).
-    </p>
-
-    <p>
-      Please note that any product along with a gift/ combo must be returned in its entirety.
-    </p>
-
-    <p>
-      In case you want to return or exchange the product for any reason, within 7 days of delivery, please contact our
-      customer care department through email at
-      <a href="mailto:care@idcult.com">care@idcult.com</a> or call
-      <a href="tel:+919910433300">+91-9910433300</a> (9:30 AM till 6:00 PM; Mon-Sat).
-    </p>
   </div>
-  
-
 </div>
-
 {% if product.selected_or_first_available_variant.available %}
   <div class="stock-badge in-stock">
     <span class="stock-dot"></span>
@@ -426,15 +452,12 @@
 
 <script>
 document.querySelectorAll(".idc-return-header").forEach(header => {
-  header.addEventListener("click", function (e) {
-    e.preventDefault();
+  header.addEventListener("click", function () {
     const body = this.nextElementSibling;
+    const isExpanded = this.getAttribute("aria-expanded") === "true";
 
-    if (body.style.maxHeight) {
-      body.style.maxHeight = null;
-    } else {
-      body.style.maxHeight = body.scrollHeight + "px";
-    }
+    this.setAttribute("aria-expanded", String(!isExpanded));
+    body.style.maxHeight = isExpanded ? null : body.scrollHeight + "px";
   });
 });
 </script>
