@@ -76,6 +76,31 @@
 {% endif %}
 {% assign next_row_image_index = 0 %}
 
+{% comment %} ---------- COLLECTION IMAGE BANNER ---------- {% endcomment %}
+{% if collection.image != blank %}
+  {% assign collection_banner_alt = collection.image.alt | default: collection.title %}
+
+  <section class="collection-image-banner" aria-label="{{ collection.title | escape }} collection banner">
+    <img
+      class="collection-image-banner__image"
+      src="{{ collection.image | image_url: width: 2000 }}"
+      srcset="
+        {{ collection.image | image_url: width: 750 }} 750w,
+        {{ collection.image | image_url: width: 1100 }} 1100w,
+        {{ collection.image | image_url: width: 1500 }} 1500w,
+        {{ collection.image | image_url: width: 2000 }} 2000w,
+        {{ collection.image | image_url: width: 2400 }} 2400w
+      "
+      sizes="100vw"
+      alt="{{ collection_banner_alt | escape }}"
+      width="{{ collection.image.width }}"
+      height="{{ collection.image.height }}"
+      loading="eager"
+      fetchpriority="high"
+    >
+  </section>
+{% endif %}
+
 <!-- HERO / COLLECTION HEADER (AXEL ARIGATO STYLE) -->
 <section class="arigato-header">
   <div class="arigato-header-inner">
@@ -1119,6 +1144,22 @@ document.addEventListener('DOMContentLoaded', function() {
   box-sizing: border-box;
 }
 
+/* COLLECTION IMAGE BANNER */
+.collection-image-banner {
+  width: 100%;
+  overflow: hidden;
+  background: #ebebe8;
+  line-height: 0;
+}
+
+.collection-image-banner__image {
+  display: block;
+  width: 100%;
+  height: clamp(220px, 34vw, 520px);
+  object-fit: cover;
+  object-position: center;
+}
+
 /* HERO HEADER (AXEL ARIGATO MINIMALIST STYLE) */
 .arigato-header {
   background: #ebebe8;
@@ -1698,6 +1739,10 @@ document.addEventListener('DOMContentLoaded', function() {
 }
 
 @media (max-width: 768px) {
+  .collection-image-banner__image {
+    height: clamp(180px, 58vw, 300px);
+  }
+
   .product-grid {
     grid-template-columns: repeat(2, 1fr);
   }
