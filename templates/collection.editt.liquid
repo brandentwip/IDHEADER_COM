@@ -77,7 +77,9 @@
 {% assign next_row_image_index = 0 %}
 
 {% comment %} ---------- COLLECTION IMAGE BANNER ---------- {% endcomment %}
-{% if collection.image != blank %}
+{% assign banner_collections = 'men-blackfriday,women-blackfriday' | split: ',' %}
+
+{% if collection.image != blank and banner_collections contains collection.handle %}
   {% assign collection_banner_alt = collection.image.alt | default: collection.title %}
 
   <section class="collection-image-banner" aria-label="{{ collection.title | escape }} collection banner">
