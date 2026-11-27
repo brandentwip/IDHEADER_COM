@@ -1406,7 +1406,6 @@
           },
           "slide_CtAALB": {
             "type": "slide",
-            "disabled": true,
             "settings": {
               "desktop_image": "shopify://shop_images/ID_Website_Banner_1_f81c073a-6d7f-44c6-bb7a-69dc7077c672.png",
               "mobile_image": "shopify://shop_images/ID_Website_Banner_2.png",
