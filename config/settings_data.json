@@ -1404,6 +1404,22 @@
               "overlay_opacity": 0
             }
           },
+          "slide_CtAALB": {
+            "type": "slide",
+            "settings": {
+              "desktop_image": "shopify://shop_images/55.jpg",
+              "mobile_image": "shopify://shop_images/56_40735f5c-90a9-4ba7-b223-d4e661bf8429.jpg",
+              "label": "",
+              "heading": "",
+              "text": "",
+              "button_label": "",
+              "button_link": "https://idcult.com/collections/men-blackfriday",
+              "text_position": "bottom-right",
+              "text_color": "#ffffff",
+              "overlay_color": "#000000",
+              "overlay_opacity": 0
+            }
+          },
           "slide_aYA7x7": {
             "type": "slide",
             "disabled": true,
@@ -1595,6 +1611,7 @@
         "block_order": [
           "slide_KdctHa",
           "slide_Ywnx3d",
+          "slide_CtAALB",
           "slide_aYA7x7",
           "slide_rEeydk",
           "slide_yzKnCU",
